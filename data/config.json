@@ -1,0 +1,9 @@
+{
+  "provider": "offline",
+  "geminiApiKey": "",
+  "claudeApiKey": "",
+  "openaiApiKey": "",
+  "geminiModel": "gemini-1.5-flash",
+  "claudeModel": "claude-3-5-sonnet-20241022",
+  "openaiModel": "gpt-4o-mini"
+}

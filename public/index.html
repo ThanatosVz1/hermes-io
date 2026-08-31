@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hermes.io — AI-Powered Learning Roadmap Generator & Progress Tracker</title>
+  <meta name="description" content="Generate personalized, interactive learning roadmaps with AI, on-demand submodule expansions, and real-time progress roll-ups.">
+
+  <!-- Inter Font & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- Hermes CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- App Header / Navigation Bar -->
+  <header class="app-navbar">
+    <div class="nav-left">
+      <div class="nav-brand" id="navbar-brand-btn">
+        <div class="brand-icon">
+          <i class="ph ph-lightning-fill"></i>
+        </div>
+        <span>Hermes<span class="brand-dot">.io</span></span>
+      </div>
+
+      <nav class="nav-links">
+        <button class="nav-link-btn" data-nav="dashboard">
+          <i class="ph ph-squares-four"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-link-btn" id="btn-explore-templates-nav" data-nav="gallery">
+          <i class="ph ph-sparkle"></i>
+          <span>Template Gallery</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="nav-right">
+      <button class="btn btn-primary btn-sm" id="btn-new-roadmap-nav">
+        <i class="ph ph-plus"></i>
+        <span>New Roadmap</span>
+      </button>
+
+      <!-- Theme Switcher -->
+      <button class="btn-icon" id="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle Theme">
+        <i class="ph ph-sun"></i>
+      </button>
+
+      <!-- Settings Button -->
+      <button class="btn-icon" id="navbar-settings-btn" title="AI & App Settings" aria-label="Settings">
+        <i class="ph ph-gear"></i>
+      </button>
+
+      <!-- Auth State / User Profile Badge -->
+      <button class="btn btn-secondary btn-sm" id="navbar-auth-btn">
+        <i class="ph ph-user"></i>
+        <span>Sign In</span>
+      </button>
+
+      <div class="user-badge-container hidden" id="navbar-user-badge">
+        <!-- Dynamically populated via app.js -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Container -->
+  <main class="app-main">
+
+    <!-- ==========================================
+         VIEW 1: DASHBOARD
+         ========================================== -->
+    <section id="view-dashboard" class="app-view">
+      <div class="dashboard-hero">
+        <div class="hero-left">
+          <h1>Master Any Skill with AI</h1>
+          <p>Generate goal-driven curriculums, expand modules on-demand, and track every milestone in one place.</p>
+        </div>
+        <div class="hero-right">
+          <button class="btn btn-primary" onclick="window.hermesApp.startOnboardingWizard()">
+            <i class="ph ph-sparkle"></i> Create Custom Roadmap
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div class="dashboard-stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon-wrap"><i class="ph ph-hourglass-high"></i></div>
+          <div class="stat-content">
+            <div class="stat-value" id="dash-stat-hours">0h</div>
+            <div class="stat-label">Total Learned</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap"><i class="ph ph-tree-structure"></i></div>
+          <div class="stat-content">
+            <div class="stat-value" id="dash-stat-active">0</div>
+            <div class="stat-label">Active Roadmaps</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap"><i class="ph ph-check-circle"></i></div>
+          <div class="stat-content">
+            <div class="stat-value" id="dash-stat-completed">0</div>
+            <div class="stat-label">Completed Tracks</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Roadmaps Grid Section -->
+      <div class="section-header">
+        <h2>Your Saved Roadmaps</h2>
+        <button class="btn btn-secondary btn-sm" data-nav="gallery">
+          <i class="ph ph-compass"></i> Explore Curated Templates
+        </button>
+      </div>
+
+      <div class="roadmaps-grid" id="dashboard-roadmaps-grid">
+        <!-- Loaded via app.js -->
+      </div>
+
+      <!-- Empty State if no roadmaps -->
+      <div class="empty-state-box hidden" id="dashboard-empty-state">
+        <div class="empty-state-icon"><i class="ph ph-compass"></i></div>
+        <h3>No learning roadmaps yet</h3>
+        <p>Start a tailored 4-step wizard or clone an industry-standard template with one click.</p>
+        <div style="display: flex; gap: 0.8rem; justify-content: center;">
+          <button class="btn btn-primary" onclick="window.hermesApp.startOnboardingWizard()">
+            <i class="ph ph-sparkle"></i> Launch Wizard (Flow A)
+          </button>
+          <button class="btn btn-secondary" onclick="window.hermesApp.navigateTo('gallery')">
+            <i class="ph ph-books"></i> Browse Templates (Flow B)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 2: FLOW A — ONBOARDING WIZARD
+         ========================================== -->
+    <section id="view-wizard" class="app-view hidden">
+      <div class="wizard-container">
+
+        <!-- Step Progress Indicator -->
+        <div class="wizard-step-tracker">
+          <div class="wizard-step-indicator active" id="wizard-indicator-step-1">
+            <div class="step-circle">1</div>
+            <span class="step-label">Interests</span>
+          </div>
+          <div class="wizard-step-indicator pending" id="wizard-indicator-step-2">
+            <div class="step-circle">2</div>
+            <span class="step-label">Level</span>
+          </div>
+          <div class="wizard-step-indicator pending" id="wizard-indicator-step-3">
+            <div class="step-circle">3</div>
+            <span class="step-label">Goal</span>
+          </div>
+          <div class="wizard-step-indicator pending" id="wizard-indicator-step-4">
+            <div class="step-circle">4</div>
+            <span class="step-label">Target Role</span>
+          </div>
+        </div>
+
+        <!-- Step 1: Interest Areas -->
+        <div id="wizard-step-section-1" class="wizard-step-content">
+          <div class="wizard-step-header">
+            <h2>What do you want to learn?</h2>
+            <p>Select one or more programming languages or domains to generate your custom connected roadmap.</p>
+          </div>
+
+          <!-- Programming Languages Quick Picks -->
+          <div style="margin-bottom: 0.85rem;">
+            <small style="color: var(--accent-gold); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">⚡ Programming Languages:</small>
+          </div>
+          <div class="interests-tags-container" style="margin-bottom: 1.25rem;">
+            <button type="button" class="wizard-interest-tag" data-value="Python">🐍 Python 3</button>
+            <button type="button" class="wizard-interest-tag" data-value="Java">☕ Java (Core & Spring)</button>
+            <button type="button" class="wizard-interest-tag" data-value="C++">⚡ Modern C++ (C++20)</button>
+            <button type="button" class="wizard-interest-tag" data-value="JavaScript">💛 JavaScript (ES2024)</button>
+            <button type="button" class="wizard-interest-tag" data-value="TypeScript">💙 TypeScript</button>
+            <button type="button" class="wizard-interest-tag" data-value="Go">🐹 Golang</button>
+            <button type="button" class="wizard-interest-tag" data-value="Rust">🦀 Rust</button>
+            <button type="button" class="wizard-interest-tag" data-value="C#">💜 C# / .NET</button>
+          </div>
+
+          <div style="margin-bottom: 0.85rem;">
+            <small style="color: var(--accent-secondary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">🌐 Engineering & Career Domains:</small>
+          </div>
+          <div class="interests-tags-container" id="wizard-interests-tags-wrap">
+            <button type="button" class="wizard-interest-tag" data-value="Frontend Web Dev">Frontend Web Dev</button>
+            <button type="button" class="wizard-interest-tag" data-value="Full-Stack Engineering">Full-Stack Engineering</button>
+            <button type="button" class="wizard-interest-tag" data-value="Data Science & Analytics">Data Science & Analytics</button>
+            <button type="button" class="wizard-interest-tag" data-value="AI & Machine Learning">AI & Machine Learning</button>
+            <button type="button" class="wizard-interest-tag" data-value="DevOps & Cloud">DevOps & Cloud</button>
+            <button type="button" class="wizard-interest-tag" data-value="Cybersecurity">Cybersecurity</button>
+          </div>
+
+          <div class="form-group">
+            <label for="wizard-custom-interest">Or enter any custom language / tool / framework (Press Enter to add):</label>
+            <div class="input-with-icon">
+              <i class="ph ph-tag"></i>
+              <input type="text" id="wizard-custom-interest" class="input-field" placeholder="e.g. Kotlin, Swift, Flutter, PyTorch, Kubernetes, Rust...">
+            </div>
+          </div>
+
+          <div class="wizard-nav-buttons">
+            <div></div>
+            <button class="btn btn-primary" id="btn-wizard-next-1">
+              Next: Skill Level <i class="ph ph-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Skill Level & Background -->
+        <div id="wizard-step-section-2" class="wizard-step-content hidden">
+          <div class="wizard-step-header">
+            <h2>What is your current knowledge level?</h2>
+            <p>This allows Hermes AI to skip foundational concepts you already know and focus where it matters.</p>
+          </div>
+
+          <div class="level-cards-grid">
+            <div class="wizard-level-card selected" data-level="Beginner">
+              <div class="level-card-title">🌱 Beginner</div>
+              <div class="level-card-desc">Starting from scratch. Need strong foundations and clear step-by-step guidance.</div>
+            </div>
+
+            <div class="wizard-level-card" data-level="Some Exposure">
+              <div class="level-card-title">🌿 Some Exposure</div>
+              <div class="level-card-desc">Familiar with basic syntax or concepts, but haven't built large projects yet.</div>
+            </div>
+
+            <div class="wizard-level-card" data-level="Intermediate">
+              <div class="level-card-title">🌳 Intermediate</div>
+              <div class="level-card-desc">Comfortable building apps; ready for architecture, patterns, and performance.</div>
+            </div>
+
+            <div class="wizard-level-card" data-level="Advanced">
+              <div class="level-card-title">⚡ Advanced</div>
+              <div class="level-card-desc">Experienced practitioner targeting specialized mastery, scale, and low-level internals.</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="wizard-skill-details">Specific Background Details (Optional):</label>
+            <textarea id="wizard-skill-details" class="textarea-field" rows="3" placeholder="e.g. 'Know HTML/CSS and basic Python, but no JavaScript frameworks or SQL...'"></textarea>
+          </div>
+
+          <div class="wizard-nav-buttons">
+            <button class="btn btn-secondary" id="btn-wizard-back-2"><i class="ph ph-arrow-left"></i> Back</button>
+            <button class="btn btn-primary" id="btn-wizard-next-2">Next: End Goal <i class="ph ph-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- Step 3: End Goal -->
+        <div id="wizard-step-section-3" class="wizard-step-content hidden">
+          <div class="wizard-step-header">
+            <h2>What is your end goal?</h2>
+            <p>Define what successful mastery looks like for you.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="wizard-goal-input">Your Specific Learning Objective:</label>
+            <div class="input-with-icon">
+              <i class="ph ph-flag-banner"></i>
+              <input type="text" id="wizard-goal-input" class="input-field" placeholder="e.g. Job-ready as a Frontend Developer, Pass AWS SAA, Ship a SaaS...">
+            </div>
+
+            <div class="goal-chips-row">
+              <span class="wizard-goal-chip">Job-ready as a Frontend Developer</span>
+              <span class="wizard-goal-chip">Pass AWS Solutions Architect (SAA)</span>
+              <span class="wizard-goal-chip">Build & Deploy Full-Stack AI SaaS</span>
+              <span class="wizard-goal-chip">Transition into Data Science</span>
+              <span class="wizard-goal-chip">Pass CompTIA Security+</span>
+            </div>
+          </div>
+
+          <div class="wizard-nav-buttons">
+            <button class="btn btn-secondary" id="btn-wizard-back-3"><i class="ph ph-arrow-left"></i> Back</button>
+            <button class="btn btn-primary" id="btn-wizard-next-3">Next: Target Role <i class="ph ph-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- Step 4: Target Role & Review -->
+        <div id="wizard-step-section-4" class="wizard-step-content hidden">
+          <div class="wizard-step-header">
+            <h2>Target Occupation / Job Title (Optional)</h2>
+            <p>Align the final milestones with real-world hiring and portfolio expectations.</p>
+          </div>
+
+          <div class="form-group">
+            <label for="wizard-role-input">Target Job Title:</label>
+            <div class="input-with-icon">
+              <i class="ph ph-briefcase"></i>
+              <input type="text" id="wizard-role-input" class="input-field" placeholder="e.g. Senior React Developer, ML Engineer, Cloud SRE...">
+            </div>
+          </div>
+
+          <div class="wizard-nav-buttons">
+            <button class="btn btn-secondary" id="btn-wizard-back-4"><i class="ph ph-arrow-left"></i> Back</button>
+            <button class="btn btn-primary" id="btn-wizard-submit-generate">
+              <i class="ph ph-sparkle"></i> Generate Roadmap with AI
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 5: Generation Loading State -->
+        <div id="wizard-step-section-5" class="wizard-step-content hidden">
+          <div class="wizard-generating-wrap">
+            <div class="spinner-pulse-ring"></div>
+            <h2 id="wizard-generation-status-text">Hermes AI is synthesizing your roadmap...</h2>
+            <p style="color: var(--text-secondary); margin-top: 0.5rem;">Structuring recursive milestones, verified documentation, and estimating learning time.</p>
+            
+            <div class="wizard-gen-progress-track">
+              <div class="wizard-gen-progress-fill" id="wizard-gen-progress-fill"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 3: FLOW B — TEMPLATE GALLERY
+         ========================================== -->
+    <section id="view-gallery" class="app-view hidden">
+      <div class="dashboard-hero">
+        <div class="hero-left">
+          <h1>Curated Roadmap Gallery</h1>
+          <p>Clone production-grade learning paths or personalize them with AI in seconds.</p>
+        </div>
+      </div>
+
+      <!-- Categories Filter -->
+      <div class="gallery-categories-bar">
+        <button class="gallery-category-filter active" data-category="all">All Tracks</button>
+        <button class="gallery-category-filter" data-category="programming languages">💻 Programming Languages</button>
+        <button class="gallery-category-filter" data-category="engineering">Engineering</button>
+        <button class="gallery-category-filter" data-category="data">Data Science</button>
+        <button class="gallery-category-filter" data-category="ai">AI & ML</button>
+        <button class="gallery-category-filter" data-category="cloud">Cloud & DevOps</button>
+        <button class="gallery-category-filter" data-category="security">Security</button>
+      </div>
+
+      <div class="roadmaps-grid" id="gallery-templates-grid">
+        <!-- Rendered via templates-data.js & app.js -->
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 4: ROADMAP EXPLORER (TREE VIEW)
+         ========================================== -->
+    <section id="view-roadmap" class="app-view hidden">
+      <!-- Sticky Header with Real-Time Progress Rollup -->
+      <div class="roadmap-sticky-bar" id="roadmap-sticky-stats">
+        <!-- Rendered by roadmap-renderer.js -->
+      </div>
+
+      <!-- Recursive Node Tree Container -->
+      <div id="roadmap-tree-container">
+        <!-- Rendered by roadmap-renderer.js -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================
+       MODALS
+       ========================================== -->
+
+  <!-- 1. Auth Modal (Login / Signup) -->
+  <div class="modal-backdrop hidden" id="auth-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="nav-brand">
+          <div class="brand-icon"><i class="ph ph-lightning-fill"></i></div>
+          <span>Hermes<span class="brand-dot">.io</span></span>
+        </div>
+        <button class="close-modal-btn" id="close-auth-modal" aria-label="Close"><i class="ph ph-x"></i></button>
+      </div>
+
+      <div class="modal-tabs">
+        <button class="modal-tab active" id="tab-auth-login">Sign In</button>
+        <button class="modal-tab" id="tab-auth-signup">Create Account</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="form-login">
+        <div class="error-banner hidden" id="login-error-msg"></div>
+
+        <div class="form-group">
+          <label for="login-email">Email Address</label>
+          <div class="input-with-icon">
+            <i class="ph ph-envelope"></i>
+            <input type="email" id="login-email" class="input-field" placeholder="you@example.com" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="input-with-icon">
+            <i class="ph ph-lock"></i>
+            <input type="password" id="login-password" class="input-field" placeholder="••••••••" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Sign In</button>
+
+        <div style="margin-top: 1.5rem; text-align: center;">
+          <small style="color: var(--text-muted);">Quick Demo Sign-In (1-Click Evaluation):</small>
+          <div class="demo-users-list" id="demo-users-container"></div>
+        </div>
+      </form>
+
+      <!-- Signup Form -->
+      <form id="form-signup" class="hidden">
+        <div class="error-banner hidden" id="signup-error-msg"></div>
+
+        <div class="form-group">
+          <label for="signup-name">Full Name</label>
+          <div class="input-with-icon">
+            <i class="ph ph-user"></i>
+            <input type="text" id="signup-name" class="input-field" placeholder="Jane Doe" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-email">Email Address</label>
+          <div class="input-with-icon">
+            <i class="ph ph-envelope"></i>
+            <input type="email" id="signup-email" class="input-field" placeholder="jane@example.com" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="signup-password">Password</label>
+          <div class="input-with-icon">
+            <i class="ph ph-lock"></i>
+            <input type="password" id="signup-password" class="input-field" placeholder="At least 6 characters" minlength="6" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Personalize Template Modal -->
+  <div class="modal-backdrop hidden" id="personalize-tpl-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="personalize-tpl-title">Personalize Template</h3>
+        <button class="close-modal-btn" id="close-personalize-modal"><i class="ph ph-x"></i></button>
+      </div>
+
+      <form id="form-personalize-tpl">
+        <div class="form-group">
+          <label for="personalize-level-select">Your Current Level</label>
+          <select id="personalize-level-select" class="select-field">
+            <option value="Beginner">Beginner (Start with foundations)</option>
+            <option value="Some Exposure">Some Exposure (Skip basic syntax)</option>
+            <option value="Intermediate">Intermediate (Focus on projects & architecture)</option>
+            <option value="Advanced">Advanced (Scale, performance & internals)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="personalize-goal-input">Target Outcome / Project</label>
+          <input type="text" id="personalize-goal-input" class="input-field" placeholder="e.g. Build an e-commerce platform with real-time checkout">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+          Generate Tailored Roadmap
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Adjust Difficulty / Level Modal -->
+  <div class="modal-backdrop hidden" id="adjust-node-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="adjust-node-heading">Adjust Section</h3>
+        <button class="close-modal-btn" id="close-adjust-modal"><i class="ph ph-x"></i></button>
+      </div>
+
+      <form id="form-adjust-node">
+        <div class="form-group">
+          <label for="adjust-type-select">Adjustment Goal</label>
+          <select id="adjust-type-select" class="select-field">
+            <option value="easier">Make this easier / More step-by-step guidance</option>
+            <option value="harder">Make this more advanced / Deeper architecture & scale</option>
+            <option value="projects">Refocus on hands-on practical projects</option>
+            <option value="shorter">Condense into a fast-track summary</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="adjust-notes-input">Specific Custom Instructions (Optional):</label>
+          <textarea id="adjust-notes-input" class="textarea-field" rows="3" placeholder="e.g. 'Use TypeScript instead of vanilla JS and add a testing section...'"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          Apply Adjustment
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 4. Add Custom Node Modal -->
+  <div class="modal-backdrop hidden" id="add-node-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="add-node-heading">Add Checkpoint</h3>
+        <button class="close-modal-btn" id="close-add-node-modal"><i class="ph ph-x"></i></button>
+      </div>
+
+      <form id="form-add-node">
+        <div class="form-group">
+          <label for="new-node-title">Title</label>
+          <input type="text" id="new-node-title" class="input-field" placeholder="e.g. State Machines with XState" required>
+        </div>
+
+        <div class="form-group">
+          <label for="new-node-desc">Summary Description</label>
+          <textarea id="new-node-desc" class="textarea-field" rows="2" placeholder="1-2 sentences on what will be learned"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="new-node-hours">Estimated Hours</label>
+          <input type="number" id="new-node-hours" class="input-field" value="6" min="1" max="100">
+        </div>
+
+        <div class="form-group">
+          <label>Resource (Optional)</label>
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <select id="new-node-res-type" class="select-field" style="width: 130px;">
+              <option value="docs">Documentation</option>
+              <option value="article">Article</option>
+              <option value="video">Video</option>
+              <option value="course">Course</option>
+              <option value="practice">Practice</option>
+              <option value="project">Project</option>
+            </select>
+            <input type="text" id="new-node-res-title" class="input-field" placeholder="Resource Title">
+          </div>
+          <input type="url" id="new-node-res-url" class="input-field" placeholder="https://...">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          Add to Roadmap
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 5. Export Modal -->
+  <div class="modal-backdrop hidden" id="export-modal">
+    <div class="modal-card" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3>Export Learning Roadmap</h3>
+        <button class="close-modal-btn" id="close-export-modal"><i class="ph ph-x"></i></button>
+      </div>
+
+      <div class="modal-tabs">
+        <button class="modal-tab active" id="tab-export-md">Markdown (.md)</button>
+        <button class="modal-tab" id="tab-export-json">JSON Schema (.json)</button>
+      </div>
+
+      <div class="form-group">
+        <textarea id="export-content-area" class="textarea-field" style="font-family: var(--font-mono); font-size: 0.8rem; height: 260px;" readonly></textarea>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+        <button class="btn btn-secondary" id="btn-copy-export">
+          <i class="ph ph-copy"></i> Copy to Clipboard
+        </button>
+        <button class="btn btn-primary" id="btn-download-export">
+          <i class="ph ph-download-simple"></i> Download File
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Settings Modal -->
+  <div class="modal-backdrop hidden" id="settings-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>AI & Engine Settings</h3>
+        <button class="close-modal-btn" id="close-settings-modal"><i class="ph ph-x"></i></button>
+      </div>
+
+      <form id="form-settings">
+        <div class="form-group">
+          <label for="settings-provider-select">AI Generation Provider</label>
+          <select id="settings-provider-select" class="select-field">
+            <option value="offline">⚡ Hermes Smart Engine (Instant, No API Key Required)</option>
+            <option value="gemini">Google Gemini API (Gemini 1.5 Flash / Pro)</option>
+            <option value="claude">Anthropic Claude API (Claude 3.5 Sonnet)</option>
+            <option value="openai">OpenAI API (GPT-4o / GPT-4o-mini)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="settings-gemini-key">Gemini API Key (Optional)</label>
+          <input type="password" id="settings-gemini-key" class="input-field" placeholder="AIzaSy...">
+        </div>
+
+        <div class="form-group">
+          <label for="settings-claude-key">Anthropic Claude API Key (Optional)</label>
+          <input type="password" id="settings-claude-key" class="input-field" placeholder="sk-ant-...">
+        </div>
+
+        <!-- Supabase Cloud Database Integration -->
+        <div style="border-top: 1px solid var(--border-subtle); margin: 1.5rem 0; padding-top: 1.25rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem;">
+            <label style="font-weight: 700; color: #34d399; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0;">
+              <i class="ph ph-database"></i> Supabase Cloud Database (Optional)
+            </label>
+            <span id="supabase-status-pill" class="meta-pill" style="font-size: 0.75rem;">Local JSON Storage</span>
+          </div>
+
+          <div class="form-group">
+            <label for="settings-supabase-url">Supabase Project URL</label>
+            <input type="text" id="settings-supabase-url" class="input-field" placeholder="https://xyzcompany.supabase.co">
+          </div>
+
+          <div class="form-group">
+            <label for="settings-supabase-key">Supabase Anon / Service Role Key</label>
+            <input type="password" id="settings-supabase-key" class="input-field" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+          </div>
+
+          <div style="display: flex; gap: 0.6rem; margin-bottom: 1.25rem;">
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-test-supabase" style="flex: 1;">
+              <i class="ph ph-plugs-connected"></i> Test Connection
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-sync-supabase" style="flex: 1;">
+              <i class="ph ph-cloud-arrow-up"></i> Sync to Supabase
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          Save All Settings
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Module Quiz Modal (10-20 Questions) -->
+  <div id="module-quiz-modal" class="modal-backdrop hidden">
+    <div class="modal-card quiz-modal-card">
+      <div class="quiz-modal-header">
+        <div class="quiz-meta-wrap">
+          <span class="quiz-tag-pill"><i class="ph ph-exam"></i> Module Knowledge Check</span>
+          <h3 id="quiz-module-title" class="quiz-title">Module Quiz</h3>
+        </div>
+        <button class="close-modal-btn" id="btn-close-quiz-modal"><i class="ph ph-x"></i></button>
+      </div>
+
+      <!-- Quiz Loading State -->
+      <div id="quiz-loading-state" class="quiz-loading-box">
+        <div class="quiz-spinner"><i class="ph ph-sparkle ph-spin"></i></div>
+        <h4>Generating Tailored Technical Quiz...</h4>
+        <p>Formulating 10–15 conceptual questions and code tests for this module.</p>
+      </div>
+
+      <!-- Quiz Active Testing State -->
+      <div id="quiz-active-state" class="quiz-body-wrap hidden">
+        <div class="quiz-progress-bar-wrap">
+          <div class="quiz-progress-fill" id="quiz-progress-bar" style="width: 0%;"></div>
+        </div>
+        
+        <div class="quiz-question-counter-row">
+          <span id="quiz-q-counter">Question 1 of 15</span>
+          <span id="quiz-live-score" class="quiz-score-badge"><i class="ph ph-trophy"></i> Score: 0</span>
+        </div>
+
+        <div class="quiz-question-box">
+          <h4 id="quiz-question-text" class="quiz-question-prompt"></h4>
+          <pre id="quiz-code-snippet" class="quiz-code-block hidden"><code></code></pre>
+        </div>
+
+        <!-- 4 Options Grid -->
+        <div class="quiz-options-grid" id="quiz-options-container"></div>
+
+        <!-- Explanation Alert Card (shown upon answering) -->
+        <div id="quiz-explanation-box" class="quiz-explanation-card hidden">
+          <div class="explanation-title" id="quiz-explanation-title"></div>
+          <p id="quiz-explanation-text"></p>
+        </div>
+
+        <div class="quiz-footer-actions">
+          <button class="btn btn-primary" id="btn-quiz-next-q" disabled>
+            Next Question <i class="ph ph-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quiz Final Score Summary State -->
+      <div id="quiz-summary-state" class="quiz-summary-wrap hidden">
+        <div class="summary-score-hero">
+          <div class="summary-score-circle">
+            <span class="summary-score-percent" id="quiz-final-percent">0%</span>
+            <span class="summary-score-fraction" id="quiz-final-fraction">0 / 0</span>
+          </div>
+          <h3 id="quiz-result-headline">Quiz Completed!</h3>
+          <p id="quiz-result-subline">Review your knowledge mastery below.</p>
+        </div>
+
+        <div class="summary-action-buttons">
+          <button class="btn btn-primary" id="btn-quiz-mark-mastered">
+            <i class="ph ph-check-circle"></i> Mark Module as Completed
+          </button>
+          <button class="btn btn-secondary" id="btn-quiz-retake">
+            <i class="ph ph-arrow-counter-clockwise"></i> Retake Quiz
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide-Over Resource & Submodule Deep Dive Drawer -->
+  <div id="node-resource-drawer" class="hidden"></div>
+
+  <!-- Floating Toast Notifications Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Script Inclusions -->
+  <script src="js/templates-data.js"></script>
+  <script src="js/ai-service.js"></script>
+  <script src="js/roadmap-renderer.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

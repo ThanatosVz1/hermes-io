@@ -1,0 +1,22 @@
+[
+  {
+    "id": "usr_demo_thanatos_001",
+    "name": "Thanatos (Frontend Specialist)",
+    "email": "thanatos@hermes.io",
+    "passwordHash": "d50e2dec9a5a93679ce57bc106667709db800e5c17597bc13a1b54c2a403bfccca84e441fc0c55dac81500dce49549da6a45f5c1b00c5d8160a0f39c2fe7c683",
+    "salt": "2d5f24f9688b3560c973827b959d1ab5",
+    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+    "createdAt": "2026-08-31T17:03:15.679Z",
+    "updatedAt": "2026-08-31T17:03:15.680Z"
+  },
+  {
+    "id": "usr_demo_cronus_002",
+    "name": "Cronus (AI & ML Engineer)",
+    "email": "cronus@hermes.io",
+    "passwordHash": "9401b5545e431010c3e8322a9d946ad7985056ef08751e8cf7e84218ef14eed546a0855a1ce36fca7960e3d0282bdfb764307759327f9440073e11420c7b8efc",
+    "salt": "eb28e182232e43111f0dbdbbfa0ea854",
+    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+    "createdAt": "2026-08-31T17:03:15.680Z",
+    "updatedAt": "2026-08-31T17:03:15.680Z"
+  }
+]
