@@ -18,6 +18,14 @@ class HermesRoadmapRenderer {
     this.statusFilter = 'all';
     this.activeDrawerNode = null;
     this.activeDrawerParentNode = null;
+
+    // Redraw connectors smoothly on window resize
+    window.addEventListener('resize', () => {
+      if (this.currentViewMode === 'graph' && this.container) {
+        const canvas = this.container.querySelector('.visual-graph-canvas');
+        if (canvas) this.drawSmoothBranchConnectors(canvas);
+      }
+    });
   }
 
   setRoadmap(roadmap) {
@@ -85,6 +93,14 @@ class HermesRoadmapRenderer {
 
   setViewMode(mode) {
     this.currentViewMode = mode;
+    const btnGraph = this.stickyHeader?.querySelector('#btn-view-graph');
+    const btnTree = this.stickyHeader?.querySelector('#btn-view-tree');
+    if (btnGraph) btnGraph.classList.toggle('active', mode === 'graph');
+    if (btnTree) btnTree.classList.toggle('active', mode === 'tree');
+    if (this.container) {
+      this.container.classList.remove('view-graph', 'view-tree');
+      this.container.classList.add(`view-${mode}`);
+    }
     this.render();
   }
 
@@ -161,57 +177,63 @@ class HermesRoadmapRenderer {
 
     this.stickyHeader.innerHTML = `
       <div class="stats-bar-inner">
-        <div class="stats-main-info">
-          <div class="progress-ring-container animate-fade-in">
-            <div class="progress-circle-wrap">
-              <svg class="progress-circle" width="56" height="56" viewBox="0 0 56 56">
-                <circle class="circle-bg" cx="28" cy="28" r="23"></circle>
-                <circle class="circle-fill" cx="28" cy="28" r="23" style="stroke-dasharray: 144.5; stroke-dashoffset: ${144.5 - (144.5 * progress) / 100}"></circle>
-              </svg>
-              <span class="progress-percent-label">${progress}%</span>
+        <!-- Tier 1: Roadmap Branding, Title, Meta Badges -->
+        <div class="stats-header-top-row">
+          <div class="stats-header-left">
+            <div class="stats-header-branding">
+              <div class="premium-progress-ring">
+                <svg class="progress-circle-svg" viewBox="0 0 64 64">
+                  <circle class="ring-track" cx="32" cy="32" r="28" fill="none"></circle>
+                  <circle class="ring-fill" cx="32" cy="32" r="28" fill="none" style="stroke-dasharray: 175.93; stroke-dashoffset: ${175.93 - (175.93 * progress) / 100}"></circle>
+                </svg>
+                <div class="ring-text">${progress}%</div>
+              </div>
+            </div>
+            <div class="stats-text-block">
+              <h1 class="roadmap-active-title" title="${this.escapeHTML(this.roadmap.title)}">${this.escapeHTML(this.roadmap.title)}</h1>
+              <div class="roadmap-sub-meta">
+                <span class="meta-pill"><i class="ph ph-bullseye"></i> ${this.escapeHTML(this.roadmap.targetRole || this.roadmap.goal || 'General Track')}</span>
+                <span class="meta-pill"><i class="ph ph-hourglass-high"></i> ${completedHours} / ${totalHours} hrs</span>
+                <span class="meta-pill"><i class="ph ph-check-circle"></i> ${completedMilestones} / ${totalMilestones} checkpoints</span>
+              </div>
             </div>
           </div>
-          <div class="stats-text-block">
-            <h2 class="roadmap-active-title">${this.escapeHTML(this.roadmap.title)}</h2>
-            <div class="roadmap-sub-meta">
-              <span class="meta-pill"><i class="ph ph-target"></i> ${this.escapeHTML(this.roadmap.targetRole || this.roadmap.goal || 'General Mastery')}</span>
-              <span class="meta-pill"><i class="ph ph-hourglass-high"></i> ${completedHours} / ${totalHours} hrs</span>
-              <span class="meta-pill"><i class="ph ph-check-circle"></i> ${completedMilestones} / ${totalMilestones} milestones</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="stats-controls">
-          <!-- View Mode Toggle (Visual Flowchart vs Tree List) -->
-          <div class="view-mode-toggle-group">
-            <button class="btn-toggle-view ${this.currentViewMode === 'graph' ? 'active' : ''}" id="btn-view-graph" title="Visual Flowchart Graph">
-              <i class="ph ph-graph"></i> Visual Graph
-            </button>
-            <button class="btn-toggle-view ${this.currentViewMode === 'tree' ? 'active' : ''}" id="btn-view-tree" title="Nested Tree View">
-              <i class="ph ph-list-dashes"></i> Tree View
-            </button>
-          </div>
-
-          <div class="search-filter-group">
-            <div class="input-with-icon search-input-box">
-              <i class="ph ph-magnifying-glass"></i>
-              <input type="text" id="tree-search-input" placeholder="Search topics..." value="${this.escapeHTML(this.searchQuery)}">
-            </div>
-            <select id="tree-status-filter" class="custom-select-compact">
-              <option value="all" ${this.statusFilter === 'all' ? 'selected' : ''}>All Status</option>
-              <option value="in_progress" ${this.statusFilter === 'in_progress' ? 'selected' : ''}>In Progress</option>
-              <option value="completed" ${this.statusFilter === 'completed' ? 'selected' : ''}>Completed</option>
-              <option value="not_started" ${this.statusFilter === 'not_started' ? 'selected' : ''}>Not Started</option>
-            </select>
-          </div>
-
-          <div class="action-btn-group">
+          <div class="stats-header-actions">
             <button class="btn btn-secondary btn-sm" id="btn-export-roadmap" title="Export roadmap JSON or Markdown">
               <i class="ph ph-share-network"></i> Export
             </button>
             <button class="btn btn-danger-soft btn-sm" id="btn-delete-active-roadmap" title="Delete this roadmap">
               <i class="ph ph-trash"></i> Delete
             </button>
+          </div>
+        </div>
+
+        <!-- Tier 2: Toolbar (View Mode, Search, Filter) -->
+        <div class="stats-header-toolbar">
+          <div class="premium-toggle-switch">
+            <div class="toggle-switch-slider ${this.currentViewMode === 'tree' ? 'tree-active' : 'graph-active'}"></div>
+            <button class="toggle-switch-btn ${this.currentViewMode === 'graph' ? 'active' : ''}" id="btn-view-graph">
+              <i class="ph ph-graph"></i> Visual Graph
+            </button>
+            <button class="toggle-switch-btn ${this.currentViewMode === 'tree' ? 'active' : ''}" id="btn-view-tree">
+              <i class="ph ph-list-dashes"></i> Tree View
+            </button>
+          </div>
+
+          <div class="search-filter-group">
+            <div class="premium-search-box">
+              <i class="ph ph-magnifying-glass"></i>
+              <input type="text" id="tree-search-input" class="premium-input" placeholder="Search topics..." value="${this.escapeHTML(this.searchQuery)}">
+            </div>
+            <div class="premium-select-box">
+              <select id="tree-status-filter" class="premium-select">
+                <option value="all" ${this.statusFilter === 'all' ? 'selected' : ''}>All Status</option>
+                <option value="in_progress" ${this.statusFilter === 'in_progress' ? 'selected' : ''}>In Progress</option>
+                <option value="completed" ${this.statusFilter === 'completed' ? 'selected' : ''}>Completed</option>
+                <option value="not_started" ${this.statusFilter === 'not_started' ? 'selected' : ''}>Not Started</option>
+              </select>
+              <i class="ph ph-caret-down"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -251,6 +273,47 @@ class HermesRoadmapRenderer {
         }
       }
     });
+  }
+
+  setViewMode(mode) {
+    this.currentViewMode = mode;
+    
+    // Update active class on buttons
+    if (this.stickyHeader) {
+      const btnGraph = this.stickyHeader.querySelector('#btn-view-graph');
+      const btnTree = this.stickyHeader.querySelector('#btn-view-tree');
+      if (btnGraph) {
+        if (mode === 'graph') btnGraph.classList.add('active');
+        else btnGraph.classList.remove('active');
+      }
+      if (btnTree) {
+        if (mode === 'tree') btnTree.classList.add('active');
+        else btnTree.classList.remove('active');
+      }
+      
+      const slider = this.stickyHeader.querySelector('.toggle-switch-slider');
+      if (slider) {
+        if (mode === 'graph') {
+          slider.classList.add('graph-active');
+          slider.classList.remove('tree-active');
+        } else {
+          slider.classList.add('tree-active');
+          slider.classList.remove('graph-active');
+        }
+      }
+    }
+    
+    if (this.container) {
+      if (mode === 'graph') {
+        this.container.classList.add('graph-mode-active');
+        this.container.classList.remove('tree-mode-active');
+      } else {
+        this.container.classList.add('tree-mode-active');
+        this.container.classList.remove('graph-mode-active');
+      }
+    }
+    
+    this.render();
   }
 
   // Master Render Dispatcher
@@ -340,15 +403,20 @@ class HermesRoadmapRenderer {
       // 2. Central Spine Card (Primary Milestone Box)
       const isMCompleted = milestone.status === 'completed';
       const isMInProg = milestone.status === 'in_progress';
+      const hasMProgress = isMCompleted || isMInProg || (milestone.progress && milestone.progress > 0);
       const hasChildren = milestone.children && milestone.children.length > 0;
+
+      const spineCheckboxIcon = isMCompleted
+        ? '<i class="ph-fill ph-check-square"></i>'
+        : (isMInProg ? '<i class="ph ph-clock-clockwise"></i>' : '<i class="ph ph-square"></i>');
 
       const spineNode = document.createElement('div');
       spineNode.className = `graph-spine-node status-${milestone.status}`;
       spineNode.dataset.nodeId = milestone.id;
       spineNode.innerHTML = `
         <div class="spine-node-inner">
-          <button class="node-status-checkbox status-${milestone.status}" title="${isMCompleted ? 'Mark Incomplete' : 'Mark Completed'}">
-            <i class="ph ph-${isMCompleted ? 'check-square-fill' : (isMInProg ? 'clock-clockwise' : 'square')}"></i>
+          <button class="node-status-checkbox status-${milestone.status}" title="${isMCompleted ? 'Click to uncheck' : 'Mark Completed'}">
+            ${spineCheckboxIcon}
           </button>
           <div class="spine-node-title">${this.escapeHTML(milestone.title)}</div>
           <div class="spine-node-hours">${milestone.estimatedHours || 12}h</div>
@@ -359,10 +427,12 @@ class HermesRoadmapRenderer {
       `;
 
       // Checkbox click on main milestone
-      spineNode.querySelector('.node-status-checkbox').addEventListener('click', (e) => {
+      const spineCheckbox = spineNode.querySelector('.node-status-checkbox');
+      spineCheckbox.addEventListener('click', (e) => {
         e.stopPropagation();
         this.handleStatusToggle(milestone);
       });
+      this.addCompletedHoverSwap(spineCheckbox, isMCompleted);
 
       // Inline Expand/Unexpand toggle on spine card
       spineNode.querySelector('.btn-spine-toggle-sub').addEventListener('click', (e) => {
@@ -397,11 +467,6 @@ class HermesRoadmapRenderer {
         const branchCluster = document.createElement('div');
         branchCluster.className = `graph-branch-cluster ${isAlternateSide ? 'branch-left' : 'branch-right'}`;
 
-        // SVG Connector curve
-        const connector = document.createElement('div');
-        connector.className = 'branch-connector-curve';
-        branchCluster.appendChild(connector);
-
         const subnodesWrap = document.createElement('div');
         subnodesWrap.className = 'branch-subnodes-stack';
 
@@ -413,6 +478,7 @@ class HermesRoadmapRenderer {
             <i class="ph ph-arrows-in-line-horizontal"></i> Unexpand Submodules (${children.length})
           </button>
         `;
+
         clusterHeader.querySelector('.btn-cluster-collapse').addEventListener('click', (e) => {
           e.stopPropagation();
           milestone.collapsedBackup = milestone.children;
@@ -432,25 +498,32 @@ class HermesRoadmapRenderer {
           const isSubDone = sub.status === 'completed';
           const isSubInProg = sub.status === 'in_progress';
 
+          const subCheckboxIcon = isSubDone
+            ? '<i class="ph-fill ph-check-square"></i>'
+            : (isSubInProg ? '<i class="ph ph-clock-clockwise"></i>' : '<i class="ph ph-square"></i>');
+
+          // Clean badges for non-default types; no misleading excess checkmark ticks
           const recBadge = sub.recommendationType === 'alternative' 
-            ? '<span class="rec-icon icon-alt" title="Alternative Option"><i class="ph ph-check"></i></span>'
+            ? '<span class="rec-badge badge-alt" title="Alternative Option"><i class="ph ph-arrows-split"></i> Alt</span>'
             : (sub.recommendationType === 'optional' 
-                ? '<span class="rec-icon icon-opt" title="Optional / Order not strict"><i class="ph ph-check"></i></span>'
-                : '<span class="rec-icon icon-rec" title="Personal Recommendation"><i class="ph ph-check"></i></span>');
+                ? '<span class="rec-badge badge-opt" title="Optional"><i class="ph ph-circle-dashed"></i> Opt</span>'
+                : '');
 
           subCard.innerHTML = `
-            <button class="subcard-checkbox status-${sub.status}" title="${isSubDone ? 'Mark Incomplete' : 'Mark Completed'}">
-              <i class="ph ph-${isSubDone ? 'check-square-fill' : (isSubInProg ? 'clock-clockwise' : 'square')}"></i>
+            <button class="subcard-checkbox status-${sub.status}" title="${isSubDone ? 'Click to uncheck' : 'Mark Completed'}">
+              ${subCheckboxIcon}
             </button>
             <div class="subcard-title">${this.escapeHTML(sub.title)}</div>
             ${recBadge}
           `;
 
           // Checkbox click directly toggles submodule completion
-          subCard.querySelector('.subcard-checkbox').addEventListener('click', (e) => {
+          const subCheckbox = subCard.querySelector('.subcard-checkbox');
+          subCheckbox.addEventListener('click', (e) => {
             e.stopPropagation();
             this.handleSubmoduleCheckboxToggle(sub, milestone);
           });
+          this.addCompletedHoverSwap(subCheckbox, isSubDone);
 
           // Clicking card body opens drawer
           subCard.addEventListener('click', (e) => {
@@ -500,23 +573,113 @@ class HermesRoadmapRenderer {
     graphWrapper.appendChild(canvas);
     this.container.appendChild(graphWrapper);
 
+    // Render smooth SVG bezier curves for branching submodules
+    requestAnimationFrame(() => {
+      this.drawSmoothBranchConnectors(canvas);
+    });
+
     // Bind Zoom Controls
     legendCard.querySelector('#btn-zoom-in')?.addEventListener('click', () => {
       this.zoomLevel = Math.min(1.5, Math.round((this.zoomLevel + 0.1) * 10) / 10);
       canvas.style.transform = `scale(${this.zoomLevel})`;
       legendCard.querySelector('#zoom-text').textContent = `${Math.round(this.zoomLevel * 100)}%`;
+      requestAnimationFrame(() => this.drawSmoothBranchConnectors(canvas));
     });
 
     legendCard.querySelector('#btn-zoom-out')?.addEventListener('click', () => {
       this.zoomLevel = Math.max(0.6, Math.round((this.zoomLevel - 0.1) * 10) / 10);
       canvas.style.transform = `scale(${this.zoomLevel})`;
       legendCard.querySelector('#zoom-text').textContent = `${Math.round(this.zoomLevel * 100)}%`;
+      requestAnimationFrame(() => this.drawSmoothBranchConnectors(canvas));
     });
 
     legendCard.querySelector('#btn-zoom-reset')?.addEventListener('click', () => {
       this.zoomLevel = 1.0;
       canvas.style.transform = `scale(${this.zoomLevel})`;
       legendCard.querySelector('#zoom-text').textContent = `100%`;
+      requestAnimationFrame(() => this.drawSmoothBranchConnectors(canvas));
+    });
+  }
+
+  // Draw smooth, high-precision SVG Bezier curved edges connecting milestone spine to submodules
+  drawSmoothBranchConnectors(canvas) {
+    if (!canvas) return;
+    const rows = canvas.querySelectorAll('.graph-milestone-row');
+    const zoom = this.zoomLevel || 1.0;
+
+    rows.forEach(row => {
+      // Clean up previous SVG if any
+      const oldSvg = row.querySelector('.branch-connector-svg');
+      if (oldSvg) oldSvg.remove();
+
+      const branchCluster = row.querySelector('.graph-branch-cluster');
+      const spineNode = row.querySelector('.graph-spine-node');
+      if (!branchCluster || !spineNode) return;
+
+      const subCards = branchCluster.querySelectorAll('.graph-submodule-card');
+      if (subCards.length === 0) return;
+
+      const isLeft = row.classList.contains('side-left');
+      const rowRect = row.getBoundingClientRect();
+      const spineRect = spineNode.getBoundingClientRect();
+
+      // Spine Anchor point (facing the branch cluster)
+      const x0 = (isLeft 
+        ? (spineRect.left - rowRect.left) 
+        : (spineRect.right - rowRect.left)) / zoom;
+      const y0 = ((spineRect.top - rowRect.top) + (spineRect.height / 2)) / zoom;
+
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('class', 'branch-connector-svg');
+      svg.style.position = 'absolute';
+      svg.style.top = '0';
+      svg.style.left = '0';
+      svg.style.width = '100%';
+      svg.style.height = '100%';
+      svg.style.pointerEvents = 'none';
+      svg.style.zIndex = '1';
+      svg.style.overflow = 'visible';
+
+      // Spine root anchor dot
+      const rootDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      rootDot.setAttribute('cx', x0);
+      rootDot.setAttribute('cy', y0);
+      rootDot.setAttribute('r', '3.5');
+      rootDot.setAttribute('class', 'connector-anchor-dot');
+      svg.appendChild(rootDot);
+
+      subCards.forEach(card => {
+        const cardRect = card.getBoundingClientRect();
+        const isDone = card.classList.contains('status-completed');
+
+        // Card connection anchor point (facing the spine)
+        const x1 = (isLeft 
+          ? (cardRect.right - rowRect.left) 
+          : (cardRect.left - rowRect.left)) / zoom;
+        const y1 = ((cardRect.top - rowRect.top) + (cardRect.height / 2)) / zoom;
+
+        // Smooth cubic bezier S-curve with horizontal departure and arrival tangents
+        const dx = (x1 - x0) * 0.55;
+        const cp1x = x0 + dx;
+        const cp1y = y0;
+        const cp2x = x1 - dx;
+        const cp2y = y1;
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M ${x0} ${y0} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${x1} ${y1}`);
+        path.setAttribute('class', `branch-curve-path ${isDone ? 'is-completed' : ''}`);
+        svg.appendChild(path);
+
+        // Terminal anchor dot at card edge
+        const cardDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        cardDot.setAttribute('cx', x1);
+        cardDot.setAttribute('cy', y1);
+        cardDot.setAttribute('r', '3');
+        cardDot.setAttribute('class', `connector-card-dot ${isDone ? 'is-completed' : ''}`);
+        svg.appendChild(cardDot);
+      });
+
+      row.appendChild(svg);
     });
   }
 
@@ -605,15 +768,31 @@ class HermesRoadmapRenderer {
           </div>
 
           <!-- Curated Learning Resources Section -->
-          <div class="drawer-section">
-            <h3 class="drawer-section-title"><i class="ph ph-books"></i> Verified Learning Resources</h3>
+          <div class="drawer-section drawer-resources-section">
+            <h3 class="drawer-section-title">
+              <span class="drawer-section-title-text">
+                <i class="ph ph-books"></i> Verified Learning Resources
+              </span>
+              ${resources.length > 0 ? `<span class="drawer-section-counter">${resources.length}</span>` : ''}
+            </h3>
             ${resources.length === 0 ? `
-              <p class="drawer-empty-text">No direct links attached yet. Click below to generate verified docs & tutorials.</p>
+              <div class="drawer-empty-resource-card">
+                <div class="drawer-empty-icon"><i class="ph ph-books"></i></div>
+                <div class="drawer-empty-text-wrap">
+                  <div class="drawer-empty-title">No verified links attached yet</div>
+                  <p class="drawer-empty-desc">Use "Ask AI" above to generate tailored tutorials, or search online documentation.</p>
+                </div>
+              </div>
             ` : `
               <div class="drawer-resources-list">
-                ${resources.map(r => this.renderResourceCard(r)).join('')}
+                ${resources.map(r => this.renderResourceCard(r, node.title)).join('')}
               </div>
             `}
+            <div class="drawer-resources-footer">
+              <a href="https://www.google.com/search?q=${encodeURIComponent(node.title + ' documentation tutorial')}" target="_blank" rel="noopener noreferrer" class="drawer-search-more-resources-link">
+                <i class="ph ph-magnifying-glass"></i> Search online documentation <i class="ph ph-arrow-up-right"></i>
+              </a>
+            </div>
           </div>
 
           <!-- Granular Submodules Section with Interactive Checkboxes -->
@@ -624,10 +803,15 @@ class HermesRoadmapRenderer {
                 ${children.map(child => `
                   <div class="drawer-subitem status-${child.status}" data-child-id="${child.id}">
                     <button class="drawer-subitem-check-btn status-${child.status}" data-child-id="${child.id}" title="${child.status === 'completed' ? 'Mark Incomplete' : 'Mark Completed'}">
-                      <i class="ph ph-${child.status === 'completed' ? 'check-square-fill' : 'square'}"></i>
+                      ${child.status === 'completed' ? '<i class="ph-fill ph-check-square"></i>' : '<i class="ph ph-square"></i>'}
                     </button>
                     <span class="drawer-subitem-title">${this.escapeHTML(child.title)}</span>
                     <small>${child.estimatedHours || 2}h</small>
+                    ${(child.status === 'completed' || child.status === 'in_progress' || (child.progress && child.progress > 0)) ? `
+                      <button class="drawer-subitem-uncheck-btn static-uncheck-btn" data-child-id="${child.id}" title="Uncheck this item">
+                        <i class="ph ph-arrow-counter-clockwise"></i> Uncheck
+                      </button>
+                    ` : ''}
                   </div>
                 `).join('')}
               </div>
@@ -656,7 +840,11 @@ class HermesRoadmapRenderer {
     // Status pill clicks inside drawer
     drawer.querySelectorAll('.btn-status-pill').forEach(btn => {
       btn.addEventListener('click', () => {
-        const newStatus = btn.dataset.status;
+        let newStatus = btn.dataset.status;
+        // If clicking on already completed pill, cycle/undo back to not_started
+        if (node.status === newStatus && newStatus === 'completed') {
+          newStatus = 'not_started';
+        }
         node.status = newStatus;
         if (newStatus === 'completed') {
           node.progress = 100;
@@ -682,6 +870,27 @@ class HermesRoadmapRenderer {
         if (targetChild) {
           this.handleSubmoduleCheckboxToggle(targetChild, node);
           this.openNodeDrawer(node, parentNode); // Refresh drawer UI
+        }
+      });
+      // Add icon swap on hover for completed drawer subitems
+      this.addCompletedHoverSwap(checkBtn, checkBtn.classList.contains('status-completed'));
+    });
+
+    // Subitem static uncheck buttons inside drawer
+    drawer.querySelectorAll('.drawer-subitem-uncheck-btn').forEach(uncheckBtn => {
+      uncheckBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const childId = uncheckBtn.dataset.childId;
+        const targetChild = children.find(c => c.id === childId);
+        if (targetChild) {
+          targetChild.status = 'not_started';
+          targetChild.progress = 0;
+          this.recalculateAndRender();
+          this.onUpdate(this.roadmap);
+          this.openNodeDrawer(node, parentNode); // Refresh drawer UI
+          if (window.hermesApp && window.hermesApp.showToast) {
+            window.hermesApp.showToast(`"${targetChild.title}" marked as Not Started`, 'info');
+          }
         }
       });
     });
@@ -755,6 +964,11 @@ class HermesRoadmapRenderer {
     const isExpanded = node.isExpanded !== false;
     const isCompleted = node.status === 'completed';
     const isInProg = node.status === 'in_progress';
+    const hasProgress = isCompleted || isInProg || (node.progress && node.progress > 0);
+
+    const treeCheckboxIcon = isCompleted
+      ? '<i class="ph-fill ph-check-square"></i>'
+      : (isInProg ? '<i class="ph ph-clock-clockwise"></i>' : '<i class="ph ph-square"></i>');
 
     const card = document.createElement('div');
     card.className = `tree-node-card depth-${depth} status-${node.status} ${isExpanded ? 'is-expanded' : 'is-collapsed'} animate-fade-in-up`;
@@ -772,7 +986,7 @@ class HermesRoadmapRenderer {
 
         <div class="node-status-col">
           <button class="node-status-toggle status-btn-${node.status}" title="${isCompleted ? 'Mark Incomplete' : 'Mark Completed'}">
-            <i class="ph ph-${isCompleted ? 'check-square-fill' : (isInProg ? 'clock-clockwise' : 'square')}"></i>
+            ${treeCheckboxIcon}
           </button>
         </div>
 
@@ -816,6 +1030,7 @@ class HermesRoadmapRenderer {
         e.stopPropagation();
         this.handleStatusToggle(node);
       });
+      this.addCompletedHoverSwap(statusBtn, isCompleted);
     }
 
     // Render children
@@ -828,6 +1043,19 @@ class HermesRoadmapRenderer {
     }
 
     return card;
+  }
+
+  // Helper: adds icon swap on hover for completed checkboxes
+  addCompletedHoverSwap(btn, isCompleted) {
+    if (!isCompleted) return;
+    const icon = btn.querySelector('i');
+    if (!icon) return;
+    btn.addEventListener('mouseenter', () => {
+      icon.className = 'ph ph-x-square';
+    });
+    btn.addEventListener('mouseleave', () => {
+      icon.className = 'ph-fill ph-check-square';
+    });
   }
 
   handleStatusToggle(node) {
@@ -854,31 +1082,75 @@ class HermesRoadmapRenderer {
     }
   }
 
-  renderResourceCard(resource) {
-    let typeIcon = 'article';
-    if (resource.type === 'video') typeIcon = 'video';
-    else if (resource.type === 'course') typeIcon = 'graduation-cap';
-    else if (resource.type === 'docs') typeIcon = 'file-text';
-    else if (resource.type === 'practice') typeIcon = 'terminal-window';
-    else if (resource.type === 'project') typeIcon = 'git-fork';
+  renderResourceCard(resource, nodeTitle = '') {
+    if (!resource) return '';
+    const type = String(resource.type || 'docs').toLowerCase();
 
-    const hasUrl = Boolean(resource.url && resource.url.startsWith('http'));
+    let typeIcon = 'file-text';
+    let typeLabel = 'DOCS';
+
+    if (type === 'video') {
+      typeIcon = 'play-circle';
+      typeLabel = 'VIDEO';
+    } else if (type === 'course') {
+      typeIcon = 'graduation-cap';
+      typeLabel = 'COURSE';
+    } else if (type === 'practice') {
+      typeIcon = 'terminal-window';
+      typeLabel = 'PRACTICE';
+    } else if (type === 'project') {
+      typeIcon = 'git-fork';
+      typeLabel = 'PROJECT';
+    } else if (type === 'article') {
+      typeIcon = 'newspaper';
+      typeLabel = 'ARTICLE';
+    } else {
+      typeIcon = 'file-text';
+      typeLabel = 'DOCS';
+    }
+
+    let rawUrl = (resource.url || '').trim();
+    if (rawUrl && !/^https?:\/\//i.test(rawUrl) && !rawUrl.startsWith('/')) {
+      rawUrl = 'https://' + rawUrl;
+    }
+    const hasDirectUrl = Boolean(rawUrl && /^https?:\/\//i.test(rawUrl));
+    
+    // Fallback search link if resource lacks a direct URL
+    const fallbackSearchUrl = `https://www.google.com/search?q=${encodeURIComponent((nodeTitle ? nodeTitle + ' ' : '') + (resource.title || '') + ' ' + typeLabel.toLowerCase())}`;
+    const targetUrl = hasDirectUrl ? rawUrl : fallbackSearchUrl;
+
+    let domain = '';
+    if (hasDirectUrl) {
+      try {
+        const parsed = new URL(rawUrl);
+        domain = parsed.hostname.replace(/^www\./i, '');
+      } catch (e) {
+        domain = '';
+      }
+    }
+
+    const isFree = Boolean(resource.isFree !== false);
+    const titleText = this.escapeHTML(resource.title || 'Learning Resource');
 
     return `
-      <div class="resource-card res-type-${resource.type}">
-        <div class="res-icon-wrap"><i class="ph ph-${typeIcon}"></i></div>
+      <a href="${this.escapeHTML(targetUrl)}" target="_blank" rel="noopener noreferrer" class="resource-card res-type-${type}" title="${titleText}">
+        <div class="res-icon-wrap" aria-hidden="true">
+          <i class="ph ph-${typeIcon}"></i>
+        </div>
         <div class="res-info-wrap">
-          <div class="res-type-badge">${resource.type.toUpperCase()}</div>
-          ${hasUrl ? `
-            <a href="${this.escapeHTML(resource.url)}" target="_blank" rel="noopener noreferrer" class="res-title-link">
-              ${this.escapeHTML(resource.title)} <i class="ph ph-arrow-square-out"></i>
-            </a>
-          ` : `<span class="res-title-text">${this.escapeHTML(resource.title)}</span>`}
+          <div class="res-meta-row">
+            <span class="res-type-badge">${typeLabel}</span>
+            ${domain ? `<span class="res-domain-pill"><i class="ph ph-globe"></i> ${this.escapeHTML(domain)}</span>` : ''}
+          </div>
+          <div class="res-title-text">${titleText}</div>
         </div>
-        <div class="res-free-badge ${resource.isFree ? 'is-free' : 'is-paid'}">
-          ${resource.isFree ? 'FREE' : 'PAID'}
+        <div class="res-action-wrap">
+          <span class="res-free-badge ${isFree ? 'is-free' : 'is-paid'}">
+            ${isFree ? '<i class="ph ph-sparkle"></i> FREE' : '<i class="ph ph-tag"></i> PAID'}
+          </span>
+          <span class="res-external-icon" aria-hidden="true"><i class="ph ph-arrow-up-right"></i></span>
         </div>
-      </div>
+      </a>
     `;
   }
 

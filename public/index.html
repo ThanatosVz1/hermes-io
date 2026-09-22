@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hermes.io — AI-Powered Learning Roadmap Generator & Progress Tracker</title>
   <meta name="description" content="Generate personalized, interactive learning roadmaps with AI, on-demand submodule expansions, and real-time progress roll-ups.">
 
-  <!-- Inter Font & JetBrains Mono -->
+  <!-- Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#F5F5F2">
 
-  <!-- Phosphor Icons -->
-  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <!-- Phosphor Icons (Regular & Fill) -->
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
 
   <!-- Hermes CSS -->
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=7">
 </head>
 <body>
 
@@ -23,9 +25,6 @@
   <header class="app-navbar">
     <div class="nav-left">
       <div class="nav-brand" id="navbar-brand-btn">
-        <div class="brand-icon">
-          <i class="ph ph-lightning-fill"></i>
-        </div>
         <span>Hermes<span class="brand-dot">.io</span></span>
       </div>
 
@@ -341,7 +340,7 @@
       <!-- Categories Filter -->
       <div class="gallery-categories-bar">
         <button class="gallery-category-filter active" data-category="all">All Tracks</button>
-        <button class="gallery-category-filter" data-category="programming languages">💻 Programming Languages</button>
+        <button class="gallery-category-filter" data-category="programming languages">Programming Languages</button>
         <button class="gallery-category-filter" data-category="engineering">Engineering</button>
         <button class="gallery-category-filter" data-category="data">Data Science</button>
         <button class="gallery-category-filter" data-category="ai">AI & ML</button>
@@ -380,7 +379,6 @@
     <div class="modal-card">
       <div class="modal-header">
         <div class="nav-brand">
-          <div class="brand-icon"><i class="ph ph-lightning-fill"></i></div>
           <span>Hermes<span class="brand-dot">.io</span></span>
         </div>
         <button class="close-modal-btn" id="close-auth-modal" aria-label="Close"><i class="ph ph-x"></i></button>
@@ -734,10 +732,10 @@
   <div class="toast-container" id="toast-container"></div>
 
   <!-- Script Inclusions -->
-  <script src="js/templates-data.js"></script>
-  <script src="js/ai-service.js"></script>
-  <script src="js/roadmap-renderer.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/templates-data.js?v=6"></script>
+  <script src="js/ai-service.js?v=6"></script>
+  <script src="js/roadmap-renderer.js?v=6"></script>
+  <script src="js/app.js?v=6"></script>
 
 </body>
 </html>

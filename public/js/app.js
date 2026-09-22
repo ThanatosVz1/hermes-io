@@ -386,9 +386,34 @@ class HermesApp {
       this.roadmapsList.forEach(roadmap => {
         const card = document.createElement('div');
         card.className = 'roadmap-dash-card animate-fade-in-up';
+        
+        // Parse skills/interests tags cleanly
+        const rawInterests = (roadmap.interests || '')
+          .split(',')
+          .map(t => t.trim())
+          .filter(Boolean);
+        
+        // Clean display role
+        let roleBadge = roadmap.targetRole ? roadmap.targetRole.trim() : '';
+        if (!roleBadge && rawInterests.length > 0) {
+          roleBadge = rawInterests[0];
+        }
+        if (!roleBadge) {
+          roleBadge = 'Custom Track';
+        }
+        if (roleBadge.length > 28) {
+          roleBadge = roleBadge.substring(0, 26) + '...';
+        }
+
+        // Distinct skill tags (exclude the role if already shown as roleBadge)
+        const displayTags = rawInterests.filter(t => t.toLowerCase() !== roleBadge.toLowerCase());
+        const maxTags = 3;
+        const visibleTags = displayTags.length > 0 ? displayTags.slice(0, maxTags) : [roleBadge];
+        const extraCount = displayTags.length > maxTags ? displayTags.length - maxTags : 0;
+
         card.innerHTML = `
           <div class="card-top-row">
-            <span class="card-role-tag"><i class="ph ph-sparkle"></i> ${this.escapeHTML(roadmap.targetRole || roadmap.interests || 'Custom Track')}</span>
+            <span class="card-role-tag" title="${this.escapeHTML(roleBadge)}">${this.escapeHTML(roleBadge)}</span>
             <div class="card-actions-wrapper">
               <button class="btn-card-quick-delete" data-id="${roadmap.id}" title="Delete Roadmap" aria-label="Delete Roadmap">
                 <i class="ph ph-trash"></i>
@@ -416,8 +441,13 @@ class HermesApp {
             </div>
           </div>
 
-          <h3 class="card-roadmap-title">${this.escapeHTML(roadmap.title)}</h3>
-          <p class="card-roadmap-goal">${this.escapeHTML(roadmap.goal || 'Goal-driven curriculum roadmap')}</p>
+          <h3 class="card-roadmap-title" title="${this.escapeHTML(roadmap.title)}">${this.escapeHTML(roadmap.title)}</h3>
+          <p class="card-roadmap-goal" title="${this.escapeHTML(roadmap.goal || 'Goal-driven curriculum roadmap')}">${this.escapeHTML(roadmap.goal || 'Goal-driven curriculum roadmap')}</p>
+
+          <div class="card-tags-row">
+            ${visibleTags.map(tag => `<span class="tag-pill" title="${this.escapeHTML(tag)}">${this.escapeHTML(tag)}</span>`).join('')}
+            ${extraCount > 0 ? `<span class="tag-pill-more" title="${extraCount} more skills">+${extraCount} more</span>` : ''}
+          </div>
 
           <div class="card-progress-section">
             <div class="card-progress-meta">
@@ -738,14 +768,29 @@ class HermesApp {
       const card = document.createElement('div');
       card.className = 'template-gallery-card animate-fade-in-up';
       card.style.animationDelay = `${idx * 40}ms`;
+
+      // Parse tags for template
+      const rawInterests = (tpl.interests || '')
+        .split(',')
+        .map(t => t.trim())
+        .filter(Boolean);
+      const maxTags = 3;
+      const visibleTags = rawInterests.slice(0, maxTags);
+      const extraCount = rawInterests.length > maxTags ? rawInterests.length - maxTags : 0;
+
       card.innerHTML = `
         <div class="tpl-card-header" style="cursor: pointer;">
           <span class="tpl-badge">${this.escapeHTML(tpl.badge || tpl.category)}</span>
           <span class="tpl-hours"><i class="ph ph-hourglass"></i> ${tpl.estimatedTotalHours || 100}h total</span>
         </div>
 
-        <h3 class="tpl-title" style="cursor: pointer;">${this.escapeHTML(tpl.title)}</h3>
-        <p class="tpl-desc">${this.escapeHTML(tpl.description)}</p>
+        <h3 class="tpl-title" style="cursor: pointer;" title="${this.escapeHTML(tpl.title)}">${this.escapeHTML(tpl.title)}</h3>
+        <p class="tpl-desc" title="${this.escapeHTML(tpl.description)}">${this.escapeHTML(tpl.description)}</p>
+
+        <div class="card-tags-row">
+          ${visibleTags.map(tag => `<span class="tag-pill" title="${this.escapeHTML(tag)}">${this.escapeHTML(tag)}</span>`).join('')}
+          ${extraCount > 0 ? `<span class="tag-pill-more" title="${extraCount} more skills">+${extraCount} more</span>` : ''}
+        </div>
 
         <div class="tpl-meta-tags">
           <span class="meta-tag"><i class="ph ph-check-circle"></i> ${tpl.milestonesCount || (tpl.nodes || []).length} Checkpoints</span>
@@ -1070,7 +1115,7 @@ class HermesApp {
     if (titleEl) titleEl.textContent = `${node.title} — Quiz`;
 
     try {
-      const quiz = await window.hermesAI.generateQuiz(node.title, node.description || '', 12);
+      const quiz = await window.hermesAI.generateQuiz(node.title, node.description || '', 5);
       this.currentQuizData = quiz;
       this.startQuizSession(quiz, node);
     } catch (err) {
@@ -1115,7 +1160,7 @@ class HermesApp {
     const nextBtn = document.getElementById('btn-quiz-next-q');
 
     if (counterEl) counterEl.textContent = `Question ${this.currentQuestionIdx + 1} of ${total}`;
-    if (scoreEl) scoreEl.innerHTML = `<i class="ph ph-trophy"></i> Score: ${this.quizScore} / ${this.currentQuestionIdx}`;
+    if (scoreEl) scoreEl.innerHTML = `<i class="ph ph-trophy"></i> Score: ${this.quizScore} / ${total}`;
     if (progressEl) progressEl.style.width = `${Math.round(((this.currentQuestionIdx) / total) * 100)}%`;
 
     if (promptEl) promptEl.textContent = q.question;

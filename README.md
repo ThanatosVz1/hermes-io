@@ -34,5 +34,14 @@ Hermes.io is a modern full-stack web application that generates personalized, in
 
 ---
 
+## ☁️ Deploy to Vercel
+
+1. Push this repository to GitHub.
+2. Go to [Vercel Dashboard](https://vercel.com) $\rightarrow$ **Add New Project**.
+3. Import your GitHub repository.
+4. Click **Deploy** (zero extra build configuration required).
+
+---
+
 ## 📄 License
 MIT

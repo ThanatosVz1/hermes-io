@@ -1,5 +1,7 @@
-// Hermes.io — AI-Powered Learning Roadmap Generator Backend
+// Hermes.io â€” AI-Powered Learning Roadmap Generator Backend
 // Pure Node.js HTTP Server with User Auth, Database Persistence & AI Engine
+
+const { spawn } = require('child_process');
 
 const http = require('node:http');
 const fs = require('node:fs');
@@ -207,7 +209,7 @@ function initializeSeedData() {
           estimatedHours: 25,
           resources: [
             { type: 'docs', title: 'React.dev Official Documentation & Tutorials', url: 'https://react.dev/learn', isFree: true },
-            { type: 'course', title: 'Full Stack Open — Deep Dive Into React', url: 'https://fullstackopen.com/en/', isFree: true }
+            { type: 'course', title: 'Full Stack Open â€” Deep Dive Into React', url: 'https://fullstackopen.com/en/', isFree: true }
           ],
           children: [
             {
@@ -261,7 +263,7 @@ function initializeSeedData() {
           progress: 0,
           estimatedHours: 14,
           resources: [
-            { type: 'docs', title: 'web.dev — Core Web Vitals Optimization', url: 'https://web.dev/explore/fast', isFree: true }
+            { type: 'docs', title: 'web.dev â€” Core Web Vitals Optimization', url: 'https://web.dev/explore/fast', isFree: true }
           ],
           children: [],
           isExpandable: true,
@@ -829,16 +831,187 @@ function generateSmartOfflineQuiz(moduleTitle = 'Core Topic', moduleDescription 
         explanation: "Dereferencing a nullptr or dangling pointer invokes Undefined Behavior in C++, commonly leading to crashes (SIGSEGV) or silent memory corruption."
       }
     ];
+  } else if (context.includes('html') || context.includes('accessibility') || context.includes('a11y') || context.includes('semantic')) {
+    pool = [
+      {
+        question: "Which HTML element represents the main dominant content of a document body, unique from headers, footers, and sidebars?",
+        options: ["<main>", "<section>", "<article>", "<div id='main'>"],
+        correctAnswer: 0,
+        explanation: "<main> represents the central, unique content of the document. There should only be one visible <main> element per page for accessibility."
+      },
+      {
+        question: "Why is providing a descriptive 'alt' attribute on <img> tags essential for web accessibility (a11y)?",
+        options: [
+          "It allows screen readers to convey image meaning and context to visually impaired users.",
+          "It reduces the image payload file size during network transfer.",
+          "It automatically forces the image into a responsive aspect ratio.",
+          "It enables right-click image downloading in modern browsers."
+        ],
+        correctAnswer: 0,
+        explanation: "Screen readers announce the 'alt' text to users who cannot see the image, ensuring equal access to information and proper semantic context."
+      },
+      {
+        question: "Which element is the correct semantic choice for an interactive control that triggers an in-page action without navigating to a new URL?",
+        codeSnippet: "<!-- User clicks to toggle modal -->\n<button type=\"button\">Open Settings</button>",
+        options: ["<button>", "<a href=\"#\">", "<div onclick=\"...\">", "<span role=\"link\">"],
+        correctAnswer: 0,
+        explanation: "<button> provides native keyboard focus (Tab), Enter/Space activation, and communicates role='button' to assistive technologies automatically."
+      },
+      {
+        question: "What is the primary function of ARIA (Accessible Rich Internet Applications) attributes?",
+        options: [
+          "To provide semantic accessibility metadata when native HTML elements are insufficient for custom widgets.",
+          "To style interactive components with hardware-accelerated animations.",
+          "To execute JavaScript callbacks in background service worker threads.",
+          "To enforce cryptographic encryption on form inputs."
+        ],
+        correctAnswer: 0,
+        explanation: "ARIA attributes (like aria-expanded, aria-label, aria-live) bridge accessibility gaps for complex dynamic widgets when native HTML is unavailable."
+      },
+      {
+        question: "How should form inputs and their descriptive labels be programmatically linked for screen readers?",
+        codeSnippet: "<label for=\"user-email\">Email Address</label>\n<input type=\"email\" id=\"user-email\">",
+        options: [
+          "By matching the label's 'for' attribute to the input's 'id' attribute.",
+          "By giving both elements the same 'name' attribute.",
+          "By wrapping both inside an unstyled <div> container.",
+          "By using placeholder text instead of a <label> element."
+        ],
+        correctAnswer: 0,
+        explanation: "The 'for' attribute matching the input 'id' creates an explicit programmatic link that assistive technologies announce when focusing the input."
+      }
+    ];
+  } else if (context.includes('css') || context.includes('flexbox') || context.includes('grid') || context.includes('layout')) {
+    pool = [
+      {
+        question: "What is the primary conceptual difference between CSS Flexbox and CSS Grid?",
+        options: [
+          "Flexbox is primarily 1-dimensional (row OR column), while CSS Grid is 2-dimensional (rows AND columns simultaneously).",
+          "Flexbox only operates on mobile devices, while Grid is for desktop displays.",
+          "CSS Grid cannot align items along a cross-axis, while Flexbox can.",
+          "Flexbox requires fixed pixel values, while Grid only supports percentages."
+        ],
+        correctAnswer: 0,
+        explanation: "Flexbox excels at linear 1D distribution along a single axis, whereas CSS Grid provides powerful 2D grid-template controls across rows and columns simultaneously."
+      },
+      {
+        question: "When 'box-sizing: border-box' is applied to an element, how are width and height calculated?",
+        codeSnippet: ".box {\n  box-sizing: border-box;\n  width: 200px;\n  padding: 20px;\n  border: 5px solid black;\n}",
+        options: [
+          "Total rendered width is 200px (padding and border are absorbed inside the specified width).",
+          "Total rendered width is 250px (padding and border are added outside the specified width).",
+          "Width is ignored and determined solely by inner text content.",
+          "Border is absorbed, but padding is added externally."
+        ],
+        correctAnswer: 0,
+        explanation: "Under 'border-box', padding and border are absorbed into the declared width/height, preventing unexpected layout overflow."
+      },
+      {
+        question: "Which CSS selector has the highest specificity?",
+        options: [
+          "#nav .item.active (1 ID + 2 classes)",
+          ".header nav ul li a (5 elements/classes, 0 IDs)",
+          "button.btn-primary:hover (1 element + 1 class + 1 pseudo-class)",
+          "* (Universal selector)"
+        ],
+        correctAnswer: 0,
+        explanation: "IDs hold higher specificity weight (0,1,0,0) than any number of standard classes or elements. '#nav .item.active' has specificity (0,1,2,0)."
+      },
+      {
+        question: "What does the CSS 'clamp(min, val, max)' function accomplish?",
+        codeSnippet: "font-size: clamp(1rem, 2.5vw, 2rem);",
+        options: [
+          "It sets a fluid value between an allowed minimum and maximum threshold based on viewport size.",
+          "It clips overflowing text with an ellipsis (...).",
+          "It enforces strict grid alignment for nested items.",
+          "It clamps CSS animation frame rates to 60fps."
+        ],
+        correctAnswer: 0,
+        explanation: "'clamp()' creates responsive fluid typography and spacing by scaling between a minimum and maximum bound."
+      },
+      {
+        question: "What is the effect of 'position: absolute' on an HTML element?",
+        options: [
+          "It removes the element from normal flow and positions it relative to its nearest positioned ancestor.",
+          "It fixes the element relative to the browser viewport at all times.",
+          "It centers the element inside its immediate parent.",
+          "It converts the element into an inline-level block."
+        ],
+        correctAnswer: 0,
+        explanation: "Absolute positioning removes an element from normal layout flow and positions it relative to the closest ancestor with a position other than 'static'."
+      }
+    ];
+  } else if (context.includes('javascript') || context.includes('js') || context.includes('dom') || context.includes('async')) {
+    pool = [
+      {
+        question: "What is the main difference between 'let' and 'var' declarations in JavaScript?",
+        codeSnippet: "function test() {\n  if (true) {\n    var x = 1;\n    let y = 2;\n  }\n  console.log(x); // 1\n  console.log(y); // ReferenceError\n}",
+        options: [
+          "'let' is block-scoped, while 'var' is function-scoped (or globally scoped).",
+          "'var' variables are immutable, while 'let' variables can be reassigned.",
+          "'let' is hoisted to the top and initialized with undefined, while 'var' throws a ReferenceError.",
+          "There is no functional difference in modern ES6+ environments."
+        ],
+        correctAnswer: 0,
+        explanation: "'let' and 'const' adhere to block scope ({ ... }) and reside in the Temporal Dead Zone until declared, whereas 'var' is hoisted and function-scoped."
+      },
+      {
+        question: "In the JavaScript event loop, which queue has priority when the call stack clears?",
+        codeSnippet: "console.log('1');\nsetTimeout(() => console.log('2'), 0);\nPromise.resolve().then(() => console.log('3'));\nconsole.log('4');",
+        options: [
+          "The Microtask Queue (Promises) executes before the Macrotask Queue (setTimeout). Output: 1, 4, 3, 2.",
+          "The Macrotask Queue executes first. Output: 1, 4, 2, 3.",
+          "SetTimeout has priority because it was scheduled first. Output: 1, 2, 4, 3.",
+          "Execution order is completely non-deterministic."
+        ],
+        correctAnswer: 0,
+        explanation: "Microtasks (Promise callbacks) are processed immediately after the current synchronous execution context empties, before processing any pending Macrotasks (like setTimeout)."
+      },
+      {
+        question: "What is a closure in JavaScript?",
+        options: [
+          "A function that retains access to variables from its lexical outer scope even after that outer scope has closed.",
+          "A method that prevents an object from being mutated or extended.",
+          "A syntax construct for terminating while loops early.",
+          "A build step that bundles modular JavaScript into a single file."
+        ],
+        correctAnswer: 0,
+        explanation: "A closure gives an inner function access to an outer function's scope variables, preserved even when the outer function has finished executing."
+      },
+      {
+        question: "What does the Array.prototype.map() method return in JavaScript?",
+        codeSnippet: "const numbers = [1, 2, 3];\nconst doubled = numbers.map(n => n * 2);",
+        options: [
+          "A new array with the results of calling the provided function on every element, without mutating the original array.",
+          "The original array mutated in place with the transformed values.",
+          "A single accumulated scalar value.",
+          "A boolean indicating whether all elements satisfy the condition."
+        ],
+        correctAnswer: 0,
+        explanation: "'map()' is a pure higher-order function that returns a brand-new array containing transformed elements, leaving the source array untouched."
+      },
+      {
+        question: "What is event delegation in client-side JavaScript?",
+        options: [
+          "Attaching a single event listener to a common parent element to handle events for all children via event bubbling.",
+          "Passing event listener functions as parameters to Web Workers.",
+          "Stopping an event from propagating up the DOM tree via e.stopPropagation().",
+          "Preventing the default browser action on form submission."
+        ],
+        correctAnswer: 0,
+        explanation: "Event delegation leverages DOM event bubbling to capture events at an ancestor level, dramatically improving performance and handling dynamically added child elements."
+      }
+    ];
   } else {
-    // General / Full-Stack / Universal Quiz Pool
+    // General / Full-Stack / Universal Technical Quiz Pool
     pool = [
       {
         question: `In modern software architecture, what is the primary purpose of ${moduleTitle}?`,
         options: [
-          `To structure and implement scalable, maintainable solutions for ${moduleTitle}.`,
-          "To bypass unit testing and deploy directly to production without validation.",
-          "To replace database storage with hardcoded client variables.",
-          "To eliminate the need for version control."
+          `To structure modular, maintainable, and standardized solutions for ${moduleTitle}.`,
+          "To combine business logic directly into presentation views without separation.",
+          "To bypass data validation and rely exclusively on optimistic client updates.",
+          "To replace automated unit testing with runtime exception catching."
         ],
         correctAnswer: 0,
         explanation: `Mastering ${moduleTitle} establishes core architectural patterns, maintainable code quality, and scalable execution.`
@@ -1227,8 +1400,8 @@ function generateSmartOfflineRoadmap(profile, userId = 'usr_guest') {
           level: 'beginner'
         },
         resources: [
-          { type: 'docs', title: 'LearnCpp.com — Outstanding Comprehensive Tutorial', url: 'https://www.learncpp.com/', isFree: true },
-          { type: 'docs', title: 'cppreference.com — The C++ Standard Reference', url: 'https://en.cppreference.com/w/', isFree: true }
+          { type: 'docs', title: 'LearnCpp.com â€” Outstanding Comprehensive Tutorial', url: 'https://www.learncpp.com/', isFree: true },
+          { type: 'docs', title: 'cppreference.com â€” The C++ Standard Reference', url: 'https://en.cppreference.com/w/', isFree: true }
         ],
         children: [
           {
@@ -1313,7 +1486,7 @@ function generateSmartOfflineRoadmap(profile, userId = 'usr_guest') {
         projectCallout: { title: 'Beginner Project', description: 'Analyze real-world e-commerce sales data with complex SQL queries.', level: 'beginner' },
         resources: [
           { type: 'docs', title: 'PostgreSQL Official Documentation & Tutorials', url: 'https://www.postgresql.org/docs/', isFree: true },
-          { type: 'practice', title: 'SQLBolt — Interactive Lessons & Exercises', url: 'https://sqlbolt.com/', isFree: true }
+          { type: 'practice', title: 'SQLBolt â€” Interactive Lessons & Exercises', url: 'https://sqlbolt.com/', isFree: true }
         ],
         children: []
       },
@@ -1396,7 +1569,7 @@ function generateSmartOfflineRoadmap(profile, userId = 'usr_guest') {
         recommendationType: 'recommended',
         resources: [
           { type: 'docs', title: 'JavaScript.info: The Modern JavaScript Tutorial', url: 'https://javascript.info/', isFree: true },
-          { type: 'practice', title: 'Exercism.org — JavaScript Track with Mentorship', url: 'https://exercism.org/tracks/javascript', isFree: true }
+          { type: 'practice', title: 'Exercism.org â€” JavaScript Track with Mentorship', url: 'https://exercism.org/tracks/javascript', isFree: true }
         ],
         children: []
       },
@@ -1408,7 +1581,7 @@ function generateSmartOfflineRoadmap(profile, userId = 'usr_guest') {
         projectCallout: { title: 'Intermediate Project', description: 'Build an interactive Kanban Board with global state and optimistic updates.', level: 'intermediate' },
         resources: [
           { type: 'docs', title: 'React Official Documentation: Quick Start & Hooks', url: 'https://react.dev/learn', isFree: true },
-          { type: 'course', title: 'Full Stack Open — Deep Dive Into Modern Web Development', url: 'https://fullstackopen.com/en/', isFree: true }
+          { type: 'course', title: 'Full Stack Open â€” Deep Dive Into Modern Web Development', url: 'https://fullstackopen.com/en/', isFree: true }
         ],
         children: []
       },
@@ -1748,7 +1921,220 @@ async function runAIGeneration(systemPrompt, userPrompt) {
   return null;
 }
 
-// Prompt §4a
+// Prompt Â§4a
+
+async function runHermesMLEngine(profile) {
+  return new Promise((resolve, reject) => {
+
+    const rootDir = __dirname;
+
+    const enginePath = path.join(
+      rootDir,
+      'ml',
+      'src',
+      'hermes_engine.py'
+    );
+
+    if (!fs.existsSync(enginePath)) {
+      return reject(
+        new Error(
+          `Hermes ML engine not found: ${enginePath}`
+        )
+      );
+    }
+
+    const candidates =
+      process.platform === 'win32'
+        ? [
+            path.join(
+              rootDir,
+              'ml',
+              '.venv',
+              'Scripts',
+              'python.exe'
+            ),
+            path.join(
+              rootDir,
+              '.venv',
+              'Scripts',
+              'python.exe'
+            ),
+            'python'
+          ]
+        : [
+            path.join(
+              rootDir,
+              'ml',
+              '.venv',
+              'bin',
+              'python'
+            ),
+            path.join(
+              rootDir,
+              '.venv',
+              'bin',
+              'python'
+            ),
+            'python3',
+            'python'
+          ];
+
+    const pythonPath =
+      candidates.find(p => {
+        if (
+          p === 'python' ||
+          p === 'python3'
+        ) {
+          return true;
+        }
+
+        return fs.existsSync(p);
+      });
+
+    if (!pythonPath) {
+      return reject(
+        new Error(
+          'Python interpreter not found'
+        )
+      );
+    }
+
+    const input = JSON.stringify({
+
+      goal:
+        profile.goal || '',
+
+      targetRole:
+        profile.targetRole || '',
+
+      interests:
+        profile.interests || '',
+
+      skillLevel:
+        profile.skillLevel ||
+        'Beginner',
+
+      skillDetails:
+        profile.skillDetails || '',
+
+      topK:
+        Math.max(
+          1,
+          Math.min(
+            Number(profile.topK) || 26,
+            75
+          )
+        )
+
+    });
+
+    let stdout = '';
+    let stderr = '';
+
+    const child = spawn(
+      pythonPath,
+      [enginePath],
+      {
+        cwd: rootDir,
+        windowsHide: true,
+
+        stdio: [
+          'pipe',
+          'pipe',
+          'pipe'
+        ]
+      }
+    );
+
+    child.stdout.on(
+      'data',
+      data => {
+        stdout += data.toString();
+      }
+    );
+
+    child.stderr.on(
+      'data',
+      data => {
+        stderr += data.toString();
+      }
+    );
+
+    child.on(
+      'error',
+      error => {
+        reject(error);
+      }
+    );
+
+    child.on(
+      'close',
+      code => {
+
+        if (code !== 0) {
+
+          return reject(
+            new Error(
+              `Hermes ML exited with code ${code}: ${stderr}`
+            )
+          );
+
+        }
+
+        try {
+
+          const result =
+            JSON.parse(
+              stdout.trim()
+            );
+
+          if (
+            result.success !== true
+          ) {
+
+            return reject(
+              new Error(
+                result.error ||
+                'Hermes ML failed'
+              )
+            );
+
+          }
+
+          if (
+            !Array.isArray(
+              result.skills
+            )
+          ) {
+
+            return reject(
+              new Error(
+                'Hermes ML returned invalid skills'
+              )
+            );
+
+          }
+
+          resolve(result);
+
+        } catch (error) {
+
+          reject(
+            new Error(
+              `Could not parse Hermes ML JSON: ${error.message}\n${stdout}`
+            )
+          );
+
+        }
+
+      }
+    );
+
+    child.stdin.write(input);
+    child.stdin.end();
+
+  });
+}
 function buildPrompt4a(profile) {
   const schemaStr = `
 {
@@ -1771,12 +2157,12 @@ function buildPrompt4a(profile) {
   ]
 }`;
 
-  const system = `You are an expert curriculum designer and career mentor. Given a learner's profile, generate a personalized, realistic learning roadmap as valid JSON only — no prose, no markdown fences.
+  const system = `You are an expert curriculum designer and career mentor. Given a learner's profile, generate a personalized, realistic learning roadmap as valid JSON only â€” no prose, no markdown fences.
 
 Rules:
 1. Output must match this JSON schema exactly: ${schemaStr}
 2. Generate 5-9 top-level milestones, ordered foundational -> advanced, tailored to the stated level (skip basics the learner already has).
-3. Each milestone needs a title, a 1-2 sentence description, an estimatedHours value (e.g. 10-30), and 2-4 real, well-known resources (official docs, reputable courses/platforms/channels). Never invent a URL you aren't confident is real — if unsure, give the resource by name only and omit url or use empty string.
+3. Each milestone needs a title, a 1-2 sentence description, an estimatedHours value (e.g. 10-30), and 2-4 real, well-known resources (official docs, reputable courses/platforms/channels). Never invent a URL you aren't confident is real â€” if unsure, give the resource by name only and omit url or use empty string.
 4. Set isExpandable: true on any milestone broad enough to break down further; leave children as an empty array (submodules are generated later, on demand).
 5. The final 1-2 milestones should map directly to skills/portfolio outcomes relevant to target occupation, if provided.
 6. Set status to "not_started" and progress to 0 for all milestones.`;
@@ -1790,7 +2176,7 @@ Rules:
   return { system, user };
 }
 
-// Prompt §4b
+// Prompt Â§4b
 function buildPrompt4b(milestone, context) {
   const schemaStr = `
 {
@@ -1819,7 +2205,7 @@ Each submodule should be independently completable, include 1-3 verified resourc
 
   const user = `Context:
 - Overall goal: ${context.goal || 'Mastery'} / target role: ${context.targetRole || 'Engineer'} / level: ${context.skillLevel || 'Beginner'}
-- Milestone being expanded: ${milestone.title} — ${milestone.description}
+- Milestone being expanded: ${milestone.title} â€” ${milestone.description}
 - Milestone Estimated Hours: ${milestone.estimatedHours || 12}`;
 
   return { system, user };
@@ -2263,46 +2649,482 @@ const server = http.createServer(async (req, res) => {
     // AI GENERATION ROUTES
     // ==========================================
 
-    // POST /api/generate - Flow A: Initial Roadmap Generation (§4a)
+    // POST /api/generate - Hermes ML primary engine
     if (pathname === '/api/generate' && method === 'POST') {
-      const profile = await parseBody(req);
-      if (!profile.interests && !profile.goal) {
-        return sendJSON(res, 400, { error: 'Profile must include interests or goal' });
+
+      const profile =
+        await parseBody(req);
+
+      if (
+        !profile.interests &&
+        !profile.goal
+      ) {
+
+        return sendJSON(
+          res,
+          400,
+          {
+            error:
+              'Profile must include interests or goal'
+          }
+        );
+
       }
 
-      const effectiveUserId = authUser ? authUser.id : (profile.userId || 'usr_guest');
-      const { system, user } = buildPrompt4a(profile);
-      const aiResult = await runAIGeneration(system, user);
+      const effectiveUserId =
+        authUser
+          ? authUser.id
+          : (
+              profile.userId ||
+              'usr_guest'
+            );
 
-      let finalRoadmap;
-      if (aiResult && (aiResult.milestones || Array.isArray(aiResult))) {
-        const milestones = Array.isArray(aiResult) ? aiResult : (aiResult.milestones || []);
-        finalRoadmap = {
-          id: crypto.randomUUID(),
-          userId: effectiveUserId,
-          title: aiResult.title || `${profile.targetRole || profile.interests} Learning Roadmap`,
-          goal: profile.goal || '',
-          targetRole: profile.targetRole || '',
-          interests: Array.isArray(profile.interests) ? profile.interests.join(', ') : profile.interests,
-          skillLevel: profile.skillLevel || 'Beginner',
-          skillDetails: profile.skillDetails || '',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          nodes: milestones.map(validateNode)
+      // ======================================================
+      // HERMES ML
+      // ======================================================
+
+      try {
+
+        console.log(
+          '[Hermes ML] Starting roadmap generation...'
+        );
+
+        const mlResult =
+          await runHermesMLEngine(
+            profile
+          );
+
+        console.log(
+          `[Hermes ML] Generated ${mlResult.skills.length} skills`
+        );
+
+        // ====================================================
+        // CONVERT ML OUTPUT TO HERMES NODES
+        // ====================================================
+
+        const nodes =
+          mlResult.skills.map(
+            (skill, index) => {
+
+              return validateNode({
+
+                id:
+                  skill.skillId ||
+                  `skill_${index + 1}`,
+
+                title:
+                  skill.title ||
+                  skill.name ||
+                  `Skill ${index + 1}`,
+
+                description:
+                  skill.description ||
+                  `Learn ${
+                    skill.title ||
+                    skill.name ||
+                    'this skill'
+                  }.`,
+
+                status:
+                  index === 0
+                    ? 'available'
+                    : 'locked',
+
+                progress: 0,
+
+                estimatedHours:
+                  Number(
+                    skill.estimatedHours
+                  ) || 0,
+
+                recommendationType:
+                  'recommended',
+
+                projectCallout:
+                  null,
+
+                resources:
+                  Array.isArray(
+                    skill.resources
+                  )
+                    ? skill.resources
+                    : [],
+
+                children: [],
+
+                isExpandable: false,
+
+                isExpanded: false,
+
+                category:
+                  skill.category ||
+                  mlResult.domain ||
+                  'general',
+
+                parentId:
+                  skill.parentId ||
+                  null,
+
+                parentTitle:
+                  skill.parentTitle ||
+                  null,
+
+                semanticScore:
+                  Number(
+                    skill.semanticScore
+                  ) || 0,
+
+                prerequisiteDepth:
+                  Number(
+                    skill.prerequisiteDepth
+                  ) || 0,
+
+                                  topics:
+                  Array.isArray(skill.topics)
+                    ? skill.topics
+                        .map((t) => String(t).trim())
+                        .filter(Boolean)
+                    : [],
+
+                practicalSkills:
+                  Array.isArray(skill.practicalSkills)
+                    ? skill.practicalSkills
+                        .map((s) => String(s).trim())
+                        .filter(Boolean)
+                    : [],
+
+                tools:
+                  Array.isArray(skill.tools)
+                    ? skill.tools
+                        .map((t) => String(t).trim())
+                        .filter(Boolean)
+                    : [],
+
+                phase:
+                  skill.phase ||
+                  null,
+
+                projectCallout:
+                  skill.projectCallout ||
+                  null,
+
+                order:
+                  Number(
+                    skill.order
+                  ) ||
+                  index + 1
+
+              });
+
+            }
+          );
+
+        // ====================================================
+        // FINAL ROADMAP
+        // ====================================================
+
+        const finalRoadmap = {
+
+          id:
+            crypto.randomUUID(),
+
+          userId:
+            effectiveUserId,
+
+          title:
+            profile.targetRole
+              ? `${profile.targetRole} Learning Roadmap`
+              : (
+                  mlResult.domain
+                    ? `${mlResult.domain} Learning Roadmap`
+                    : 'Hermes Learning Roadmap'
+                ),
+
+          goal:
+            profile.goal ||
+            '',
+
+          targetRole:
+            profile.targetRole ||
+            '',
+
+          interests:
+            Array.isArray(
+              profile.interests
+            )
+              ? profile.interests.join(', ')
+              : (
+                  profile.interests ||
+                  ''
+                ),
+
+          skillLevel:
+            profile.skillLevel ||
+            'Beginner',
+
+          skillDetails:
+            profile.skillDetails ||
+            '',
+
+          engine:
+            mlResult.engine ||
+            'hermes-ml',
+
+          domain:
+            mlResult.domain ||
+            'general',
+
+          skillCount:
+            nodes.length,
+
+          totalHours:
+            Number(
+              mlResult.totalHours
+            ) ||
+            nodes.reduce(
+              (sum, node) =>
+                sum +
+                (
+                  Number(
+                    node.estimatedHours
+                  ) || 0
+                ),
+              0
+            ),
+
+          createdAt:
+            new Date().toISOString(),
+
+          updatedAt:
+            new Date().toISOString(),
+
+          nodes
+
         };
-      } else {
-        finalRoadmap = generateSmartOfflineRoadmap(profile, effectiveUserId);
+
+        // ====================================================
+        // SAVE
+        // ====================================================
+
+        const roadmaps =
+          readJSON(
+            ROADMAPS_FILE,
+            []
+          );
+
+        roadmaps.unshift(
+          finalRoadmap
+        );
+
+        writeJSON(
+          ROADMAPS_FILE,
+          roadmaps
+        );
+
+        console.log(
+          '[Hermes ML] Roadmap saved.'
+        );
+
+        return sendJSON(
+          res,
+          200,
+          finalRoadmap
+        );
+
+      } catch (mlError) {
+
+        // ====================================================
+        // ML FAILED -> EXISTING AI FALLBACK
+        // ====================================================
+
+        console.error(
+          '[Hermes ML] Failed:',
+          mlError.message
+        );
+
+        console.log(
+          '[Hermes ML] Using existing AI fallback...'
+        );
+
+        try {
+
+          const {
+            system,
+            user
+          } =
+            buildPrompt4a(
+              profile
+            );
+
+          const aiResult =
+            await runAIGeneration(
+              system,
+              user
+            );
+
+          let finalRoadmap;
+
+          if (
+            aiResult &&
+            (
+              aiResult.milestones ||
+              Array.isArray(aiResult)
+            )
+          ) {
+
+            const milestones =
+              Array.isArray(aiResult)
+                ? aiResult
+                : (
+                    aiResult.milestones ||
+                    []
+                  );
+
+            finalRoadmap = {
+
+              id:
+                crypto.randomUUID(),
+
+              userId:
+                effectiveUserId,
+
+              title:
+                aiResult.title ||
+                `${
+                  profile.targetRole ||
+                  profile.interests
+                } Learning Roadmap`,
+
+              goal:
+                profile.goal ||
+                '',
+
+              targetRole:
+                profile.targetRole ||
+                '',
+
+              interests:
+                Array.isArray(
+                  profile.interests
+                )
+                  ? profile.interests.join(', ')
+                  : (
+                      profile.interests ||
+                      ''
+                    ),
+
+              skillLevel:
+                profile.skillLevel ||
+                'Beginner',
+
+              skillDetails:
+                profile.skillDetails ||
+                '',
+
+              createdAt:
+                new Date().toISOString(),
+
+              updatedAt:
+                new Date().toISOString(),
+
+              nodes:
+                milestones.map(
+                  validateNode
+                )
+
+            };
+
+          } else {
+
+            finalRoadmap =
+              generateSmartOfflineRoadmap(
+                profile,
+                effectiveUserId
+              );
+
+          }
+
+          const roadmaps =
+            readJSON(
+              ROADMAPS_FILE,
+              []
+            );
+
+          roadmaps.unshift(
+            finalRoadmap
+          );
+
+          writeJSON(
+            ROADMAPS_FILE,
+            roadmaps
+          );
+
+          return sendJSON(
+            res,
+            200,
+            finalRoadmap
+          );
+
+        } catch (fallbackError) {
+
+          console.error(
+            '[AI fallback] Failed:',
+            fallbackError.message
+          );
+
+          try {
+
+            const finalRoadmap =
+              generateSmartOfflineRoadmap(
+                profile,
+                effectiveUserId
+              );
+
+            const roadmaps =
+              readJSON(
+                ROADMAPS_FILE,
+                []
+              );
+
+            roadmaps.unshift(
+              finalRoadmap
+            );
+
+            writeJSON(
+              ROADMAPS_FILE,
+              roadmaps
+            );
+
+            return sendJSON(
+              res,
+              200,
+              finalRoadmap
+            );
+
+          } catch (offlineError) {
+
+            console.error(
+              '[Offline fallback] Failed:',
+              offlineError.message
+            );
+
+            return sendJSON(
+              res,
+              500,
+              {
+                error:
+                  'Unable to generate roadmap'
+              }
+            );
+
+          }
+
+        }
+
       }
 
-      // Persist immediately in database
-      const roadmaps = readJSON(ROADMAPS_FILE, []);
-      roadmaps.unshift(finalRoadmap);
-      writeJSON(ROADMAPS_FILE, roadmaps);
-
-      return sendJSON(res, 200, finalRoadmap);
     }
-
-    // POST /api/expand - Flow A/B: On-demand Submodule Expansion (§4b)
+    // POST /api/expand - Flow A/B: On-demand Submodule Expansion (Â§4b)
     if (pathname === '/api/expand' && method === 'POST') {
       const { milestone, context } = await parseBody(req);
       if (!milestone || !milestone.title) {
@@ -2399,8 +3221,9 @@ module.exports = server;
 if (require.main === module) {
   server.listen(PORT, () => {
     console.log(`====================================================`);
-    console.log(`🚀 Hermes.io Server running at http://localhost:${PORT}`);
-    console.log(`✨ AI-Powered Learning Roadmap Generator & Auth System`);
+    console.log(`ðŸš€ Hermes.io Server running at http://localhost:${PORT}`);
+    console.log(`âœ¨ AI-Powered Learning Roadmap Generator & Auth System`);
     console.log(`====================================================`);
   });
 }
+
