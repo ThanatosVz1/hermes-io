@@ -91,18 +91,6 @@ class HermesRoadmapRenderer {
     });
   }
 
-  setViewMode(mode) {
-    this.currentViewMode = mode;
-    const btnGraph = this.stickyHeader?.querySelector('#btn-view-graph');
-    const btnTree = this.stickyHeader?.querySelector('#btn-view-tree');
-    if (btnGraph) btnGraph.classList.toggle('active', mode === 'graph');
-    if (btnTree) btnTree.classList.toggle('active', mode === 'tree');
-    if (this.container) {
-      this.container.classList.remove('view-graph', 'view-tree');
-      this.container.classList.add(`view-${mode}`);
-    }
-    this.render();
-  }
 
   // Recalculate rollup progress and refresh UI
   recalculateAndRender() {
@@ -192,7 +180,7 @@ class HermesRoadmapRenderer {
             <div class="stats-text-block">
               <h1 class="roadmap-active-title" title="${this.escapeHTML(this.roadmap.title)}">${this.escapeHTML(this.roadmap.title)}</h1>
               <div class="roadmap-sub-meta">
-                <span class="meta-pill"><i class="ph ph-bullseye"></i> ${this.escapeHTML(this.roadmap.targetRole || this.roadmap.goal || 'General Track')}</span>
+                <span class="meta-pill"><i class="ph ph-target"></i> ${this.escapeHTML(this.roadmap.targetRole || this.roadmap.goal || 'General Track')}</span>
                 <span class="meta-pill"><i class="ph ph-hourglass-high"></i> ${completedHours} / ${totalHours} hrs</span>
                 <span class="meta-pill"><i class="ph ph-check-circle"></i> ${completedMilestones} / ${totalMilestones} checkpoints</span>
               </div>
@@ -320,8 +308,12 @@ class HermesRoadmapRenderer {
   render() {
     if (!this.container || !this.roadmap) return;
     if (this.currentViewMode === 'graph') {
+      this.container.classList.add('graph-mode-active');
+      this.container.classList.remove('tree-mode-active');
       this.renderVisualGraph();
     } else {
+      this.container.classList.add('tree-mode-active');
+      this.container.classList.remove('graph-mode-active');
       this.renderTreeView();
     }
   }

@@ -17,13 +17,17 @@
   <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
 
   <!-- Hermes CSS -->
-  <link rel="stylesheet" href="css/styles.css?v=7">
+  <link rel="stylesheet" href="css/styles.css?v=8">
 </head>
 <body>
 
   <!-- App Header / Navigation Bar -->
   <header class="app-navbar">
     <div class="nav-left">
+      <button class="mobile-nav-toggle" id="btn-mobile-nav-toggle" aria-label="Toggle Navigation">
+        <i class="ph ph-list"></i>
+      </button>
+
       <div class="nav-brand" id="navbar-brand-btn">
         <span>Hermes<span class="brand-dot">.io</span></span>
       </div>
@@ -67,6 +71,28 @@
       </div>
     </div>
   </header>
+
+  <!-- Mobile Navigation Drawer Overlay -->
+  <div class="mobile-nav-drawer hidden" id="mobile-nav-drawer">
+    <div class="mobile-nav-content">
+      <button class="mobile-nav-link" data-nav="dashboard">
+        <i class="ph ph-squares-four"></i>
+        <span>Dashboard</span>
+      </button>
+      <button class="mobile-nav-link" data-nav="gallery">
+        <i class="ph ph-sparkle"></i>
+        <span>Template Gallery</span>
+      </button>
+      <button class="mobile-nav-link" id="btn-mobile-new-roadmap">
+        <i class="ph ph-plus-circle"></i>
+        <span>New Roadmap (AI Wizard)</span>
+      </button>
+      <button class="mobile-nav-link" id="btn-mobile-settings">
+        <i class="ph ph-gear"></i>
+        <span>Settings & Preferences</span>
+      </button>
+    </div>
+  </div>
 
   <!-- Main Application Container -->
   <main class="app-main">
@@ -313,13 +339,8 @@
         <!-- Step 5: Generation Loading State -->
         <div id="wizard-step-section-5" class="wizard-step-content hidden">
           <div class="wizard-generating-wrap">
-            <div class="spinner-pulse-ring"></div>
             <h2 id="wizard-generation-status-text">Hermes AI is synthesizing your roadmap...</h2>
             <p style="color: var(--text-secondary); margin-top: 0.5rem;">Structuring recursive milestones, verified documentation, and estimating learning time.</p>
-            
-            <div class="wizard-gen-progress-track">
-              <div class="wizard-gen-progress-fill" id="wizard-gen-progress-fill"></div>
-            </div>
           </div>
         </div>
 

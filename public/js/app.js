@@ -93,14 +93,41 @@ class HermesApp {
           </div>
         `;
 
+        // Toggle dropdown on avatar click
+        const avatarWrap = userBadge.querySelector('.user-avatar-wrap');
+        const dropdownMenu = userBadge.querySelector('.user-dropdown-menu');
+
+        avatarWrap?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isOpen = dropdownMenu?.classList.toggle('show');
+          userBadge.classList.toggle('open', isOpen);
+        });
+
+        if (!this.userDropdownDocListenerBound) {
+          this.userDropdownDocListenerBound = true;
+          document.addEventListener('click', (e) => {
+            const badge = document.getElementById('navbar-user-badge');
+            if (badge && !badge.contains(e.target)) {
+              badge.classList.remove('open');
+              badge.querySelector('.user-dropdown-menu')?.classList.remove('show');
+            }
+          });
+        }
+
         // User dropdown clicks
         userBadge.querySelector('#btn-user-my-roadmaps')?.addEventListener('click', () => {
+          dropdownMenu?.classList.remove('show');
+          userBadge.classList.remove('open');
           this.navigateTo('dashboard');
         });
         userBadge.querySelector('#btn-user-settings')?.addEventListener('click', () => {
+          dropdownMenu?.classList.remove('show');
+          userBadge.classList.remove('open');
           this.openSettingsModal();
         });
         userBadge.querySelector('#btn-user-logout')?.addEventListener('click', () => {
+          dropdownMenu?.classList.remove('show');
+          userBadge.classList.remove('open');
           this.handleLogout();
         });
       }
@@ -129,6 +156,12 @@ class HermesApp {
 
     closeAuth?.addEventListener('click', () => {
       authModal.classList.add('hidden');
+    });
+
+    authModal?.addEventListener('click', (e) => {
+      if (e.target === authModal) {
+        authModal.classList.add('hidden');
+      }
     });
 
     tabLogin?.addEventListener('click', () => {
@@ -297,6 +330,47 @@ class HermesApp {
 
     document.getElementById('btn-explore-templates-nav')?.addEventListener('click', () => {
       this.navigateTo('gallery');
+    });
+
+    // Mobile Navigation Drawer Toggle & Navigation
+    const mobileNavToggle = document.getElementById('btn-mobile-nav-toggle');
+    const mobileNavDrawer = document.getElementById('mobile-nav-drawer');
+    const closeMobileNav = () => {
+      mobileNavDrawer?.classList.add('hidden');
+      if (mobileNavToggle) {
+        mobileNavToggle.innerHTML = '<i class="ph ph-list"></i>';
+      }
+    };
+
+    mobileNavToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isClosed = mobileNavDrawer?.classList.contains('hidden');
+      if (isClosed) {
+        mobileNavDrawer?.classList.remove('hidden');
+        mobileNavToggle.innerHTML = '<i class="ph ph-x"></i>';
+      } else {
+        closeMobileNav();
+      }
+    });
+
+    mobileNavDrawer?.querySelectorAll('.mobile-nav-link').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const navTarget = btn.getAttribute('data-nav');
+        if (navTarget) {
+          this.navigateTo(navTarget);
+        } else if (btn.id === 'btn-mobile-new-roadmap') {
+          this.startOnboardingWizard();
+        } else if (btn.id === 'btn-mobile-settings') {
+          this.openSettingsModal();
+        }
+        closeMobileNav();
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!mobileNavDrawer?.contains(e.target) && !mobileNavToggle?.contains(e.target)) {
+        closeMobileNav();
+      }
     });
   }
 
@@ -894,6 +968,10 @@ class HermesApp {
     modal.querySelector('#close-personalize-modal').onclick = () => {
       modal.classList.add('hidden');
     };
+
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.classList.add('hidden');
+    };
   }
 
   // ==========================================
@@ -986,6 +1064,9 @@ class HermesApp {
     const closeAdjust = document.getElementById('close-adjust-modal');
 
     closeAdjust?.addEventListener('click', () => adjustModal.classList.add('hidden'));
+    adjustModal?.addEventListener('click', (e) => {
+      if (e.target === adjustModal) adjustModal.classList.add('hidden');
+    });
 
     formAdjust?.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1024,6 +1105,9 @@ class HermesApp {
     const closeAddNode = document.getElementById('close-add-node-modal');
 
     closeAddNode?.addEventListener('click', () => addNodeModal.classList.add('hidden'));
+    addNodeModal?.addEventListener('click', (e) => {
+      if (e.target === addNodeModal) addNodeModal.classList.add('hidden');
+    });
 
     formAddNode?.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1071,6 +1155,9 @@ class HermesApp {
     const markMasteredBtn = document.getElementById('btn-quiz-mark-mastered');
 
     closeQuizBtn?.addEventListener('click', () => quizModal?.classList.add('hidden'));
+    quizModal?.addEventListener('click', (e) => {
+      if (e.target === quizModal) quizModal.classList.add('hidden');
+    });
 
     nextQBtn?.addEventListener('click', () => {
       this.handleQuizNextQuestion();
@@ -1372,6 +1459,9 @@ class HermesApp {
     };
 
     modal.querySelector('#close-export-modal').onclick = () => modal.classList.add('hidden');
+    modal.onclick = (e) => {
+      if (e.target === modal) modal.classList.add('hidden');
+    };
     modal.classList.remove('hidden');
   }
 
@@ -1386,6 +1476,9 @@ class HermesApp {
 
     navBtn?.addEventListener('click', () => this.openSettingsModal());
     closeBtn?.addEventListener('click', () => modal.classList.add('hidden'));
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.add('hidden');
+    });
 
     // Test Supabase Connection
     btnTestSupabase?.addEventListener('click', async () => {

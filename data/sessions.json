@@ -34,5 +34,11 @@
     "userId": "usr_demo_cronus_002",
     "expiresAt": "2026-09-30T17:18:26.703Z",
     "createdAt": "2026-08-31T17:18:26.703Z"
+  },
+  {
+    "token": "hermes_bd76dfc32b69ae60d1fb8d5d1d04105eadb5edb2a203eca965e2bc20f49ef677",
+    "userId": "usr_demo_thanatos_001",
+    "expiresAt": "2026-10-23T14:28:10.970Z",
+    "createdAt": "2026-09-23T14:28:10.970Z"
   }
 ]
