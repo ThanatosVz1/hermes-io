@@ -27,14 +27,14 @@
        ========================================================================== */
     
     :root {
-      --overseer-bg: #07070E;
-      --overseer-surface: #0E101D;
-      --overseer-surface-elevated: #15182C;
-      --overseer-surface-card: #121424;
+      --overseer-bg: transparent;
+      --overseer-surface: rgba(14, 16, 29, 0.78);
+      --overseer-surface-elevated: rgba(21, 24, 44, 0.85);
+      --overseer-surface-card: rgba(18, 20, 36, 0.72);
       --overseer-border: rgba(255, 255, 255, 0.08);
-      --overseer-border-glow: rgba(99, 102, 241, 0.35);
+      --overseer-border-glow: rgba(99, 102, 241, 0.4);
       --overseer-accent: #6366F1;
-      --overseer-accent-glow: rgba(99, 102, 241, 0.5);
+      --overseer-accent-glow: rgba(99, 102, 241, 0.55);
       --overseer-cyan: #06B6D4;
       --overseer-emerald: #10B981;
       --overseer-amber: #F59E0B;
@@ -44,9 +44,9 @@
 
     [data-theme="light"] {
       --overseer-bg: #F4F6FC;
-      --overseer-surface: #FFFFFF;
-      --overseer-surface-elevated: #EEF2FF;
-      --overseer-surface-card: #FFFFFF;
+      --overseer-surface: rgba(255, 255, 255, 0.92);
+      --overseer-surface-elevated: rgba(238, 242, 255, 0.95);
+      --overseer-surface-card: rgba(255, 255, 255, 0.92);
       --overseer-border: rgba(0, 0, 0, 0.08);
       --overseer-border-glow: rgba(79, 70, 229, 0.25);
     }
@@ -58,13 +58,194 @@
     }
 
     body {
-      background-color: var(--overseer-bg);
+      background-color: #05060C;
       color: var(--text-primary);
       font-family: var(--font-sans);
       min-height: 100vh;
       overflow-x: hidden;
       display: flex;
       flex-direction: column;
+      position: relative;
+    }
+
+    /* ==========================================================================
+       GLOBAL LIVING UNIVERSE BACKGROUND
+       ========================================================================== */
+    .terminal-universe-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 20%, #0d0f22 0%, #06060c 60%, #020205 100%);
+    }
+
+    /* Cosmic Nebula Clouds */
+    .cosmic-nebula {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.55;
+      mix-blend-mode: screen;
+    }
+
+    .nebula-1 {
+      width: 800px;
+      height: 800px;
+      top: -180px;
+      left: 10%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.38) 0%, rgba(124, 58, 237, 0.18) 45%, transparent 70%);
+      animation: nebulaDrift1 26s ease-in-out infinite alternate;
+    }
+
+    .nebula-2 {
+      width: 900px;
+      height: 900px;
+      bottom: -220px;
+      right: 5%;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, rgba(79, 70, 229, 0.14) 50%, transparent 70%);
+      animation: nebulaDrift2 32s ease-in-out infinite alternate;
+    }
+
+    .nebula-3 {
+      width: 650px;
+      height: 650px;
+      top: 40%;
+      left: 45%;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.18) 0%, rgba(139, 92, 246, 0.1) 50%, transparent 70%);
+      animation: nebulaDrift3 22s ease-in-out infinite alternate;
+    }
+
+    @keyframes nebulaDrift1 {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(70px, 40px) scale(1.08); }
+      100% { transform: translate(-40px, 80px) scale(0.95); }
+    }
+
+    @keyframes nebulaDrift2 {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-80px, -60px) scale(1.1); }
+      100% { transform: translate(50px, -30px) scale(0.92); }
+    }
+
+    @keyframes nebulaDrift3 {
+      0% { transform: translate(0, 0) scale(0.9); opacity: 0.35; }
+      50% { transform: translate(-50px, 30px) scale(1.15); opacity: 0.6; }
+      100% { transform: translate(40px, -50px) scale(1); opacity: 0.4; }
+    }
+
+    /* Starfields */
+    .cosmic-stars-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .stars-small {
+      background-image: 
+        radial-gradient(1px 1px at 25px 35px, #ffffff, transparent),
+        radial-gradient(1.2px 1.2px at 85px 120px, rgba(255, 255, 255, 0.85), transparent),
+        radial-gradient(1px 1px at 150px 60px, rgba(165, 180, 252, 0.95), transparent),
+        radial-gradient(1.5px 1.5px at 220px 180px, #ffffff, transparent),
+        radial-gradient(1px 1px at 310px 90px, rgba(254, 240, 138, 0.9), transparent),
+        radial-gradient(1.2px 1.2px at 390px 240px, #ffffff, transparent),
+        radial-gradient(1px 1px at 470px 130px, rgba(125, 211, 252, 0.95), transparent),
+        radial-gradient(1.4px 1.4px at 560px 40px, #ffffff, transparent),
+        radial-gradient(1px 1px at 630px 200px, rgba(255, 255, 255, 0.75), transparent),
+        radial-gradient(1.5px 1.5px at 720px 110px, #C7D2FE, transparent);
+      background-size: 450px 450px;
+      opacity: 0.7;
+      animation: starTwinkleSlow 6s ease-in-out infinite alternate;
+    }
+
+    .stars-medium {
+      background-image: 
+        radial-gradient(2px 2px at 40px 170px, #A5B4FC, transparent),
+        radial-gradient(2.2px 2.2px at 190px 290px, #38BDF8, transparent),
+        radial-gradient(2.5px 2.5px at 340px 50px, #FDE68A, transparent),
+        radial-gradient(2px 2px at 480px 320px, #ffffff, transparent),
+        radial-gradient(2.2px 2.2px at 620px 160px, #C084FC, transparent),
+        radial-gradient(2px 2px at 780px 270px, #67E8F9, transparent);
+      background-size: 600px 600px;
+      opacity: 0.8;
+      animation: starTwinkleFast 4s ease-in-out infinite alternate;
+    }
+
+    .stars-pulsar {
+      background-image: 
+        radial-gradient(3px 3px at 120px 220px, #ffffff 0%, rgba(99, 102, 241, 0.85) 50%, transparent 100%),
+        radial-gradient(3.5px 3.5px at 440px 110px, #ffffff 0%, rgba(6, 182, 212, 0.85) 50%, transparent 100%),
+        radial-gradient(3px 3px at 700px 360px, #ffffff 0%, rgba(245, 158, 11, 0.85) 50%, transparent 100%);
+      background-size: 800px 800px;
+      animation: pulsarBreath 5s ease-in-out infinite;
+    }
+
+    @keyframes starTwinkleSlow {
+      0% { opacity: 0.45; }
+      100% { opacity: 0.9; }
+    }
+
+    @keyframes starTwinkleFast {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.7; }
+    }
+
+    @keyframes pulsarBreath {
+      0%, 100% { transform: scale(0.9); opacity: 0.55; filter: drop-shadow(0 0 5px #6366F1); }
+      50% { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 12px #06B6D4); }
+    }
+
+    /* Subtle Constellation Dust Grid */
+    .cosmic-dust-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 80%);
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 80%);
+    }
+
+    /* Shooting Star Streaks */
+    .shooting-star-streak {
+      position: absolute;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(99, 102, 241, 0.85), transparent);
+      border-radius: 9999px;
+      filter: drop-shadow(0 0 6px #6366F1);
+      transform: rotate(-35deg);
+      opacity: 0;
+    }
+
+    .shooting-star-1 {
+      width: 150px;
+      top: 14%;
+      left: 18%;
+      animation: meteorShoot1 12s ease-in-out infinite;
+    }
+
+    .shooting-star-2 {
+      width: 200px;
+      top: 52%;
+      left: 65%;
+      animation: meteorShoot2 16s ease-in-out infinite 6s;
+    }
+
+    @keyframes meteorShoot1 {
+      0% { transform: translate(0, 0) rotate(-35deg); opacity: 0; }
+      2% { opacity: 1; }
+      5% { transform: translate(280px, 190px) rotate(-35deg); opacity: 0; }
+      100% { transform: translate(280px, 190px) rotate(-35deg); opacity: 0; }
+    }
+
+    @keyframes meteorShoot2 {
+      0% { transform: translate(0, 0) rotate(-40deg); opacity: 0; }
+      2% { opacity: 0.95; }
+      4% { transform: translate(340px, 250px) rotate(-40deg); opacity: 0; }
+      100% { transform: translate(340px, 250px) rotate(-40deg); opacity: 0; }
     }
 
     /* ==========================================================================
@@ -74,7 +255,9 @@
       position: fixed;
       inset: 0;
       z-index: 999999;
-      background: radial-gradient(circle at 50% 30%, #121428 0%, #06060B 100%);
+      background: rgba(5, 6, 12, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -82,24 +265,12 @@
       overflow: hidden;
     }
 
-    .cosmic-cyber-grid {
-      position: absolute;
-      inset: 0;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 75%);
-      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 75%);
-      pointer-events: none;
-    }
-
     .gate-ambient-glow {
       position: absolute;
-      width: 650px;
-      height: 650px;
+      width: 680px;
+      height: 680px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.22) 0%, rgba(6, 182, 212, 0.08) 40%, rgba(0,0,0,0) 70%);
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(6, 182, 212, 0.1) 40%, rgba(0,0,0,0) 70%);
       filter: blur(60px);
       pointer-events: none;
       animation: ambientPulse 8s ease-in-out infinite alternate;
@@ -114,13 +285,13 @@
       width: 100%;
       max-width: 460px;
       background: rgba(14, 16, 29, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.14);
       border-radius: 20px;
       padding: 44px 40px;
       box-shadow: 
         0 24px 70px rgba(0, 0, 0, 0.75), 
-        0 0 0 1px rgba(99, 102, 241, 0.25),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+        0 0 0 1px rgba(99, 102, 241, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
       position: relative;
       z-index: 10;
       backdrop-filter: blur(28px);
@@ -192,6 +363,19 @@
       box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
     }
 
+    /* Gate Error Container: Hidden by default */
+    #gate-error-message {
+      display: none;
+      padding: 11px 14px;
+      border-radius: 8px;
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.35);
+      color: #FDA4AF;
+      font-size: 13px;
+      align-items: center;
+      gap: 8px;
+    }
+
     /* ==========================================================================
        2. COMMAND CENTER WORKSPACE ARCHITECTURE (SIDEBAR + MAIN CANVAS)
        ========================================================================== */
@@ -200,6 +384,7 @@
       min-height: 100vh;
       width: 100%;
       position: relative;
+      z-index: 10;
     }
 
     /* Sleek Cyber Command Rail (Sidebar) */
@@ -207,6 +392,8 @@
       width: var(--overseer-sidebar-width);
       background: var(--overseer-surface);
       border-right: 1px solid var(--overseer-border);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       display: flex;
       flex-direction: column;
       position: sticky;
@@ -296,8 +483,8 @@
       color: var(--text-primary);
     }
     .sidebar-nav-item.active {
-      background: rgba(99, 102, 241, 0.12);
-      border-color: rgba(99, 102, 241, 0.3);
+      background: rgba(99, 102, 241, 0.14);
+      border-color: rgba(99, 102, 241, 0.35);
       color: #A5B4FC;
     }
     .sni-left {
@@ -421,10 +608,10 @@
       top: 0;
       z-index: 90;
       height: 64px;
-      background: rgba(14, 16, 29, 0.85);
+      background: var(--overseer-surface);
       border-bottom: 1px solid var(--overseer-border);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -536,13 +723,15 @@
       gap: 14px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .bento-kpi-card:hover {
       transform: translateY(-3px);
       border-color: var(--overseer-border-glow);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28), 0 0 0 1px var(--overseer-accent-glow);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--overseer-accent-glow);
     }
     .bento-kpi-card::after {
       content: '';
@@ -552,7 +741,7 @@
       right: 0;
       height: 2px;
       background: linear-gradient(90deg, transparent, var(--card-glow-color, var(--overseer-accent)), transparent);
-      opacity: 0.7;
+      opacity: 0.8;
     }
 
     .bkc-top {
@@ -577,10 +766,10 @@
       font-size: 20px;
     }
 
-    .ring-indigo { background: rgba(99, 102, 241, 0.12); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.25); }
-    .ring-cyan { background: rgba(6, 182, 212, 0.12); color: #22D3EE; border: 1px solid rgba(6, 182, 212, 0.25); }
-    .ring-emerald { background: rgba(16, 185, 129, 0.12); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.25); }
-    .ring-rose { background: rgba(244, 63, 94, 0.12); color: #FB7185; border: 1px solid rgba(244, 63, 94, 0.25); }
+    .ring-indigo { background: rgba(99, 102, 241, 0.15); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.3); }
+    .ring-cyan { background: rgba(6, 182, 212, 0.15); color: #22D3EE; border: 1px solid rgba(6, 182, 212, 0.3); }
+    .ring-emerald { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .ring-rose { background: rgba(244, 63, 94, 0.15); color: #FB7185; border: 1px solid rgba(244, 63, 94, 0.3); }
 
     .bkc-value-row {
       display: flex;
@@ -630,7 +819,9 @@
       background: var(--overseer-surface);
       border: 1px solid var(--overseer-border);
       border-radius: 14px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
     }
 
     .search-telemetry-box {
@@ -659,7 +850,7 @@
     }
     .search-telemetry-input:focus {
       border-color: var(--overseer-accent);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
     }
 
     .filter-chips-cluster {
@@ -685,7 +876,7 @@
       color: var(--text-primary);
     }
     .filter-chip-btn.active {
-      background: rgba(99, 102, 241, 0.18);
+      background: rgba(99, 102, 241, 0.2);
       border-color: var(--overseer-accent);
       color: #A5B4FC;
     }
@@ -725,7 +916,7 @@
     .vmt-btn.active {
       background: var(--overseer-surface);
       color: var(--text-primary);
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
     }
 
     /* ==========================================================================
@@ -748,12 +939,14 @@
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .cyber-user-card:hover {
       border-color: var(--overseer-border-glow);
-      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--overseer-accent-glow);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--overseer-accent-glow);
       transform: translateY(-4px);
     }
 
@@ -769,8 +962,8 @@
       border-radius: 50%;
       overflow: hidden;
       flex-shrink: 0;
-      border: 2px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
       background: #050711;
       display: flex;
       align-items: center;
@@ -891,7 +1084,9 @@
       border: 1px solid var(--overseer-border);
       border-radius: 16px;
       overflow-x: auto;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
     }
 
     .enterprise-data-table {
@@ -952,6 +1147,8 @@
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       transition: all 0.2s;
     }
     .dossier-back-btn:hover {
@@ -972,7 +1169,9 @@
       justify-content: space-between;
       gap: 28px;
       margin-bottom: 28px;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       position: relative;
       overflow: hidden;
     }
@@ -984,7 +1183,7 @@
       width: 300px;
       height: 300px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -998,7 +1197,7 @@
       height: 92px;
       border-radius: 50%;
       border: 3px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55);
       overflow: hidden;
       background: #050711;
       flex-shrink: 0;
@@ -1084,7 +1283,9 @@
       display: flex;
       flex-direction: column;
       gap: 20px;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
       margin-bottom: 20px;
     }
 
@@ -1239,10 +1440,24 @@
 <body>
 
   <!-- ==========================================================================
+       GLOBAL LIVING UNIVERSE BACKGROUND
+       ========================================================================== -->
+  <div class="terminal-universe-bg">
+    <div class="cosmic-nebula nebula-1"></div>
+    <div class="cosmic-nebula nebula-2"></div>
+    <div class="cosmic-nebula nebula-3"></div>
+    <div class="cosmic-stars-layer stars-small"></div>
+    <div class="cosmic-stars-layer stars-medium"></div>
+    <div class="cosmic-stars-layer stars-pulsar"></div>
+    <div class="cosmic-dust-grid"></div>
+    <div class="shooting-star-streak shooting-star-1"></div>
+    <div class="shooting-star-streak shooting-star-2"></div>
+  </div>
+
+  <!-- ==========================================================================
        1. SECURITY CLEARANCE ENCLAVE (FULL VIEWPORT LOGIN GATE)
        ========================================================================== -->
   <div class="admin-gate-overlay" id="admin-gate-overlay">
-    <div class="cosmic-cyber-grid"></div>
     <div class="gate-ambient-glow"></div>
 
     <div class="admin-gate-card">
@@ -1275,7 +1490,8 @@
           <input type="password" id="admin-password-input" required class="gate-input-box" placeholder="" autocomplete="off">
         </div>
 
-        <div id="gate-error-message" style="display: none; padding: 11px 14px; border-radius: 8px; background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.35); color: #FDA4AF; font-size: 13px; display: flex; align-items: center; gap: 8px;">
+        <!-- Hidden by default: no display:flex in initial style -->
+        <div id="gate-error-message">
           <i class="ph ph-warning-circle"></i>
           <span id="gate-error-text">Access Denied: Invalid credentials.</span>
         </div>
@@ -1736,6 +1952,14 @@
         document.getElementById('admin-login-form')?.addEventListener('submit', (e) => this.handleLogin(e));
         document.getElementById('admin-user-search')?.addEventListener('input', () => this.renderUsersDirectory());
         document.getElementById('admin-user-sort')?.addEventListener('change', () => this.renderUsersDirectory());
+
+        // Clear error message when user starts typing in username or password
+        const clearErr = () => {
+          const errBox = document.getElementById('gate-error-message');
+          if (errBox) errBox.style.display = 'none';
+        };
+        document.getElementById('admin-email-input')?.addEventListener('input', clearErr);
+        document.getElementById('admin-password-input')?.addEventListener('input', clearErr);
       }
 
       async checkAuth() {
@@ -1764,7 +1988,9 @@
       showGate(visible) {
         const gate = document.getElementById('admin-gate-overlay');
         const workspace = document.getElementById('admin-main-workspace');
+        const errBox = document.getElementById('gate-error-message');
 
+        if (errBox) errBox.style.display = 'none';
         if (gate) gate.style.display = visible ? 'flex' : 'none';
         if (workspace) workspace.style.display = visible ? 'none' : 'flex';
       }
@@ -1792,19 +2018,23 @@
             this.token = data.token;
             sessionStorage.setItem('hermes_admin_token', data.token);
             localStorage.setItem('hermes_admin_token', data.token);
-            errBox.style.display = 'none';
+            if (errBox) errBox.style.display = 'none';
             this.showGate(false);
             this.renderOverseerProfile(data.admin);
             this.showToast('Overseer terminal decrypted & online.', false);
             this.loadDashboardData();
           } else {
-            errBox.style.display = 'flex';
-            errText.textContent = data.error || 'Access Denied: Invalid credentials.';
+            if (errBox) {
+              errBox.style.display = 'flex';
+              if (errText) errText.textContent = data.error || 'Access Denied: Invalid credentials.';
+            }
             this.showToast('Authentication failed.', true);
           }
         } catch (err) {
-          errBox.style.display = 'flex';
-          errText.textContent = 'Server connection error.';
+          if (errBox) {
+            errBox.style.display = 'flex';
+            if (errText) errText.textContent = 'Server connection error.';
+          }
         } finally {
           submitBtn.disabled = false;
           submitBtn.innerHTML = `<i class="ph ph-key"></i> <span>Decrypt Terminal</span>`;
