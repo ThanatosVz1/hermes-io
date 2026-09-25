@@ -700,7 +700,7 @@
   <div class="modal-backdrop hidden" id="settings-modal">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>AI & Engine Settings</h3>
+        <h3>AI &amp; API Key Settings</h3>
         <button class="close-modal-btn" id="close-settings-modal"><i class="ph ph-x"></i></button>
       </div>
 
@@ -716,7 +716,7 @@
         </div>
 
         <div class="form-group">
-          <label for="settings-gemini-key">Gemini API Key (Optional)</label>
+          <label for="settings-gemini-key">Google Gemini API Key (Optional)</label>
           <input type="password" id="settings-gemini-key" class="input-field" placeholder="AIzaSy...">
         </div>
 
@@ -725,37 +725,13 @@
           <input type="password" id="settings-claude-key" class="input-field" placeholder="sk-ant-...">
         </div>
 
-        <!-- Supabase Cloud Database Integration -->
-        <div style="border-top: 1px solid var(--border-subtle); margin: 1.5rem 0; padding-top: 1.25rem;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem;">
-            <label style="font-weight: 700; color: #34d399; display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0;">
-              <i class="ph ph-database"></i> Supabase Cloud Database (Optional)
-            </label>
-            <span id="supabase-status-pill" class="meta-pill" style="font-size: 0.75rem;">Local JSON Storage</span>
-          </div>
-
-          <div class="form-group">
-            <label for="settings-supabase-url">Supabase Project URL</label>
-            <input type="text" id="settings-supabase-url" class="input-field" placeholder="https://xyzcompany.supabase.co">
-          </div>
-
-          <div class="form-group">
-            <label for="settings-supabase-key">Supabase Anon / Service Role Key</label>
-            <input type="password" id="settings-supabase-key" class="input-field" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
-          </div>
-
-          <div style="display: flex; gap: 0.6rem; margin-bottom: 1.25rem;">
-            <button type="button" class="btn btn-secondary btn-sm" id="btn-test-supabase" style="flex: 1;">
-              <i class="ph ph-plugs-connected"></i> Test Connection
-            </button>
-            <button type="button" class="btn btn-secondary btn-sm" id="btn-sync-supabase" style="flex: 1;">
-              <i class="ph ph-cloud-arrow-up"></i> Sync to Supabase
-            </button>
-          </div>
+        <div class="form-group">
+          <label for="settings-openai-key">OpenAI API Key (Optional)</label>
+          <input type="password" id="settings-openai-key" class="input-field" placeholder="sk-...">
         </div>
 
-        <button type="submit" class="btn btn-primary" style="width: 100%;">
-          Save All Settings
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+          Save API Keys &amp; Settings
         </button>
       </form>
     </div>

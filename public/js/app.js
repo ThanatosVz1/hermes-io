@@ -1,4 +1,4 @@
-// Hermes.io — Main Application Controller & View Orchestrator
+﻿// Hermes.io — Main Application Controller & View Orchestrator
 // Coordinates Auth, Onboarding Wizard, Template Gallery, Roadmap Explorer & State
 
 
@@ -1814,20 +1814,20 @@ class HermesApp {
     // Save All Settings Submit
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const provider = document.getElementById('settings-provider-select').value;
-      const geminiKey = document.getElementById('settings-gemini-key').value;
-      const claudeKey = document.getElementById('settings-claude-key').value;
-      const openaiKey = document.getElementById('settings-openai-key').value;
-      const supabaseUrl = document.getElementById('settings-supabase-url').value.trim();
-      const supabaseKey = document.getElementById('settings-supabase-key').value.trim();
+      const provider = document.getElementById('settings-provider-select')?.value || 'offline';
+      const geminiKey = document.getElementById('settings-gemini-key')?.value?.trim();
+      const claudeKey = document.getElementById('settings-claude-key')?.value?.trim();
+      const openaiKey = document.getElementById('settings-openai-key')?.value?.trim();
+      const supabaseUrlEl = document.getElementById('settings-supabase-url');
+      const supabaseKeyEl = document.getElementById('settings-supabase-key');
 
       try {
         const payload = { provider };
-        if (geminiKey) payload.geminiApiKey = geminiKey;
-        if (claudeKey) payload.claudeApiKey = claudeKey;
-        if (openaiKey) payload.openaiApiKey = openaiKey;
-        if (supabaseUrl !== undefined) payload.supabaseUrl = supabaseUrl;
-        if (supabaseKey) payload.supabaseKey = supabaseKey;
+        if (geminiKey !== undefined) payload.geminiApiKey = geminiKey;
+        if (claudeKey !== undefined) payload.claudeApiKey = claudeKey;
+        if (openaiKey !== undefined) payload.openaiApiKey = openaiKey;
+        if (supabaseUrlEl) payload.supabaseUrl = supabaseUrlEl.value.trim();
+        if (supabaseKeyEl) payload.supabaseKey = supabaseKeyEl.value.trim();
 
         await fetch('/api/config', {
           method: 'POST',
@@ -1836,7 +1836,7 @@ class HermesApp {
         });
 
         modal.classList.add('hidden');
-        this.showToast('✅ All settings & database credentials saved!', 'success');
+        this.showToast('API keys & settings saved successfully!', 'success');
       } catch (err) {
         this.showToast(`Error saving settings: ${err.message}`, 'error');
       }
@@ -1853,6 +1853,15 @@ class HermesApp {
       
       const providerSelect = modal.querySelector('#settings-provider-select');
       if (providerSelect) providerSelect.value = cfg.provider || 'offline';
+
+      const geminiInput = modal.querySelector('#settings-gemini-key');
+      if (geminiInput && cfg.geminiApiKey) geminiInput.value = cfg.geminiApiKey;
+
+      const claudeInput = modal.querySelector('#settings-claude-key');
+      if (claudeInput && cfg.claudeApiKey) claudeInput.value = cfg.claudeApiKey;
+
+      const openaiInput = modal.querySelector('#settings-openai-key');
+      if (openaiInput && cfg.openaiApiKey) openaiInput.value = cfg.openaiApiKey;
 
       const supabaseUrlInput = modal.querySelector('#settings-supabase-url');
       if (supabaseUrlInput && cfg.supabaseUrl) supabaseUrlInput.value = cfg.supabaseUrl;
