@@ -865,9 +865,9 @@ class HermesApp {
         #hermes-gen-overlay.fading{animation:_gFadeOut 0.4s ease forwards;}
         #hermes-gen-overlay img{border-radius:16px;box-shadow:0 0 60px rgba(79,70,229,0.45);width:320px;max-width:88vw;}
         #hermes-gen-ol-text{
-          color:#E8E8E8;font-family:'Plus Jakarta Sans',sans-serif;
-          font-size:16px;font-weight:500;text-align:center;
-          max-width:340px;letter-spacing:0.01em;
+          color:#FFFFFF;font-family:'Plus Jakarta Sans',sans-serif;
+          font-size:18px;font-weight:700;text-align:center;
+          max-width:380px;letter-spacing:-0.01em;line-height:1.4;
           transition:opacity 0.25s ease;
         }
         .hg-dots{display:flex;gap:8px;}
@@ -889,10 +889,10 @@ class HermesApp {
       _overlay = document.createElement('div');
       _overlay.id = 'hermes-gen-overlay';
       _overlay.innerHTML = `
+        <p id="hermes-gen-ol-text">${initialText}</p>
+        <div class="hg-dots" style="margin-top:-6px;margin-bottom:6px;"><span></span><span></span><span></span></div>
         <img src="https://cdn.dribbble.com/userupload/42153336/file/original-47d79aeef2b6c2f3d94914d2ecfda559.gif"
              alt="Generating roadmap..." />
-        <p id="hermes-gen-ol-text">${initialText}</p>
-        <div class="hg-dots"><span></span><span></span><span></span></div>
       `;
       document.body.appendChild(_overlay);
     }
@@ -981,10 +981,10 @@ class HermesApp {
     const _overlay = document.createElement('div');
     _overlay.id = 'hermes-gen-overlay';
     _overlay.innerHTML = `
+      <p id="hermes-gen-ol-text">${_genOverlayTexts[0]}</p>
+      <div class="hg-dots" style="margin-top:-6px;margin-bottom:6px;"><span></span><span></span><span></span></div>
       <img src="https://cdn.dribbble.com/userupload/42153336/file/original-47d79aeef2b6c2f3d94914d2ecfda559.gif"
            width="300" style="max-width:88vw" alt="Generating roadmap..." />
-      <p id="hermes-gen-ol-text">${_genOverlayTexts[0]}</p>
-      <div class="hg-dots"><span></span><span></span><span></span></div>
     `;
     document.body.appendChild(_overlay);
 
