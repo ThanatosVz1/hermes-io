@@ -1,9 +1,35 @@
-﻿node_modules/
-.env
-*.env
-__pycache__/
-*.pyc
-*.backup*
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
 
-.venv/
-venv/
+# Environment variables (NEVER commit these)
+.env
+.env.local
+.env.production
+
+# Local data files (contain user passwords — use Supabase in production)
+data/sessions.json
+data/roadmaps.json
+
+# Keep users.json only if it has demo users (remove if real users added)
+# data/users.json
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+
+# Temp
+tmp/
+.tmp/
