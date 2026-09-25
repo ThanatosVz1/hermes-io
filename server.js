@@ -3465,7 +3465,23 @@ const server = http.createServer(async (req, res) => {
       pass: 'Thanatos.Vz'
     };
 
-    // Helper: verify admin token
+    const ADMIN_SECRET = 'hermes_overseer_vault_secret_998124_vz';
+
+    // Sign a cryptographically secure, stateless admin token (valid 30 days across all serverless lambdas)
+    function signAdminToken(adminData) {
+      const payload = {
+        email: adminData.email,
+        name: 'Cronus (Overseer)',
+        role: 'administrator',
+        iat: Date.now(),
+        exp: Date.now() + (30 * 24 * 60 * 60 * 1000)
+      };
+      const body = Buffer.from(JSON.stringify(payload)).toString('base64url');
+      const sig = crypto.createHmac('sha256', ADMIN_SECRET).update(body).digest('base64url');
+      return `hadmin.${body}.${sig}`;
+    }
+
+    // Verify admin token (handles both stateless HMAC tokens and legacy memory sessions)
     function getAuthAdmin(r) {
       const auth = r.headers['authorization'] || '';
       let token = '';
@@ -3473,13 +3489,34 @@ const server = http.createServer(async (req, res) => {
       if (!token) token = r.headers['x-admin-token'] || parsedUrl.query?.adminToken || '';
       if (!token) return null;
 
-      const session = global.HERMES_ADMIN_SESSIONS?.get(token);
-      if (!session) return null;
-      if (Date.now() > session.expiresAt) {
-        global.HERMES_ADMIN_SESSIONS.delete(token);
-        return null;
+      // 1. Verify stateless HMAC token
+      if (token.startsWith('hadmin.')) {
+        const parts = token.split('.');
+        if (parts.length === 3) {
+          const [prefix, body, sig] = parts;
+          const expectedSig = crypto.createHmac('sha256', ADMIN_SECRET).update(body).digest('base64url');
+          if (sig === expectedSig) {
+            try {
+              const payload = JSON.parse(Buffer.from(body, 'base64url').toString('utf8'));
+              if (Date.now() <= payload.exp) {
+                return {
+                  email: payload.email,
+                  name: payload.name || 'Cronus (Overseer)',
+                  role: payload.role || 'administrator'
+                };
+              }
+            } catch (_) {}
+          }
+        }
       }
-      return session;
+
+      // 2. Fallback to in-memory sessions if present
+      if (global.HERMES_ADMIN_SESSIONS && global.HERMES_ADMIN_SESSIONS.has(token)) {
+        const s = global.HERMES_ADMIN_SESSIONS.get(token);
+        if (Date.now() <= s.expiresAt) return s;
+      }
+
+      return null;
     }
 
     if (!global.HERMES_ADMIN_SESSIONS) {
@@ -3488,69 +3525,82 @@ const server = http.createServer(async (req, res) => {
 
     // POST /api/admin/login
     if (pathname === '/api/admin/login' && method === 'POST') {
-      const { email, username, identifier, password } = await parseBody(req);
+      const body = await parseBody(req);
+      const { email, username, identifier, password } = body;
       const cleanId = (identifier || username || email || '').trim().toLowerCase();
       const cleanPass = (password || '').trim();
 
       const validAdminIdentifiers = [
         ADMIN_CREDENTIALS.email.toLowerCase(),
         'cronus.xz',
-        'cronus'
+        'cronus',
+        'cronus admin',
+        'overseer'
       ];
 
       if (validAdminIdentifiers.includes(cleanId) && cleanPass === ADMIN_CREDENTIALS.pass) {
-        const token = 'hermes_admin_' + crypto.randomBytes(32).toString('hex');
-        const sessionData = {
+        const adminData = {
           email: ADMIN_CREDENTIALS.email,
           name: 'Cronus (Overseer)',
-          role: 'administrator',
-          loginTime: new Date().toISOString(),
-          expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+          role: 'administrator'
         };
-        global.HERMES_ADMIN_SESSIONS.set(token, sessionData);
+        const token = signAdminToken(adminData);
+        global.HERMES_ADMIN_SESSIONS.set(token, { ...adminData, expiresAt: Date.now() + 30 * 86400000 });
 
         return sendJSON(res, 200, {
           success: true,
           token,
-          admin: { email: sessionData.email, name: sessionData.name }
+          admin: adminData
         });
       }
 
       return sendJSON(res, 401, { error: 'Access Denied: Invalid overseer credentials.' });
     }
 
-    // GET /api/admin/me - Verify admin session
+    // GET /api/admin/me - Verify current admin session
     if (pathname === '/api/admin/me' && method === 'GET') {
       const admin = getAuthAdmin(req);
       if (!admin) {
-        return sendJSON(res, 401, { authenticated: false, error: 'Unauthorized admin session' });
+        return sendJSON(res, 401, { authenticated: false, error: 'Unauthorized overseer session' });
       }
       return sendJSON(res, 200, { authenticated: true, admin });
     }
 
     // POST /api/admin/logout
     if (pathname === '/api/admin/logout' && method === 'POST') {
-      const admin = getAuthAdmin(req);
       const auth = req.headers['authorization'] || '';
       let token = auth.startsWith('Bearer ') ? auth.substring(7).trim() : (req.headers['x-admin-token'] || '');
-      if (token) global.HERMES_ADMIN_SESSIONS.delete(token);
+      if (token && global.HERMES_ADMIN_SESSIONS) {
+        global.HERMES_ADMIN_SESSIONS.delete(token);
+      }
       return sendJSON(res, 200, { success: true, message: 'Overseer session terminated' });
     }
 
-    // GET /api/admin/users - List all users with aggregated telemetry
+    // GET /api/admin/users - Comprehensive Telemetry & Learners Directory
     if (pathname === '/api/admin/users' && method === 'GET') {
       const admin = getAuthAdmin(req);
       if (!admin) {
         return sendJSON(res, 401, { error: 'Access Denied: Restricted to Overseer terminal.' });
       }
 
-      const allUsers = await dbGetUsers();
-      const allRoadmaps = await dbGetRoadmaps();
-      const allQuizzes = await dbGetQuizResults();
+      let allUsers = (await dbGetUsers()) || [];
+      let allRoadmaps = (await dbGetRoadmaps()) || [];
+      let allQuizzes = (await dbGetQuizResults()) || [];
+
+      // If users list is empty from DB, merge with local data so dashboard is never empty
+      if (allUsers.length === 0) {
+        allUsers = readJSON(USERS_FILE, []);
+      }
+      if (allRoadmaps.length === 0) {
+        allRoadmaps = readJSON(ROADMAPS_FILE, []);
+      }
+      if (allQuizzes.length === 0) {
+        allQuizzes = readJSON(QUIZ_RESULTS_FILE, []);
+      }
 
       // Aggregate telemetry per user
       const usersData = allUsers.map(u => {
-        const userRoadmaps = allRoadmaps.filter(r => r.userId === u.id);
+        const userRoadmaps = allRoadmaps.filter(r => r.userId === u.id || r.user_id === u.id);
         const userQuizzes = allQuizzes.filter(q => q.user_id === u.id || q.userId === u.id);
 
         let totalProgress = 0;
@@ -3558,32 +3608,38 @@ const server = http.createServer(async (req, res) => {
         let totalCompletedHours = 0;
 
         userRoadmaps.forEach(r => {
-          totalProgress += (r.overallProgress || 0);
-          totalHours += (r.totalHours || 0);
-          totalCompletedHours += (r.completedHours || 0);
+          totalProgress += (r.overallProgress || r.overall_progress || 0);
+          totalHours += (r.totalHours || r.total_hours || 0);
+          totalCompletedHours += (r.completedHours || r.completed_hours || 0);
         });
 
         const avgProgress = userRoadmaps.length > 0 ? Math.round(totalProgress / userRoadmaps.length) : 0;
-        
+
         let quizScoreSum = 0;
         userQuizzes.forEach(q => { quizScoreSum += (q.percentage || 0); });
         const avgQuizScore = userQuizzes.length > 0 ? Math.round(quizScoreSum / userQuizzes.length) : 0;
 
-        // Generate celestial avatar URL
-        const celestialAvatarUrl = CelestialAvatars ? CelestialAvatars.getUrl(u.email || u.id) : (u.avatar || '');
+        // Celestial planet/star avatar URL
+        let celestialAvatarUrl = '';
+        try {
+          if (CelestialAvatars) {
+            celestialAvatarUrl = CelestialAvatars.getUrl(u.email || u.id);
+          }
+        } catch (_) {}
+
         let avatarUrl = u.avatar;
         if (!avatarUrl || avatarUrl.includes('dicebear') || !avatarUrl.startsWith('data:')) {
-          avatarUrl = celestialAvatarUrl;
+          avatarUrl = celestialAvatarUrl || avatarUrl || '';
         }
 
         return {
           id: u.id,
-          name: u.name,
-          email: u.email,
+          name: u.name || 'Anonymous Learner',
+          email: u.email || 'guest@hermes.io',
           avatar: avatarUrl,
           celestialAvatar: celestialAvatarUrl,
-          createdAt: u.createdAt,
-          updatedAt: u.updatedAt,
+          createdAt: u.createdAt || u.created_at,
+          updatedAt: u.updatedAt || u.updated_at,
           roadmapsCount: userRoadmaps.length,
           avgProgress,
           totalHours,
@@ -3595,9 +3651,8 @@ const server = http.createServer(async (req, res) => {
 
       // Global platform telemetry stats
       let globalProgressSum = 0;
-      let totalRoadmapsCount = allRoadmaps.length;
-      allRoadmaps.forEach(r => { globalProgressSum += (r.overallProgress || 0); });
-      const avgPlatformProgress = totalRoadmapsCount > 0 ? Math.round(globalProgressSum / totalRoadmapsCount) : 0;
+      allRoadmaps.forEach(r => { globalProgressSum += (r.overallProgress || r.overall_progress || 0); });
+      const avgPlatformProgress = allRoadmaps.length > 0 ? Math.round(globalProgressSum / allRoadmaps.length) : 0;
 
       let globalQuizScoreSum = 0;
       allQuizzes.forEach(q => { globalQuizScoreSum += (q.percentage || 0); });
@@ -3605,7 +3660,7 @@ const server = http.createServer(async (req, res) => {
 
       const stats = {
         totalUsers: allUsers.length,
-        totalRoadmaps: totalRoadmapsCount,
+        totalRoadmaps: allRoadmaps.length,
         avgPlatformProgress,
         totalQuizzesCompleted: allQuizzes.length,
         avgQuizScore
@@ -3623,15 +3678,28 @@ const server = http.createServer(async (req, res) => {
       }
 
       const targetId = matchAdminUserId[1];
-      const user = await dbGetUserById(targetId);
+      let user = await dbGetUserById(targetId);
+      if (!user) {
+        const localUsers = readJSON(USERS_FILE, []);
+        user = localUsers.find(u => u.id === targetId);
+      }
       if (!user) {
         return sendJSON(res, 404, { error: 'User not found in registry.' });
       }
 
-      const roadmaps = await dbGetRoadmaps(targetId);
-      const quizzes = await dbGetQuizResults(targetId);
+      let roadmaps = (await dbGetRoadmaps(targetId)) || [];
+      let quizzes = (await dbGetQuizResults(targetId)) || [];
 
-      // Attach roadmap title to quizzes for clarity
+      if (roadmaps.length === 0) {
+        const localRoadmaps = readJSON(ROADMAPS_FILE, []);
+        roadmaps = localRoadmaps.filter(r => r.userId === targetId || r.user_id === targetId);
+      }
+      if (quizzes.length === 0) {
+        const localQuizzes = readJSON(QUIZ_RESULTS_FILE, []);
+        quizzes = localQuizzes.filter(q => q.user_id === targetId || q.userId === targetId);
+      }
+
+      // Map roadmap titles to quizzes
       const roadmapMap = new Map();
       roadmaps.forEach(r => roadmapMap.set(r.id, r.title));
 
@@ -3645,18 +3713,23 @@ const server = http.createServer(async (req, res) => {
       let totalCompletedHours = 0;
 
       roadmaps.forEach(r => {
-        totalProgress += (r.overallProgress || 0);
-        totalHours += (r.totalHours || 0);
-        totalCompletedHours += (r.completedHours || 0);
+        totalProgress += (r.overallProgress || r.overall_progress || 0);
+        totalHours += (r.totalHours || r.total_hours || 0);
+        totalCompletedHours += (r.completedHours || r.completed_hours || 0);
       });
 
       const avgProgress = roadmaps.length > 0 ? Math.round(totalProgress / roadmaps.length) : 0;
 
-      let avatarUrl = user.avatar;
-      if (!avatarUrl || avatarUrl.includes('dicebear')) {
+      let celestialAvatarUrl = '';
+      try {
         if (CelestialAvatars) {
-          avatarUrl = CelestialAvatars.getUrl(user.email || user.id);
+          celestialAvatarUrl = CelestialAvatars.getUrl(user.email || user.id);
         }
+      } catch (_) {}
+
+      let avatarUrl = user.avatar;
+      if (!avatarUrl || avatarUrl.includes('dicebear') || !avatarUrl.startsWith('data:')) {
+        avatarUrl = celestialAvatarUrl || avatarUrl || '';
       }
 
       return sendJSON(res, 200, {
@@ -3665,8 +3738,8 @@ const server = http.createServer(async (req, res) => {
           name: user.name,
           email: user.email,
           avatar: avatarUrl,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
+          createdAt: user.createdAt || user.created_at,
+          updatedAt: user.updatedAt || user.updated_at,
           avgProgress,
           totalHours,
           totalCompletedHours
@@ -3683,18 +3756,26 @@ const server = http.createServer(async (req, res) => {
       if (!admin) {
         return sendJSON(res, 401, { error: 'Access Denied' });
       }
-      const roadmap = await dbGetRoadmapById(matchAdminRoadmapId[1]);
+      let roadmap = await dbGetRoadmapById(matchAdminRoadmapId[1]);
+      if (!roadmap) {
+        const local = readJSON(ROADMAPS_FILE, []);
+        roadmap = local.find(r => r.id === matchAdminRoadmapId[1]);
+      }
       if (!roadmap) return sendJSON(res, 404, { error: 'Roadmap not found' });
       return sendJSON(res, 200, roadmap);
     }
 
-    // ROUTE /admin and /admin/ - Serve the Secret Admin Terminal HTML
     // ROUTE /admin, /admin/dashboard - Serve the Secret Admin Terminal HTML
     if ((pathname === '/admin' || pathname === '/admin/' || pathname === '/admin.html' || pathname === '/admin/dashboard' || pathname === '/admin-dashboard') && method === 'GET') {
       const adminFile = path.join(PUBLIC_DIR, 'admin.html');
       if (fs.existsSync(adminFile)) {
         const content = fs.readFileSync(adminFile);
-        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        res.writeHead(200, {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        });
         return res.end(content);
       }
     }
