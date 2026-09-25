@@ -1,5 +1,5 @@
 /**
- * Hermes.io — Cosmic Splash Page Engine
+ * Hermes.io — Cosmic Splash Page with Sliding Enter Control
  * Controlled by `window.HERMES_SPLASH_ENABLED` (true = active, false = disabled/removed)
  */
 (function() {
@@ -14,35 +14,142 @@
     }
 
     var splash = document.getElementById('hermes-splash-screen');
-    var enterBtn = document.getElementById('btn-splash-enter');
+    var track = document.getElementById('splash-slider-track');
+    var thumb = document.getElementById('splash-slider-thumb');
+    var progress = document.getElementById('splash-slider-progress');
+    var label = document.querySelector('.splash-slider-label');
+    var icon = document.getElementById('sst-icon');
 
-    if (!splash || !enterBtn) return;
+    if (!splash || !track || !thumb) return;
+
+    var isDragging = false;
+    var startX = 0;
+    var currentX = 0;
+    var maxDrag = 0;
+    var isUnlocked = false;
+
+    function getMaxDrag() {
+      return Math.max(0, track.clientWidth - thumb.clientWidth - 8);
+    }
 
     function enterSite() {
-      enterBtn.disabled = true;
-      splash.classList.add('splash-fade-out');
+      if (isUnlocked) return;
+      isUnlocked = true;
 
-      // Remove after transition finishes
+      track.classList.add('unlocked');
+      if (icon) {
+        icon.className = 'ph-bold ph-check';
+      }
+
+      // Smooth cinematic transition out
       setTimeout(function() {
-        if (splash && splash.parentNode) {
-          splash.remove();
-        }
-      }, 700);
+        splash.classList.add('splash-fade-out');
+        setTimeout(function() {
+          if (splash && splash.parentNode) {
+            splash.remove();
+          }
+        }, 750);
+      }, 250);
     }
 
-    enterBtn.addEventListener('click', enterSite);
+    // Touch & Mouse Drag Handlers
+    function onStart(e) {
+      if (isUnlocked) return;
+      isDragging = true;
+      thumb.classList.add('dragging');
+      startX = (e.touches ? e.touches[0].clientX : e.clientX);
+      maxDrag = getMaxDrag();
+      thumb.style.transition = 'none';
+      if (progress) progress.style.transition = 'none';
+    }
 
-    // Also allow pressing 'Enter' key while on splash screen
-    function onKeyDown(e) {
-      if (e.key === 'Enter') {
-        window.removeEventListener('keydown', onKeyDown);
-        enterSite();
+    function onMove(e) {
+      if (!isDragging || isUnlocked) return;
+      var clientX = (e.touches ? e.touches[0].clientX : e.clientX);
+      var dx = clientX - startX;
+      currentX = Math.max(0, Math.min(maxDrag, dx));
+
+      thumb.style.transform = 'translateX(' + currentX + 'px)';
+      if (progress) {
+        progress.style.width = (currentX + 25) + 'px';
+      }
+      if (label && maxDrag > 0) {
+        var ratio = currentX / maxDrag;
+        label.style.opacity = Math.max(0, 1 - ratio * 1.5);
       }
     }
-    window.addEventListener('keydown', onKeyDown);
+
+    function onEnd() {
+      if (!isDragging || isUnlocked) return;
+      isDragging = false;
+      thumb.classList.remove('dragging');
+
+      maxDrag = getMaxDrag();
+      var ratio = maxDrag > 0 ? (currentX / maxDrag) : 0;
+
+      // Threshold: dragged past 70% of the track unlocks
+      if (ratio >= 0.70) {
+        // Snap to end
+        thumb.style.transition = 'transform 0.15s ease-out';
+        thumb.style.transform = 'translateX(' + maxDrag + 'px)';
+        if (progress) {
+          progress.style.transition = 'width 0.15s ease-out';
+          progress.style.width = '100%';
+        }
+        enterSite();
+      } else {
+        // Snap back to origin
+        thumb.style.transition = 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)';
+        thumb.style.transform = 'translateX(0px)';
+        if (progress) {
+          progress.style.transition = 'width 0.25s ease';
+          progress.style.width = '0px';
+        }
+        if (label) {
+          label.style.opacity = '1';
+        }
+        currentX = 0;
+      }
+    }
+
+    // Attach drag events to thumb
+    thumb.addEventListener('mousedown', onStart);
+    thumb.addEventListener('touchstart', onStart, { passive: true });
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, { passive: true });
+
+    window.addEventListener('mouseup', onEnd);
+    window.addEventListener('touchend', onEnd);
+
+    // Fallback: Click track or press Enter key
+    track.addEventListener('click', function(e) {
+      if (!isUnlocked && e.target !== thumb && !thumb.contains(e.target)) {
+        // Slide across track automatically on direct click
+        maxDrag = getMaxDrag();
+        thumb.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+        thumb.style.transform = 'translateX(' + maxDrag + 'px)';
+        if (progress) {
+          progress.style.transition = 'width 0.35s ease';
+          progress.style.width = '100%';
+        }
+        if (label) label.style.opacity = '0';
+        enterSite();
+      }
+    });
+
+    window.addEventListener('keydown', function(e) {
+      if ((e.key === 'Enter' || e.key === ' ') && !isUnlocked) {
+        maxDrag = getMaxDrag();
+        thumb.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+        thumb.style.transform = 'translateX(' + maxDrag + 'px)';
+        if (progress) progress.style.width = '100%';
+        if (label) label.style.opacity = '0';
+        enterSite();
+      }
+    });
   }
 
-  // Run on DOMContentLoaded or immediately if already loaded
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initSplash);
   } else {

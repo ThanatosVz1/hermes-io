@@ -1,5 +1,5 @@
 /* ==========================================================================
-   HERMES.IO COSMIC SPLASH PAGE STYLING
+   HERMES.IO COSMIC SPLASH PAGE — UNIQUE IMMERSIVE DESIGN
    ========================================================================== */
 
 .hermes-splash-overlay {
@@ -12,13 +12,15 @@
   justify-content: center;
   padding: 24px;
   overflow: hidden;
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease;
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), filter 0.75s ease;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .hermes-splash-overlay.splash-fade-out {
   opacity: 0;
-  transform: scale(1.05);
-  filter: blur(10px);
+  transform: scale(1.06);
+  filter: blur(12px);
   pointer-events: none;
 }
 
@@ -34,26 +36,26 @@
 .splash-nebula {
   position: absolute;
   border-radius: 50%;
-  filter: blur(90px);
+  filter: blur(95px);
   mix-blend-mode: screen;
   pointer-events: none;
 }
 
 .splash-nebula-1 {
-  width: 600px;
-  height: 600px;
-  top: -100px;
-  left: 20%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, rgba(124, 58, 237, 0.12) 50%, transparent 70%);
+  width: 650px;
+  height: 650px;
+  top: -120px;
+  left: 18%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.32) 0%, rgba(124, 58, 237, 0.14) 50%, transparent 70%);
   animation: splashNebulaFloat 16s ease-in-out infinite alternate;
 }
 
 .splash-nebula-2 {
-  width: 700px;
-  height: 700px;
-  bottom: -150px;
-  right: 15%;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.22) 0%, rgba(79, 70, 229, 0.08) 50%, transparent 70%);
+  width: 750px;
+  height: 750px;
+  bottom: -160px;
+  right: 12%;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.25) 0%, rgba(79, 70, 229, 0.1) 50%, transparent 70%);
   animation: splashNebulaFloat2 20s ease-in-out infinite alternate;
 }
 
@@ -83,7 +85,7 @@
     radial-gradient(1px 1px at 700px 230px, rgba(255, 255, 255, 0.7), transparent),
     radial-gradient(1.5px 1.5px at 800px 130px, #C7D2FE, transparent);
   background-size: 500px 500px;
-  opacity: 0.75;
+  opacity: 0.8;
   animation: splashStarTwinkle 5s ease-in-out infinite alternate;
 }
 
@@ -105,7 +107,6 @@
   opacity: 0;
 }
 
-/* Shooting Star 1 - Falls slowly across top-left to center-right */
 .splash-star-1 {
   width: 140px;
   top: -50px;
@@ -113,7 +114,6 @@
   animation: slowShootingStar1 10s ease-in-out infinite;
 }
 
-/* Shooting Star 2 - Falls slowly across center-top toward bottom-right */
 .splash-star-2 {
   width: 180px;
   top: -60px;
@@ -121,7 +121,6 @@
   animation: slowShootingStar2 13s ease-in-out infinite 4s;
 }
 
-/* Shooting Star 3 - Falls slowly in upper-right */
 .splash-star-3 {
   width: 120px;
   top: 5%;
@@ -130,57 +129,24 @@
 }
 
 @keyframes slowShootingStar1 {
-  0% {
-    transform: translate(0, 0) rotate(36deg);
-    opacity: 0;
-  }
-  3% {
-    opacity: 1;
-  }
-  18% {
-    transform: translate(460px, 340px) rotate(36deg);
-    opacity: 0;
-  }
-  100% {
-    transform: translate(460px, 340px) rotate(36deg);
-    opacity: 0;
-  }
+  0% { transform: translate(0, 0) rotate(36deg); opacity: 0; }
+  3% { opacity: 1; }
+  18% { transform: translate(460px, 340px) rotate(36deg); opacity: 0; }
+  100% { transform: translate(460px, 340px) rotate(36deg); opacity: 0; }
 }
 
 @keyframes slowShootingStar2 {
-  0% {
-    transform: translate(0, 0) rotate(40deg);
-    opacity: 0;
-  }
-  3% {
-    opacity: 0.95;
-  }
-  20% {
-    transform: translate(520px, 440px) rotate(40deg);
-    opacity: 0;
-  }
-  100% {
-    transform: translate(520px, 440px) rotate(40deg);
-    opacity: 0;
-  }
+  0% { transform: translate(0, 0) rotate(40deg); opacity: 0; }
+  3% { opacity: 0.95; }
+  20% { transform: translate(520px, 440px) rotate(40deg); opacity: 0; }
+  100% { transform: translate(520px, 440px) rotate(40deg); opacity: 0; }
 }
 
 @keyframes slowShootingStar3 {
-  0% {
-    transform: translate(0, 0) rotate(34deg);
-    opacity: 0;
-  }
-  3% {
-    opacity: 0.85;
-  }
-  17% {
-    transform: translate(380px, 260px) rotate(34deg);
-    opacity: 0;
-  }
-  100% {
-    transform: translate(380px, 260px) rotate(34deg);
-    opacity: 0;
-  }
+  0% { transform: translate(0, 0) rotate(34deg); opacity: 0; }
+  3% { opacity: 0.85; }
+  17% { transform: translate(380px, 260px) rotate(34deg); opacity: 0; }
+  100% { transform: translate(380px, 260px) rotate(34deg); opacity: 0; }
 }
 
 /* ==========================================================================
@@ -193,61 +159,55 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 540px;
+  max-width: 580px;
   width: 100%;
-  animation: splashFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: splashFadeIn 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes splashFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px) scale(0.96);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  0% { opacity: 0; transform: translateY(22px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* Planet / Cosmic Ring Emblem */
 .splash-emblem-wrap {
   position: relative;
-  width: 90px;
-  height: 90px;
-  margin-bottom: 24px;
+  width: 96px;
+  height: 96px;
+  margin-bottom: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .splash-planet-core {
-  width: 64px;
-  height: 64px;
+  width: 66px;
+  height: 66px;
   border-radius: 50%;
   background: linear-gradient(135deg, #4338CA 0%, #6366F1 50%, #06B6D4 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
+  font-size: 34px;
   color: #FFFFFF;
-  box-shadow: 0 0 35px rgba(99, 102, 241, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.65), inset 0 2px 5px rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   position: relative;
   z-index: 2;
   animation: planetPulse 4s ease-in-out infinite alternate;
 }
 
 @keyframes planetPulse {
-  0% { transform: scale(0.97); box-shadow: 0 0 28px rgba(99, 102, 241, 0.5); }
-  100% { transform: scale(1.03); box-shadow: 0 0 42px rgba(6, 182, 212, 0.7); }
+  0% { transform: scale(0.96); box-shadow: 0 0 30px rgba(99, 102, 241, 0.5); }
+  100% { transform: scale(1.04); box-shadow: 0 0 48px rgba(6, 182, 212, 0.75); }
 }
 
 .splash-orbital-ring {
   position: absolute;
-  width: 86px;
-  height: 86px;
+  width: 92px;
+  height: 92px;
   border-radius: 50%;
-  border: 2px dashed rgba(165, 180, 252, 0.4);
+  border: 2px dashed rgba(165, 180, 252, 0.45);
   animation: orbitalSpin 14s linear infinite;
   pointer-events: none;
 }
@@ -259,13 +219,13 @@
 
 /* Website Title */
 .splash-brand-title {
-  font-size: 56px;
+  font-size: 58px;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: #FFFFFF;
   line-height: 1.1;
-  margin-bottom: 8px;
-  text-shadow: 0 0 45px rgba(99, 102, 241, 0.45);
+  margin-bottom: 6px;
+  text-shadow: 0 0 50px rgba(99, 102, 241, 0.5);
 }
 
 .splash-brand-accent {
@@ -276,14 +236,15 @@
 
 /* Subtitle: powered by thanatosvz */
 .splash-powered-by {
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.26em;
   color: #94A3B8;
-  margin-bottom: 38px;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
 }
 
@@ -291,93 +252,173 @@
   color: #A5B4FC;
   font-weight: 800;
   letter-spacing: 0.28em;
-  text-shadow: 0 0 12px rgba(165, 180, 252, 0.4);
+  text-shadow: 0 0 12px rgba(165, 180, 252, 0.45);
+}
+
+/* 2-3 Line Website Description */
+.splash-mission-desc {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #CBD5E1;
+  max-width: 500px;
+  margin: 0 auto 34px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  opacity: 0.9;
+}
+
+.splash-mission-desc strong {
+  color: #FFFFFF;
+  font-weight: 600;
 }
 
 /* ==========================================================================
-   ENTER BUTTON WITH GRAPHIC & ANIMATIONS
+   SLIDING ENTER BUTTON (COSMIC INTERACTIVE SLIDER)
    ========================================================================== */
-.splash-enter-btn {
+.splash-slider-track {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 40px;
+  width: 330px;
+  max-width: 90vw;
+  height: 58px;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: linear-gradient(135deg, #4338CA 0%, #6366F1 50%, #06B6D4 100%);
-  color: #FFFFFF;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  outline: none;
+  background: rgba(14, 16, 32, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   box-shadow: 
-    0 4px 25px rgba(99, 102, 241, 0.5), 
-    0 0 0 1px rgba(255, 255, 255, 0.15),
-    inset 0 1px 2px rgba(255, 255, 255, 0.4);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
-}
-
-.splash-enter-btn:hover {
-  transform: translateY(-2px) scale(1.04);
-  box-shadow: 
-    0 8px 35px rgba(99, 102, 241, 0.7), 
-    0 0 25px rgba(6, 182, 212, 0.5),
-    inset 0 1px 3px rgba(255, 255, 255, 0.6);
-}
-
-.splash-enter-btn:active {
-  transform: translateY(0) scale(0.99);
-}
-
-.splash-btn-content {
-  position: relative;
-  z-index: 2;
+    0 8px 32px rgba(0, 0, 0, 0.45), 
+    inset 0 1px 2px rgba(255, 255, 255, 0.15), 
+    0 0 0 1px rgba(99, 102, 241, 0.25);
   display: flex;
   align-items: center;
-  gap: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: none;
 }
 
-.splash-btn-content i {
-  font-size: 17px;
-  transition: transform 0.25s ease;
-}
-
-.splash-enter-btn:hover .splash-btn-content i {
-  transform: translateX(4px);
-}
-
-/* Animated Shimmer Sweep across Button */
-.splash-enter-btn::after {
-  content: '';
+/* Shimmer Progress Track Fill */
+.splash-slider-progress {
   position: absolute;
+  left: 0;
   top: 0;
-  left: -120%;
-  width: 80%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
-  transform: skewX(-22deg);
-  animation: btnShimmerSweep 4.5s ease-in-out infinite;
+  bottom: 0;
+  width: 0;
+  background: linear-gradient(90deg, rgba(79, 70, 229, 0.35), rgba(6, 182, 212, 0.5));
+  border-radius: 9999px;
+  pointer-events: none;
+  transition: width 0.05s ease-out;
 }
 
-@keyframes btnShimmerSweep {
-  0% { left: -120%; }
-  25% { left: 140%; }
-  100% { left: 140%; }
+/* Shimmering Center Label */
+.splash-slider-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #64748B 0%, #E2E8F0 50%, #64748B 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShimmer 3s infinite linear;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  padding-left: 20px;
+}
+
+@keyframes textShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Sliding Thumb */
+.splash-slider-thumb {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4338CA 0%, #6366F1 50%, #06B6D4 100%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    0 0 20px rgba(99, 102, 241, 0.6), 
+    inset 0 2px 4px rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  z-index: 10;
+  transition: transform 0.05s ease-out, box-shadow 0.2s;
+}
+
+.splash-slider-thumb:active,
+.splash-slider-thumb.dragging {
+  cursor: grabbing;
+  box-shadow: 
+    0 0 30px rgba(99, 102, 241, 0.85), 
+    0 0 16px rgba(6, 182, 212, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.7);
+}
+
+.sst-core {
+  font-size: 18px;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.splash-slider-thumb:hover .sst-core {
+  transform: translateX(2px);
+}
+
+/* Glowing Aura on Thumb */
+.sst-aura {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
+  pointer-events: none;
+  animation: thumbPulse 2.5s infinite alternate;
+}
+
+@keyframes thumbPulse {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(1.2); opacity: 0.85; }
+}
+
+/* When Unlocked / Snapped */
+.splash-slider-track.unlocked .splash-slider-thumb {
+  background: linear-gradient(135deg, #10B981, #06B6D4);
+  box-shadow: 0 0 35px rgba(16, 185, 129, 0.8);
+}
+
+.splash-slider-track.unlocked .sst-core i {
+  color: #FFFFFF;
 }
 
 @media (max-width: 600px) {
   .splash-brand-title {
-    font-size: 40px;
+    font-size: 42px;
   }
-  .splash-powered-by {
-    font-size: 10.5px;
-    letter-spacing: 0.18em;
+  .splash-mission-desc {
+    font-size: 13px;
+    padding: 0 10px;
+    margin-bottom: 28px;
   }
-  .splash-enter-btn {
-    padding: 13px 32px;
-    font-size: 14px;
+  .splash-slider-track {
+    width: 290px;
+    height: 54px;
+  }
+  .splash-slider-thumb {
+    width: 46px;
+    height: 46px;
   }
 }
