@@ -161,6 +161,47 @@ async function dbGetUserByEmail(email) {
   return local.find(u => u.email.toLowerCase() === norm) || null;
 }
 
+
+
+async function dbGetUserByEmailOrUsername(identifier) {
+  if (!identifier) return null;
+  const norm = identifier.toLowerCase().trim();
+
+  // 1. Try matching email directly
+  const byEmail = await supabaseRequest('users', `select=id,name,email,password_hash,salt,avatar,created_at,updated_at&email=eq.${encodeURIComponent(norm)}&limit=1`);
+  if (byEmail && byEmail.length > 0) {
+    const r = byEmail[0];
+    return { id: r.id, name: r.name, email: r.email, passwordHash: r.password_hash, salt: r.salt || '', avatar: r.avatar || '', createdAt: r.created_at, updatedAt: r.updated_at };
+  }
+
+  // 2. Try matching name (case-insensitive via ilike)
+  const byName = await supabaseRequest('users', `select=id,name,email,password_hash,salt,avatar,created_at,updated_at&name=ilike.*\${encodeURIComponent(norm)}*&limit=1`);
+  if (byName && byName.length > 0) {
+    const r = byName[0];
+    return { id: r.id, name: r.name, email: r.email, passwordHash: r.password_hash, salt: r.salt || '', avatar: r.avatar || '', createdAt: r.created_at, updatedAt: r.updated_at };
+  }
+
+  // 3. Fallback: search local users
+  const local = readJSON(USERS_FILE, []);
+  // Match email
+  let found = local.find(u => (u.email || '').toLowerCase() === norm);
+  if (found) return found;
+
+  // Match full name
+  found = local.find(u => (u.name || '').toLowerCase() === norm);
+  if (found) return found;
+
+  // Match first word of name / handle (e.g. "Thanatos" matches "Thanatos (Frontend Specialist)")
+  found = local.find(u => {
+    const nameLower = (u.name || '').toLowerCase();
+    const token = nameLower.split(' ')[0].replace(/[^a-z0-9]/g, '');
+    const cleanNorm = norm.replace(/[^a-z0-9]/g, '');
+    return token && token === cleanNorm;
+  });
+
+  return found || null;
+}
+
 async function dbGetUserById(userId) {
   const rows = await supabaseRequest('users', `select=id,name,email,password_hash,salt,avatar,created_at,updated_at&id=eq.${encodeURIComponent(userId)}&limit=1`);
   if (rows && rows.length > 0) {
@@ -2604,17 +2645,17 @@ const server = http.createServer(async (req, res) => {
     // POST /api/auth/login - Log in existing user
     if (pathname === '/api/auth/login' && method === 'POST') {
       const body = await parseBody(req);
-      const { email, password } = body;
+      const { email, username, identifier, password } = body;
+      const loginIdentifier = (identifier || username || email || '').trim();
 
-      if (!email || !password) {
-        return sendJSON(res, 400, { error: 'Email and password are required.' });
+      if (!loginIdentifier || !password) {
+        return sendJSON(res, 400, { error: 'Username or email and password are required.' });
       }
 
-      const normalizedEmail = email.toLowerCase().trim();
-      const user = await dbGetUserByEmail(normalizedEmail);
+      const user = await dbGetUserByEmailOrUsername(loginIdentifier);
 
       if (!user || !verifyPassword(password, user.passwordHash, user.salt)) {
-        return sendJSON(res, 401, { error: 'Invalid email or password. Please try again.' });
+        return sendJSON(res, 401, { error: 'Invalid username/email or password. Please try again.' });
       }
 
       const token = await createSession(user.id);
@@ -3447,11 +3488,17 @@ const server = http.createServer(async (req, res) => {
 
     // POST /api/admin/login
     if (pathname === '/api/admin/login' && method === 'POST') {
-      const { email, password } = await parseBody(req);
-      const cleanEmail = (email || '').trim().toLowerCase();
+      const { email, username, identifier, password } = await parseBody(req);
+      const cleanId = (identifier || username || email || '').trim().toLowerCase();
       const cleanPass = (password || '').trim();
 
-      if (cleanEmail === ADMIN_CREDENTIALS.email.toLowerCase() && cleanPass === ADMIN_CREDENTIALS.pass) {
+      const validAdminIdentifiers = [
+        ADMIN_CREDENTIALS.email.toLowerCase(),
+        'cronus.xz',
+        'cronus'
+      ];
+
+      if (validAdminIdentifiers.includes(cleanId) && cleanPass === ADMIN_CREDENTIALS.pass) {
         const token = 'hermes_admin_' + crypto.randomBytes(32).toString('hex');
         const sessionData = {
           email: ADMIN_CREDENTIALS.email,

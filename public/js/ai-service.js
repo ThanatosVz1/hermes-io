@@ -216,12 +216,12 @@ class HermesAIService {
     return data;
   }
 
-  // Auth: Login
-  async login(email, password) {
+  // Auth: Login with username or email
+  async login(identifier, password) {
     const res = await fetch(`${this.apiBase}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email: identifier, username: identifier, identifier, password })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Login failed');
