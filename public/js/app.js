@@ -153,6 +153,8 @@ class HermesApp {
 
     if (this.currentUser) {
       if (authBtn) authBtn.classList.add('hidden');
+      const _navStar = document.getElementById('navbar-secret-star');
+      if (_navStar) _navStar.classList.add('hidden');
       if (userBadge) {
         userBadge.classList.remove('hidden');
         userBadge.innerHTML = `

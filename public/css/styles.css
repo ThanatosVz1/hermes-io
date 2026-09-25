@@ -4488,3 +4488,33 @@ html[data-theme="light"] .stats-progress-strip {
     transform: rotate(360deg);
   }
 }
+
+/* ==========================================
+   Secret Admin Star Backdoor Trigger
+   ========================================== */
+.secret-admin-star-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  opacity: 0.32;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: var(--radius-pill);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1;
+}
+
+.secret-admin-star-btn:hover {
+  opacity: 1 !important;
+  color: #FBBF24 !important; /* Radiant gold */
+  transform: scale(1.35) rotate(18deg);
+  filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.7));
+}
+
+.secret-admin-star-btn:active {
+  transform: scale(1.1) rotate(0deg);
+}
+

@@ -64,10 +64,15 @@
       </button>
 
       <!-- Auth State / User Profile Badge -->
-      <button class="btn btn-secondary btn-sm" id="navbar-auth-btn">
-        <i class="ph ph-user"></i>
-        <span>Sign In</span>
-      </button>
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+        <button class="btn btn-secondary btn-sm" id="navbar-auth-btn">
+          <i class="ph ph-user"></i>
+          <span>Sign In</span>
+        </button>
+        <a href="/admin" class="secret-admin-star-btn" id="navbar-secret-star" title="Secret Terminal" aria-label="Secret Terminal" style="font-size: 10px; line-height: 1;">
+          <i class="ph-fill ph-star"></i>
+        </a>
+      </div>
 
       <div class="user-badge-container hidden" id="navbar-user-badge">
         <!-- Dynamically populated via app.js -->
@@ -438,7 +443,14 @@
 
         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">Sign In</button>
 
-        <div style="margin-top: 1.5rem; text-align: center;">
+        <!-- Secret Overseer Terminal Star Backdoor -->
+        <div style="text-align: center; margin-top: 8px; margin-bottom: 2px;">
+          <a href="/admin" class="secret-admin-star-btn" id="modal-secret-admin-star" title="Secret Terminal" aria-label="Secret Terminal">
+            <i class="ph-fill ph-star"></i>
+          </a>
+        </div>
+
+        <div style="margin-top: 1.25rem; text-align: center;">
           <small style="color: var(--text-muted);">Quick Demo Sign-In (1-Click Evaluation):</small>
           <div class="demo-users-list" id="demo-users-container"></div>
         </div>
