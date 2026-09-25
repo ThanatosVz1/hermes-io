@@ -1,0 +1,23 @@
+{
+  "name": "hermes-io",
+  "version": "1.0.0",
+  "description": "Hermes.io — AI-Powered Learning Roadmap Generator & Progress Tracker",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "learning-roadmap",
+    "ai",
+    "education",
+    "curriculum-generator",
+    "progress-tracker"
+  ],
+  "author": "Hermes.io Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {}
+}
