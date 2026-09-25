@@ -1,0 +1,383 @@
+/* ==========================================================================
+   HERMES.IO COSMIC SPLASH PAGE STYLING
+   ========================================================================== */
+
+.hermes-splash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999999;
+  background: radial-gradient(circle at 50% 35%, #0e1124 0%, #060710 65%, #020205 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease;
+}
+
+.hermes-splash-overlay.splash-fade-out {
+  opacity: 0;
+  transform: scale(1.05);
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+/* Cosmic Background & Starfield */
+.splash-cosmic-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Glowing Nebulas */
+.splash-nebula {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.splash-nebula-1 {
+  width: 600px;
+  height: 600px;
+  top: -100px;
+  left: 20%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, rgba(124, 58, 237, 0.12) 50%, transparent 70%);
+  animation: splashNebulaFloat 16s ease-in-out infinite alternate;
+}
+
+.splash-nebula-2 {
+  width: 700px;
+  height: 700px;
+  bottom: -150px;
+  right: 15%;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.22) 0%, rgba(79, 70, 229, 0.08) 50%, transparent 70%);
+  animation: splashNebulaFloat2 20s ease-in-out infinite alternate;
+}
+
+@keyframes splashNebulaFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(40px, 30px) scale(1.08); }
+}
+
+@keyframes splashNebulaFloat2 {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-30px, -40px) scale(1.1); }
+}
+
+/* Twinkling Starfield */
+.splash-stars-layer {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(1.2px 1.2px at 30px 40px, #ffffff, transparent),
+    radial-gradient(1.5px 1.5px at 100px 140px, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1px 1px at 180px 70px, rgba(165, 180, 252, 0.95), transparent),
+    radial-gradient(2px 2px at 260px 220px, #ffffff, transparent),
+    radial-gradient(1.2px 1.2px at 340px 110px, rgba(254, 240, 138, 0.85), transparent),
+    radial-gradient(1.8px 1.8px at 440px 280px, #ffffff, transparent),
+    radial-gradient(1.5px 1.5px at 530px 150px, rgba(125, 211, 252, 0.9), transparent),
+    radial-gradient(2px 2px at 620px 50px, #ffffff, transparent),
+    radial-gradient(1px 1px at 700px 230px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1.5px 1.5px at 800px 130px, #C7D2FE, transparent);
+  background-size: 500px 500px;
+  opacity: 0.75;
+  animation: splashStarTwinkle 5s ease-in-out infinite alternate;
+}
+
+@keyframes splashStarTwinkle {
+  0% { opacity: 0.55; }
+  100% { opacity: 0.95; }
+}
+
+/* ==========================================================================
+   SLOW SHOOTING STARS FALLING
+   ========================================================================== */
+.splash-shooting-star {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgba(99, 102, 241, 0.8) 45%, rgba(6, 182, 212, 0.4) 75%, transparent 100%);
+  border-radius: 9999px;
+  filter: drop-shadow(0 0 6px rgba(129, 140, 248, 0.9));
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* Shooting Star 1 - Falls slowly across top-left to center-right */
+.splash-star-1 {
+  width: 140px;
+  top: -50px;
+  left: 10%;
+  animation: slowShootingStar1 10s ease-in-out infinite;
+}
+
+/* Shooting Star 2 - Falls slowly across center-top toward bottom-right */
+.splash-star-2 {
+  width: 180px;
+  top: -60px;
+  left: 45%;
+  animation: slowShootingStar2 13s ease-in-out infinite 4s;
+}
+
+/* Shooting Star 3 - Falls slowly in upper-right */
+.splash-star-3 {
+  width: 120px;
+  top: 5%;
+  left: 70%;
+  animation: slowShootingStar3 11s ease-in-out infinite 7.5s;
+}
+
+@keyframes slowShootingStar1 {
+  0% {
+    transform: translate(0, 0) rotate(36deg);
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+  }
+  18% {
+    transform: translate(460px, 340px) rotate(36deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(460px, 340px) rotate(36deg);
+    opacity: 0;
+  }
+}
+
+@keyframes slowShootingStar2 {
+  0% {
+    transform: translate(0, 0) rotate(40deg);
+    opacity: 0;
+  }
+  3% {
+    opacity: 0.95;
+  }
+  20% {
+    transform: translate(520px, 440px) rotate(40deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(520px, 440px) rotate(40deg);
+    opacity: 0;
+  }
+}
+
+@keyframes slowShootingStar3 {
+  0% {
+    transform: translate(0, 0) rotate(34deg);
+    opacity: 0;
+  }
+  3% {
+    opacity: 0.85;
+  }
+  17% {
+    transform: translate(380px, 260px) rotate(34deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(380px, 260px) rotate(34deg);
+    opacity: 0;
+  }
+}
+
+/* ==========================================================================
+   CENTER SPLASH CONTENT DECK
+   ========================================================================== */
+.splash-content-container {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 540px;
+  width: 100%;
+  animation: splashFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes splashFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Planet / Cosmic Ring Emblem */
+.splash-emblem-wrap {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash-planet-core {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4338CA 0%, #6366F1 50%, #06B6D4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #FFFFFF;
+  box-shadow: 0 0 35px rgba(99, 102, 241, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  position: relative;
+  z-index: 2;
+  animation: planetPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes planetPulse {
+  0% { transform: scale(0.97); box-shadow: 0 0 28px rgba(99, 102, 241, 0.5); }
+  100% { transform: scale(1.03); box-shadow: 0 0 42px rgba(6, 182, 212, 0.7); }
+}
+
+.splash-orbital-ring {
+  position: absolute;
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  border: 2px dashed rgba(165, 180, 252, 0.4);
+  animation: orbitalSpin 14s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes orbitalSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Website Title */
+.splash-brand-title {
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  line-height: 1.1;
+  margin-bottom: 8px;
+  text-shadow: 0 0 45px rgba(99, 102, 241, 0.45);
+}
+
+.splash-brand-accent {
+  background: linear-gradient(135deg, #818CF8, #06B6D4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Subtitle: powered by thanatosvz */
+.splash-powered-by {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.26em;
+  color: #94A3B8;
+  margin-bottom: 38px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.splash-author-name {
+  color: #A5B4FC;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-shadow: 0 0 12px rgba(165, 180, 252, 0.4);
+}
+
+/* ==========================================================================
+   ENTER BUTTON WITH GRAPHIC & ANIMATIONS
+   ========================================================================== */
+.splash-enter-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 40px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: linear-gradient(135deg, #4338CA 0%, #6366F1 50%, #06B6D4 100%);
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 
+    0 4px 25px rgba(99, 102, 241, 0.5), 
+    0 0 0 1px rgba(255, 255, 255, 0.15),
+    inset 0 1px 2px rgba(255, 255, 255, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.splash-enter-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 
+    0 8px 35px rgba(99, 102, 241, 0.7), 
+    0 0 25px rgba(6, 182, 212, 0.5),
+    inset 0 1px 3px rgba(255, 255, 255, 0.6);
+}
+
+.splash-enter-btn:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.splash-btn-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.splash-btn-content i {
+  font-size: 17px;
+  transition: transform 0.25s ease;
+}
+
+.splash-enter-btn:hover .splash-btn-content i {
+  transform: translateX(4px);
+}
+
+/* Animated Shimmer Sweep across Button */
+.splash-enter-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  transform: skewX(-22deg);
+  animation: btnShimmerSweep 4.5s ease-in-out infinite;
+}
+
+@keyframes btnShimmerSweep {
+  0% { left: -120%; }
+  25% { left: 140%; }
+  100% { left: 140%; }
+}
+
+@media (max-width: 600px) {
+  .splash-brand-title {
+    font-size: 40px;
+  }
+  .splash-powered-by {
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+  }
+  .splash-enter-btn {
+    padding: 13px 32px;
+    font-size: 14px;
+  }
+}

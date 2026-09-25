@@ -21,8 +21,70 @@
 
   <!-- Celestial Planet & Star Avatars -->
   <script src="js/celestial-avatars.js"></script>
+
+  <!-- =========================================================================
+       HERMES.IO SPLASH SCREEN CONFIGURATION
+       To ACTIVATE (start) splash page: set HERMES_SPLASH_ENABLED = true
+       To REMOVE (stop/disable) splash page: set HERMES_SPLASH_ENABLED = false
+       ========================================================================= -->
+  <script>
+    window.HERMES_SPLASH_ENABLED = true; // <-- SET TO false TO STOP/REMOVE SPLASH PAGE
+  </script>
+  <link rel="stylesheet" href="css/splash.css?v=1">
+  <script src="js/splash.js?v=1"></script>
 </head>
 <body>
+
+  <!-- =========================================================================
+       HERMES.IO SPLASH SCREEN (Controlled by window.HERMES_SPLASH_ENABLED)
+       ========================================================================= -->
+  <div id="hermes-splash-screen" class="hermes-splash-overlay">
+    <!-- Starfield & Slow Shooting Stars -->
+    <div class="splash-cosmic-bg">
+      <div class="splash-nebula splash-nebula-1"></div>
+      <div class="splash-nebula splash-nebula-2"></div>
+      <div class="splash-stars-layer"></div>
+      <!-- Slow Shooting Stars Falling -->
+      <div class="splash-shooting-star splash-star-1"></div>
+      <div class="splash-shooting-star splash-star-2"></div>
+      <div class="splash-shooting-star splash-star-3"></div>
+    </div>
+
+    <!-- Centered Brand Identity & Enter Button -->
+    <div class="splash-content-container">
+      <!-- Animated Planetary Ring Emblem -->
+      <div class="splash-emblem-wrap">
+        <div class="splash-orbital-ring"></div>
+        <div class="splash-planet-core">
+          <i class="ph-fill ph-planet"></i>
+        </div>
+      </div>
+
+      <!-- Website Name -->
+      <h1 class="splash-brand-title">
+        Hermes<span class="splash-brand-accent">.io</span>
+      </h1>
+
+      <!-- Powered By Thanatosvz -->
+      <p class="splash-powered-by">
+        powered by <span class="splash-author-name">thanatosvz</span>
+      </p>
+
+      <!-- Enter Button with Graphic & Animations -->
+      <button class="splash-enter-btn" id="btn-splash-enter" aria-label="Enter Hermes.io">
+        <span class="splash-btn-content">
+          <span>Enter</span>
+          <i class="ph-bold ph-arrow-right"></i>
+        </span>
+      </button>
+    </div>
+  </div>
+  <script>
+    if (!window.HERMES_SPLASH_ENABLED) {
+      var s = document.getElementById('hermes-splash-screen');
+      if (s) s.remove();
+    }
+  </script>
 
   <!-- App Header / Navigation Bar -->
   <header class="app-navbar">
