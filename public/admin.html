@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hermes.io — Overseer Telemetry & Systems Directory</title>
+  <title>Hermes.io — Overseer Command Terminal & Telemetry Matrix</title>
   <meta name="robots" content="noindex, nofollow">
 
   <!-- Plus Jakarta Sans & JetBrains Mono Fonts -->
@@ -23,19 +23,58 @@
 
   <style>
     /* ==========================================================================
-       HERMES OVERSEER ADMIN CONSOLE — PERFECT SYSTEM LAYOUT
+       HERMES OVERSEER TERMINAL — EXECUTIVE COMMAND SYSTEM DESIGN
        ========================================================================== */
     
     :root {
-      --admin-max-width: 1400px;
+      --overseer-bg: #07070E;
+      --overseer-surface: #0E101D;
+      --overseer-surface-elevated: #15182C;
+      --overseer-surface-card: #121424;
+      --overseer-border: rgba(255, 255, 255, 0.08);
+      --overseer-border-glow: rgba(99, 102, 241, 0.35);
+      --overseer-accent: #6366F1;
+      --overseer-accent-glow: rgba(99, 102, 241, 0.5);
+      --overseer-cyan: #06B6D4;
+      --overseer-emerald: #10B981;
+      --overseer-amber: #F59E0B;
+      --overseer-rose: #F43F5E;
+      --overseer-sidebar-width: 260px;
     }
 
-    /* Full-screen Secret Gate */
+    [data-theme="light"] {
+      --overseer-bg: #F4F6FC;
+      --overseer-surface: #FFFFFF;
+      --overseer-surface-elevated: #EEF2FF;
+      --overseer-surface-card: #FFFFFF;
+      --overseer-border: rgba(0, 0, 0, 0.08);
+      --overseer-border-glow: rgba(79, 70, 229, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--overseer-bg);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ==========================================================================
+       1. SECURITY CLEARANCE AUTHENTICATION GATE (FULL VIEWPORT)
+       ========================================================================== */
     .admin-gate-overlay {
       position: fixed;
       inset: 0;
-      z-index: 99999;
-      background: #07070C;
+      z-index: 999999;
+      background: radial-gradient(circle at 50% 30%, #121428 0%, #06060B 100%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -43,394 +82,711 @@
       overflow: hidden;
     }
 
-    .cosmic-backdrop-stars {
+    .cosmic-cyber-grid {
       position: absolute;
       inset: 0;
       background-image: 
-        radial-gradient(1.5px 1.5px at 20px 30px, #ffffff, rgba(0,0,0,0)),
-        radial-gradient(1.5px 1.5px at 40px 70px, rgba(255,255,255,0.7), rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 90px 40px, #A5B4FC, rgba(0,0,0,0)),
-        radial-gradient(1.5px 1.5px at 160px 120px, #FDE68A, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 220px 80px, #38BDF8, rgba(0,0,0,0));
-      background-repeat: repeat;
-      background-size: 260px 260px;
-      opacity: 0.35;
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 75%);
       pointer-events: none;
     }
 
-    .gate-glow-orb {
+    .gate-ambient-glow {
       position: absolute;
-      width: 500px;
-      height: 500px;
+      width: 650px;
+      height: 650px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(79, 70, 229, 0.28) 0%, rgba(10, 10, 15, 0) 70%);
-      filter: blur(50px);
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.22) 0%, rgba(6, 182, 212, 0.08) 40%, rgba(0,0,0,0) 70%);
+      filter: blur(60px);
       pointer-events: none;
+      animation: ambientPulse 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes ambientPulse {
+      0% { transform: scale(0.9) translate(-20px, -20px); opacity: 0.6; }
+      100% { transform: scale(1.1) translate(20px, 20px); opacity: 0.9; }
     }
 
     .admin-gate-card {
       width: 100%;
-      max-width: 440px;
-      background: rgba(18, 18, 26, 0.85);
+      max-width: 460px;
+      background: rgba(14, 16, 29, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: var(--radius-lg);
-      padding: 40px 36px;
-      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(79, 70, 229, 0.25);
+      border-radius: 20px;
+      padding: 44px 40px;
+      box-shadow: 
+        0 24px 70px rgba(0, 0, 0, 0.75), 
+        0 0 0 1px rgba(99, 102, 241, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
       position: relative;
       z-index: 10;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      animation: gatePop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      animation: gateReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    @keyframes gatePop {
-      0% { opacity: 0; transform: scale(0.95) translateY(14px); }
+    @keyframes gateReveal {
+      0% { opacity: 0; transform: scale(0.94) translateY(18px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
     }
 
+    .gate-top-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #A5B4FC;
+      margin-bottom: 20px;
+    }
+
     .cosmic-gate-emblem {
-      width: 74px;
-      height: 74px;
-      border-radius: 50%;
+      width: 76px;
+      height: 76px;
+      border-radius: 22px;
       margin: 0 auto 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle at 35% 35%, #818CF8, #4F46E5, #1E1B4B);
-      box-shadow: 0 0 40px rgba(79, 70, 229, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3);
-      font-size: 34px;
-      color: white;
-      border: 2px solid rgba(255, 255, 255, 0.2);
+      background: linear-gradient(135deg, #4338CA 0%, #6366F1 50%, #06B6D4 100%);
+      box-shadow: 0 0 45px rgba(99, 102, 241, 0.55), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+      font-size: 36px;
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.25);
     }
 
-    /* Top Navigation */
-    .app-navbar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      height: 64px;
-      background: var(--bg-surface);
-      border-bottom: 1px solid var(--border-subtle);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 28px;
-    }
-
-    .admin-pill-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 10px;
-      border-radius: var(--radius-pill);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      background: rgba(79, 70, 229, 0.16);
-      color: #A5B4FC;
-      border: 1px solid rgba(79, 70, 229, 0.35);
-    }
-
-    .stats-pills-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-left: 20px;
-    }
-
-    @media (max-width: 1020px) {
-      .stats-pills-row { display: none; }
-    }
-
-    .stat-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 5px 13px;
-      border-radius: var(--radius-pill);
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border-subtle);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-secondary);
-    }
-    .stat-pill strong {
-      color: var(--text-primary);
-      font-family: var(--font-mono);
-      font-weight: 700;
-    }
-
-    /* Main Container */
-    .admin-container {
-      max-width: var(--admin-max-width);
-      margin: 0 auto;
-      padding: 36px 28px 90px;
-    }
-
-    /* Hero Section */
-    .admin-hero-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 32px;
-      flex-wrap: wrap;
-    }
-
-    .ahh-left h1 {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 6px;
-    }
-
-    .ahh-left p {
-      font-size: 14px;
-      color: var(--text-secondary);
-      max-width: 680px;
-      line-height: 1.5;
-    }
-
-    .ahh-actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    /* KPI Grid */
-    .telemetry-metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-      margin-bottom: 32px;
-    }
-
-    @media (max-width: 1100px) {
-      .telemetry-metrics-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 600px) {
-      .telemetry-metrics-grid { grid-template-columns: 1fr; }
-    }
-
-    .telemetry-metric-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 22px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-    .telemetry-metric-card:hover {
-      border-color: rgba(79, 70, 229, 0.5);
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .tm-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .tm-title {
+    .gate-field-label {
+      display: block;
       font-size: 11.5px;
       font-weight: 700;
-      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      color: #94A3B8;
+      margin-bottom: 8px;
     }
 
-    .tm-icon-wrap {
-      width: 36px;
-      height: 36px;
+    .gate-input-box {
+      width: 100%;
+      padding: 13px 18px;
       border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(8, 10, 18, 0.85);
+      color: #F8FAFC;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: var(--font-sans);
+    }
+    .gate-input-box:focus {
+      border-color: var(--overseer-accent);
+      background: rgba(12, 14, 26, 0.95);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    }
+
+    /* ==========================================================================
+       2. COMMAND CENTER WORKSPACE ARCHITECTURE (SIDEBAR + MAIN CANVAS)
+       ========================================================================== */
+    .overseer-workspace {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Sleek Cyber Command Rail (Sidebar) */
+    .overseer-sidebar {
+      width: var(--overseer-sidebar-width);
+      background: var(--overseer-surface);
+      border-right: 1px solid var(--overseer-border);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      flex-shrink: 0;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 24px 22px;
+      border-bottom: 1px solid var(--overseer-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #4F46E5, #06B6D4);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 19px;
+      color: #FFF;
+      font-size: 20px;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+      flex-shrink: 0;
     }
 
-    .tm-icon-indigo { background: rgba(99, 102, 241, 0.15); color: #818CF8; }
-    .tm-icon-emerald { background: rgba(16, 185, 129, 0.15); color: #34D399; }
-    .tm-icon-amber { background: rgba(245, 158, 11, 0.15); color: #FBBF24; }
-    .tm-icon-rose { background: rgba(244, 63, 94, 0.15); color: #FB7185; }
-
-    .tm-value {
-      font-size: 32px;
-      font-weight: 800;
-      color: var(--text-primary);
-      font-family: var(--font-mono);
-      letter-spacing: -0.03em;
-      line-height: 1;
-    }
-
-    .tm-subtext {
-      font-size: 12.5px;
-      color: var(--text-secondary);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .tm-subtext i { font-size: 14px; opacity: 0.8; }
-
-    /* Controls Bar */
-    .admin-controls-bar {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-      padding: 16px 20px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-sm);
-    }
-
-    .admin-search-wrap {
-      flex: 1;
-      min-width: 280px;
-      position: relative;
-    }
-    .admin-search-wrap i {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      font-size: 17px;
-    }
-
-    .admin-search-input {
-      width: 100%;
-      padding: 11px 16px 11px 42px;
-      border-radius: var(--radius-pill);
-      border: 1px solid var(--border-strong);
-      background: var(--bg-surface-elevated);
-      color: var(--text-primary);
-      font-size: 13.5px;
-      outline: none;
-      transition: all 0.2s;
-    }
-    .admin-search-input:focus {
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18);
-    }
-
-    .admin-select-input {
-      padding: 10px 16px;
-      border-radius: var(--radius-pill);
-      border: 1px solid var(--border-strong);
-      background: var(--bg-surface-elevated);
-      color: var(--text-primary);
-      font-size: 13px;
-      font-weight: 500;
-      outline: none;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .admin-select-input:focus {
-      border-color: var(--accent-primary);
-    }
-
-    .view-toggle-wrap {
-      display: flex;
-      border: 1px solid var(--border-strong);
-      background: var(--bg-surface-elevated);
-      border-radius: var(--radius-pill);
-      padding: 3px;
-    }
-    .view-toggle-btn {
-      border: none;
-      background: transparent;
-      padding: 6px 12px;
-      border-radius: var(--radius-pill);
-      color: var(--text-muted);
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-    .view-toggle-btn.active {
-      background: var(--bg-surface);
-      color: var(--text-primary);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
-    }
-
-    /* User Grid */
-    .user-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-      gap: 20px;
-    }
-
-    .user-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 24px;
+    .sidebar-brand-text {
       display: flex;
       flex-direction: column;
-      gap: 18px;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .user-card:hover {
-      border-color: rgba(79, 70, 229, 0.6);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
-      transform: translateY(-3px);
+    .sidebar-brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
     }
-    .user-card:active {
-      transform: translateY(0);
+    .sidebar-brand-subtitle {
+      font-size: 10.5px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--overseer-cyan);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    .uc-top {
+    .sidebar-nav-section {
+      padding: 20px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow-y: auto;
+    }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 8px 12px 6px;
+    }
+
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+      border: 1px solid transparent;
+    }
+    .sidebar-nav-item:hover {
+      background: var(--overseer-surface-elevated);
+      color: var(--text-primary);
+    }
+    .sidebar-nav-item.active {
+      background: rgba(99, 102, 241, 0.12);
+      border-color: rgba(99, 102, 241, 0.3);
+      color: #A5B4FC;
+    }
+    .sni-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sni-left i {
+      font-size: 18px;
+    }
+
+    .sidebar-badge {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      padding: 2px 7px;
+      border-radius: 9999px;
+      background: var(--overseer-surface-elevated);
+      color: var(--text-secondary);
+      border: 1px solid var(--overseer-border);
+    }
+    .sidebar-nav-item.active .sidebar-badge {
+      background: rgba(99, 102, 241, 0.25);
+      color: #C7D2FE;
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .sidebar-system-box {
+      margin: 12px 16px;
+      padding: 14px;
+      border-radius: 12px;
+      background: var(--overseer-surface-elevated);
+      border: 1px solid var(--overseer-border);
+    }
+    .ssb-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .ssb-status-live {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #34D399;
+      font-weight: 600;
+    }
+    .status-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 10px #10B981;
+      animation: pulseGreen 2s infinite;
+    }
+    @keyframes pulseGreen {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    .sidebar-user-footer {
+      padding: 18px;
+      border-top: 1px solid var(--overseer-border);
+      background: var(--overseer-surface);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .suf-identity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .suf-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      flex-shrink: 0;
+      background: #060814;
+    }
+    .suf-text {
+      min-width: 0;
+    }
+    .suf-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .suf-role {
+      font-size: 11px;
+      color: var(--overseer-cyan);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Main Command Canvas */
+    .overseer-main-canvas {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Cyber Command HUD Navbar */
+    .command-hud-bar {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      height: 64px;
+      background: rgba(14, 16, 29, 0.85);
+      border-bottom: 1px solid var(--overseer-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+
+    .chb-left {
       display: flex;
       align-items: center;
       gap: 16px;
     }
 
-    .celestial-avatar-frame {
-      width: 62px;
-      height: 62px;
-      border-radius: 50%;
+    .hud-breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .hud-breadcrumbs strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .cyber-clock-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      background: var(--overseer-surface-elevated);
+      border: 1px solid var(--overseer-border);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .cyber-clock-box strong {
+      color: var(--overseer-cyan);
+    }
+
+    .chb-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hud-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid var(--overseer-border);
+      background: var(--overseer-surface-elevated);
+      color: var(--text-secondary);
+    }
+    .hud-action-btn:hover {
+      border-color: var(--overseer-accent);
+      color: var(--text-primary);
+      transform: translateY(-1px);
+    }
+    .hud-action-btn.btn-cyber-primary {
+      background: linear-gradient(135deg, #4F46E5, #6366F1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #FFF;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
+    }
+    .hud-action-btn.btn-cyber-primary:hover {
+      box-shadow: 0 4px 18px rgba(99, 102, 241, 0.5);
+    }
+
+    /* Canvas Body Content */
+    .overseer-content-wrap {
+      padding: 32px 36px 90px;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ==========================================================================
+       3. TELEMETRY BENTO KPI GRID
+       ========================================================================== */
+    .telemetry-bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 1200px) {
+      .telemetry-bento-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 680px) {
+      .telemetry-bento-grid { grid-template-columns: 1fr; }
+    }
+
+    .bento-kpi-card {
+      background: var(--overseer-surface-card);
+      border: 1px solid var(--overseer-border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
       overflow: hidden;
-      flex-shrink: 0;
-      border: 2px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-      background: #060913;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bento-kpi-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--overseer-border-glow);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28), 0 0 0 1px var(--overseer-accent-glow);
+    }
+    .bento-kpi-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--card-glow-color, var(--overseer-accent)), transparent);
+      opacity: 0.7;
+    }
+
+    .bkc-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .bkc-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    .bkc-icon-ring {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .ring-indigo { background: rgba(99, 102, 241, 0.12); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.25); }
+    .ring-cyan { background: rgba(6, 182, 212, 0.12); color: #22D3EE; border: 1px solid rgba(6, 182, 212, 0.25); }
+    .ring-emerald { background: rgba(16, 185, 129, 0.12); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.25); }
+    .ring-rose { background: rgba(244, 63, 94, 0.12); color: #FB7185; border: 1px solid rgba(244, 63, 94, 0.25); }
+
+    .bkc-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .bkc-number {
+      font-size: 36px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .bkc-pill-metric {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .pill-growth { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    .bkc-footer {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .bkc-footer i { font-size: 14px; opacity: 0.8; }
+
+    /* ==========================================================================
+       4. COMMAND MATRIX CONTROLS (SEARCH, FILTERS, VIEW MODES)
+       ========================================================================== */
+    .controls-deck-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      padding: 16px 20px;
+      background: var(--overseer-surface);
+      border: 1px solid var(--overseer-border);
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-telemetry-box {
+      flex: 1;
+      min-width: 280px;
+      position: relative;
+    }
+    .search-telemetry-box i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 18px;
+    }
+    .search-telemetry-input {
+      width: 100%;
+      padding: 11px 16px 11px 44px;
+      border-radius: 9999px;
+      border: 1px solid var(--overseer-border);
+      background: var(--overseer-surface-elevated);
+      color: var(--text-primary);
+      font-size: 13.5px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .search-telemetry-input:focus {
+      border-color: var(--overseer-accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+    }
+
+    .filter-chips-cluster {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip-btn {
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      border: 1px solid var(--overseer-border);
+      background: var(--overseer-surface-elevated);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-chip-btn:hover {
+      border-color: var(--overseer-accent);
+      color: var(--text-primary);
+    }
+    .filter-chip-btn.active {
+      background: rgba(99, 102, 241, 0.18);
+      border-color: var(--overseer-accent);
+      color: #A5B4FC;
+    }
+
+    .deck-sort-select {
+      padding: 8px 14px;
+      border-radius: 9999px;
+      border: 1px solid var(--overseer-border);
+      background: var(--overseer-surface-elevated);
+      color: var(--text-primary);
+      font-size: 12.5px;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .view-mode-toggle-group {
+      display: flex;
+      border: 1px solid var(--overseer-border);
+      background: var(--overseer-surface-elevated);
+      border-radius: 9999px;
+      padding: 3px;
+    }
+    .vmt-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      color: var(--text-muted);
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .celestial-avatar-frame svg {
+    .vmt-btn.active {
+      background: var(--overseer-surface);
+      color: var(--text-primary);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ==========================================================================
+       5. CYBERNETIC CARDS MATRIX (GRID VIEW)
+       ========================================================================== */
+    .telemetry-cards-matrix {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 22px;
+    }
+
+    .cyber-user-card {
+      background: var(--overseer-surface-card);
+      border: 1px solid var(--overseer-border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cyber-user-card:hover {
+      border-color: var(--overseer-border-glow);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--overseer-accent-glow);
+      transform: translateY(-4px);
+    }
+
+    .cuc-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cuc-avatar-halo {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+      background: #050711;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .cuc-avatar-halo svg {
       width: 100%;
       height: 100%;
     }
 
-    .uc-info {
+    .cuc-identity-block {
       flex: 1;
       min-width: 0;
     }
-    .uc-name {
+    .cuc-user-name {
       font-size: 16px;
       font-weight: 700;
       color: var(--text-primary);
@@ -441,7 +797,7 @@
       align-items: center;
       gap: 6px;
     }
-    .uc-email {
+    .cuc-user-email {
       font-size: 13px;
       color: var(--text-secondary);
       font-family: var(--font-mono);
@@ -450,233 +806,255 @@
       text-overflow: ellipsis;
       margin-top: 2px;
     }
-    .uc-id-tag {
+    .cuc-id-chip {
       display: inline-block;
       font-size: 11px;
       color: var(--text-muted);
       font-family: var(--font-mono);
-      margin-top: 4px;
+      margin-top: 5px;
     }
 
-    .uc-metrics-row {
+    .cuc-telemetry-triad {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 8px;
       padding: 12px;
-      background: var(--bg-surface-elevated);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      background: var(--overseer-surface-elevated);
+      border: 1px solid var(--overseer-border);
       text-align: center;
     }
-    .uc-metric-item {
+    .ctt-cell {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
     }
-    .uc-metric-val {
+    .ctt-number {
       font-size: 16px;
-      font-weight: 700;
-      color: var(--text-primary);
+      font-weight: 800;
       font-family: var(--font-mono);
+      color: var(--text-primary);
     }
-    .uc-metric-lbl {
-      font-size: 10.5px;
+    .ctt-lbl {
+      font-size: 10px;
+      font-weight: 700;
       color: var(--text-muted);
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
     }
 
-    .uc-progress-wrap {
+    .cuc-progress-section {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 7px;
     }
-    .uc-progress-header {
+    .cuc-progress-label {
       display: flex;
       justify-content: space-between;
       font-size: 12px;
       color: var(--text-secondary);
     }
-    .uc-progress-bar {
-      height: 7px;
-      background: var(--border-subtle);
-      border-radius: var(--radius-pill);
+    .cuc-progress-track {
+      height: 8px;
+      background: var(--overseer-surface-elevated);
+      border-radius: 9999px;
       overflow: hidden;
+      border: 1px solid var(--overseer-border);
     }
-    .uc-progress-fill {
+    .cuc-progress-bar {
       height: 100%;
-      background: linear-gradient(90deg, #4F46E5, #34D399);
-      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, #4F46E5, #06B6D4);
+      border-radius: 9999px;
       transition: width 0.4s ease;
     }
 
-    .uc-action-btn {
+    .cuc-card-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-top: 10px;
-      border-top: 1px solid var(--border-subtle);
-      font-size: 13px;
+      padding-top: 12px;
+      border-top: 1px solid var(--overseer-border);
+      font-size: 12.5px;
       font-weight: 600;
-      color: var(--accent-primary-text);
+      color: #A5B4FC;
       transition: color 0.2s;
     }
-    .user-card:hover .uc-action-btn {
+    .cyber-user-card:hover .cuc-card-footer {
       color: #C7D2FE;
     }
 
-    /* Table View Alternative */
-    .admin-table-container {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
+    /* ==========================================================================
+       6. ENTERPRISE TELEMETRY TABLE (COMPACT VIEW)
+       ========================================================================== */
+    .enterprise-table-frame {
+      background: var(--overseer-surface-card);
+      border: 1px solid var(--overseer-border);
+      border-radius: 16px;
       overflow-x: auto;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
     }
 
-    .admin-table {
+    .enterprise-data-table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
     }
-    .admin-table th {
-      background: var(--bg-surface-elevated);
+    .enterprise-data-table th {
+      background: var(--overseer-surface-elevated);
       color: var(--text-muted);
-      font-size: 11.5px;
-      font-weight: 700;
+      font-size: 11px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 14px 20px;
-      border-bottom: 1px solid var(--border-subtle);
+      letter-spacing: 0.08em;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--overseer-border);
       white-space: nowrap;
     }
-    .admin-table td {
+    .enterprise-data-table td {
       padding: 16px 20px;
       font-size: 13.5px;
       color: var(--text-primary);
-      border-bottom: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--overseer-border);
       vertical-align: middle;
     }
-    .admin-table tr:last-child td { border-bottom: none; }
-    .admin-table tr:hover td { background: var(--bg-surface-elevated); }
+    .enterprise-data-table tr:last-child td { border-bottom: none; }
+    .enterprise-data-table tr:hover td { background: var(--overseer-surface-elevated); }
 
-    /* Transit Detail Dossier */
-    .transit-view-wrapper {
-      animation: transitSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    /* ==========================================================================
+       7. MASTER USER DOSSIER & MILESTONE TREE EXPLORER
+       ========================================================================== */
+    .dossier-slide-canvas {
+      animation: dossierReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    @keyframes transitSlideIn {
+    @keyframes dossierReveal {
       0% { opacity: 0; transform: translateY(14px); }
       100% { opacity: 1; transform: translateY(0); }
     }
 
-    .transit-breadcrumb-bar {
+    .dossier-nav-bar {
       display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
+      gap: 16px;
       margin-bottom: 24px;
+      flex-wrap: wrap;
     }
 
-    .transit-nav-back {
+    .dossier-back-btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 16px;
-      border-radius: var(--radius-pill);
-      background: var(--bg-surface);
-      border: 1px solid var(--border-strong);
+      padding: 9px 18px;
+      border-radius: 9999px;
+      background: var(--overseer-surface);
+      border: 1px solid var(--overseer-border);
       color: var(--text-primary);
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .transit-nav-back:hover {
-      background: var(--accent-primary-fade);
-      border-color: var(--accent-primary);
-      color: var(--accent-primary-text);
-      transform: translateX(-2px);
+    .dossier-back-btn:hover {
+      background: var(--overseer-surface-elevated);
+      border-color: var(--overseer-accent);
+      color: #A5B4FC;
+      transform: translateX(-3px);
     }
 
-    .user-hero-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 32px;
+    .dossier-cockpit-hero {
+      background: var(--overseer-surface-card);
+      border: 1px solid var(--overseer-border);
+      border-radius: 18px;
+      padding: 36px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 24px;
+      gap: 28px;
       margin-bottom: 28px;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16);
+      position: relative;
+      overflow: hidden;
+    }
+    .dossier-cockpit-hero::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+      pointer-events: none;
     }
 
-    .uh-identity {
+    .dch-identity {
       display: flex;
       align-items: center;
       gap: 24px;
     }
-    .uh-avatar-huge {
-      width: 88px;
-      height: 88px;
+    .dch-avatar-huge {
+      width: 92px;
+      height: 92px;
       border-radius: 50%;
-      border: 3px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
       overflow: hidden;
-      background: #060913;
+      background: #050711;
       flex-shrink: 0;
     }
-    .uh-avatar-huge svg { width: 100%; height: 100%; }
+    .dch-avatar-huge svg { width: 100%; height: 100%; }
 
-    .uh-details h2 {
-      font-size: 24px;
+    .dch-title-wrap h2 {
+      font-size: 26px;
       font-weight: 800;
       letter-spacing: -0.02em;
       color: var(--text-primary);
       margin-bottom: 4px;
     }
-    .uh-details p {
+    .dch-title-wrap p {
       font-size: 14px;
       color: var(--text-secondary);
       font-family: var(--font-mono);
     }
 
-    .uh-stats-row {
+    .dch-stats-dock {
       display: flex;
-      gap: 24px;
+      gap: 28px;
       flex-wrap: wrap;
     }
-    .uh-stat-box {
+    .dch-stat-pod {
       text-align: right;
     }
     @media (max-width: 600px) {
-      .uh-stat-box { text-align: left; }
+      .dch-stat-pod { text-align: left; }
     }
-    .uh-stat-num {
-      font-size: 26px;
+    .dsp-value {
+      font-size: 28px;
       font-weight: 800;
-      color: var(--text-primary);
       font-family: var(--font-mono);
+      color: var(--text-primary);
       letter-spacing: -0.02em;
     }
-    .uh-stat-desc {
-      font-size: 11.5px;
+    .dsp-label {
+      font-size: 11px;
+      font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
     }
 
-    /* Detail Tabs */
-    .transit-tabs {
+    /* Tabs & Panels */
+    .dossier-tab-strip {
       display: flex;
-      gap: 10px;
-      border-bottom: 1px solid var(--border-subtle);
+      gap: 12px;
+      border-bottom: 1px solid var(--overseer-border);
       margin-bottom: 24px;
     }
-    .transit-tab-btn {
-      padding: 12px 20px;
+    .dts-tab-btn {
+      padding: 12px 22px;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-secondary);
       border-bottom: 2px solid transparent;
       cursor: pointer;
@@ -689,158 +1067,149 @@
       border-right: none;
       transition: all 0.2s;
     }
-    .transit-tab-btn.active {
-      color: var(--accent-primary-text);
-      border-bottom-color: var(--accent-primary);
+    .dts-tab-btn.active {
+      color: var(--overseer-accent);
+      border-bottom-color: var(--overseer-accent);
     }
-    .transit-tab-btn:hover:not(.active) {
+    .dts-tab-btn:hover:not(.active) {
       color: var(--text-primary);
     }
 
-    /* Roadmap Items in Detail */
-    .roadmaps-detail-grid {
+    /* Roadmap Item in Dossier */
+    .dossier-roadmap-card {
+      background: var(--overseer-surface-card);
+      border: 1px solid var(--overseer-border);
+      border-radius: 16px;
+      padding: 26px 30px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 20px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      margin-bottom: 20px;
     }
 
-    .admin-roadmap-item {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 24px 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      transition: border-color 0.2s;
-      box-shadow: var(--shadow-sm);
-    }
-    .admin-roadmap-item:hover {
-      border-color: var(--border-strong);
-    }
-
-    .ari-top {
+    .drc-top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 16px;
       flex-wrap: wrap;
     }
-    .ari-title {
-      font-size: 19px;
-      font-weight: 700;
+    .drc-title {
+      font-size: 20px;
+      font-weight: 800;
       color: var(--text-primary);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
-    .ari-goal {
+    .drc-goal {
       font-size: 14px;
       color: var(--text-secondary);
       line-height: 1.5;
     }
 
-    .ari-meta-chips {
+    .drc-chips-row {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-top: 10px;
+      margin-top: 12px;
     }
-    .chip {
+    .cyber-chip {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 3px 10px;
-      border-radius: var(--radius-pill);
+      padding: 4px 11px;
+      border-radius: 9999px;
       font-size: 12px;
-      font-weight: 500;
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border-subtle);
+      font-weight: 600;
+      background: var(--overseer-surface-elevated);
+      border: 1px solid var(--overseer-border);
       color: var(--text-secondary);
     }
 
-    /* Milestone Explorer Box */
-    .milestone-tree-box {
-      padding: 18px 20px;
-      border-radius: var(--radius-md);
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border-subtle);
+    /* Milestone Explorer Tree Box */
+    .milestone-constellation-box {
+      padding: 20px 22px;
+      border-radius: 12px;
+      background: var(--overseer-surface-elevated);
+      border: 1px solid var(--overseer-border);
     }
-    .mtb-title {
+    .mcb-header {
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 12px;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
-    .milestone-node-row {
+    .milestone-checkpoint-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
-      margin-bottom: 6px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
+      padding: 11px 16px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: var(--overseer-surface-card);
+      border: 1px solid var(--overseer-border);
       font-size: 13.5px;
     }
-    .mn-left {
+    .mcr-left {
       display: flex;
       align-items: center;
       gap: 12px;
     }
-    .mn-status-dot {
+    .mcr-status-beacon {
       width: 10px;
       height: 10px;
       border-radius: 50%;
       flex-shrink: 0;
     }
-    .status-completed { background: #34D399; box-shadow: 0 0 10px rgba(52, 211, 153, 0.7); }
-    .status-in_progress { background: #FBBF24; box-shadow: 0 0 10px rgba(251, 191, 36, 0.7); }
-    .status-not_started { background: #64748B; }
+    .beacon-completed { background: #10B981; box-shadow: 0 0 10px #10B981; }
+    .beacon-in_progress { background: #F59E0B; box-shadow: 0 0 10px #F59E0B; }
+    .beacon-not_started { background: #64748B; }
 
     /* Score Badges */
-    .score-badge {
+    .exam-grade-badge {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 3px 10px;
-      border-radius: var(--radius-pill);
+      padding: 4px 10px;
+      border-radius: 9999px;
       font-weight: 700;
       font-family: var(--font-mono);
       font-size: 12px;
     }
-    .score-pass { background: rgba(52, 211, 153, 0.15); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.3); }
-    .score-warn { background: rgba(251, 191, 36, 0.15); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.3); }
-    .score-fail { background: rgba(248, 113, 113, 0.15); color: #F87171; border: 1px solid rgba(248, 113, 113, 0.3); }
+    .grade-mastered { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .grade-passed { background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.35); }
+    .grade-review { background: rgba(244, 63, 94, 0.15); color: #FB7185; border: 1px solid rgba(244, 63, 94, 0.35); }
 
-    .empty-state-box {
+    .empty-telemetry-state {
       text-align: center;
-      padding: 60px 24px;
+      padding: 64px 24px;
       color: var(--text-muted);
-      background: var(--bg-surface);
-      border: 1px dashed var(--border-strong);
-      border-radius: var(--radius-lg);
+      background: var(--overseer-surface-card);
+      border: 1px dashed var(--overseer-border);
+      border-radius: 16px;
     }
-    .empty-state-box i { font-size: 48px; margin-bottom: 12px; opacity: 0.6; }
-    .empty-state-box h3 { font-size: 17px; color: var(--text-primary); margin-bottom: 6px; }
+    .empty-telemetry-state i { font-size: 48px; margin-bottom: 12px; opacity: 0.6; }
+    .empty-telemetry-state h3 { font-size: 18px; color: var(--text-primary); margin-bottom: 6px; }
 
     /* Toast Notification */
     #admin-toast {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      z-index: 100000;
-      padding: 12px 20px;
-      border-radius: var(--radius-md);
-      background: #1E1B4B;
+      z-index: 1000000;
+      padding: 13px 22px;
+      border-radius: 10px;
+      background: #111322;
       color: #E0E7FF;
-      border: 1px solid #4F46E5;
-      box-shadow: 0 16px 36px rgba(0,0,0,0.5);
+      border: 1px solid var(--overseer-accent);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
       font-size: 13.5px;
-      font-weight: 500;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -853,353 +1222,451 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    @media (max-width: 900px) {
+      .overseer-sidebar {
+        display: none;
+      }
+      .command-hud-bar {
+        padding: 0 18px;
+      }
+      .overseer-content-wrap {
+        padding: 20px 18px 80px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- ==========================================
-       SECRET AUTHENTICATION GATE (Full Viewport)
-       ========================================== -->
+  <!-- ==========================================================================
+       1. SECURITY CLEARANCE ENCLAVE (FULL VIEWPORT LOGIN GATE)
+       ========================================================================== -->
   <div class="admin-gate-overlay" id="admin-gate-overlay">
-    <div class="cosmic-backdrop-stars"></div>
-    <div class="gate-glow-orb"></div>
+    <div class="cosmic-cyber-grid"></div>
+    <div class="gate-ambient-glow"></div>
 
     <div class="admin-gate-card">
-      <div class="cosmic-gate-emblem">
-        <i class="ph-fill ph-shield-check"></i>
-      </div>
+      <div style="text-align: center;">
+        <span class="gate-top-badge">
+          <i class="ph-fill ph-shield-check"></i>
+          <span>Level 5 Overseer Enclave</span>
+        </span>
 
-      <div style="text-align: center; margin-bottom: 26px;">
-        <h2 style="font-size: 22px; font-weight: 800; color: #FFFFFF; margin-bottom: 6px; letter-spacing: -0.02em;">
+        <div class="cosmic-gate-emblem">
+          <i class="ph-fill ph-fingerprint"></i>
+        </div>
+
+        <h2 style="font-size: 23px; font-weight: 800; color: #FFFFFF; margin-bottom: 6px; letter-spacing: -0.02em;">
           Hermes Overseer Terminal
         </h2>
-        <p style="font-size: 13px; color: #94A3B8; line-height: 1.5;">
-          Restricted access console. Authenticate overseer credentials to inspect global learner telemetry and milestone architectures.
+        <p style="font-size: 13px; color: #94A3B8; line-height: 1.5; margin-bottom: 24px;">
+          Synchronized telemetry interface. Authenticate overseer credentials to inspect global learner trees and exam diagnostics.
         </p>
       </div>
 
       <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 16px;">
         <div>
-          <label style="display: block; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94A3B8; margin-bottom: 6px;">
-            Overseer Username or Email
-          </label>
-          <input type="text" id="admin-email-input" required class="admin-search-input" style="padding-left: 16px; border-radius: var(--radius-sm); background: rgba(10, 10, 15, 0.8);" placeholder="" autocomplete="off">
+          <label class="gate-field-label">Overseer Username or Email</label>
+          <input type="text" id="admin-email-input" required class="gate-input-box" placeholder="" autocomplete="off">
         </div>
 
         <div>
-          <label style="display: block; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94A3B8; margin-bottom: 6px;">
-            Access Key / Password
-          </label>
-          <input type="password" id="admin-password-input" required class="admin-search-input" style="padding-left: 16px; border-radius: var(--radius-sm); background: rgba(10, 10, 15, 0.8);" placeholder="" autocomplete="off">
+          <label class="gate-field-label">Access Cipher / Password</label>
+          <input type="password" id="admin-password-input" required class="gate-input-box" placeholder="" autocomplete="off">
         </div>
 
-        <div id="gate-error-message" style="display: none; padding: 10px 14px; border-radius: var(--radius-sm); background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.3); color: #FDA4AF; font-size: 13px; display: flex; align-items: center; gap: 8px;">
+        <div id="gate-error-message" style="display: none; padding: 11px 14px; border-radius: 8px; background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.35); color: #FDA4AF; font-size: 13px; display: flex; align-items: center; gap: 8px;">
           <i class="ph ph-warning-circle"></i>
-          <span id="gate-error-text">Invalid admin credentials.</span>
+          <span id="gate-error-text">Access Denied: Invalid credentials.</span>
         </div>
 
-        <button type="submit" class="btn btn-primary" id="btn-admin-submit" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 600; margin-top: 4px;">
+        <button type="submit" class="btn btn-primary" id="btn-admin-submit" style="width: 100%; padding: 13px; font-size: 14px; font-weight: 700; margin-top: 6px; border-radius: 10px;">
           <i class="ph ph-key"></i>
-          <span>Authenticate Terminal</span>
+          <span>Decrypt Terminal</span>
         </button>
 
-        <p style="text-align: center; font-size: 12px; color: #64748B; margin-top: 8px;">
+        <p style="text-align: center; font-size: 12px; color: #64748B; margin-top: 10px;">
           Return to <a href="/" style="color: #818CF8; text-decoration: none;">Public Learning Dashboard</a>
         </p>
       </form>
     </div>
   </div>
 
-  <!-- ==========================================
-       TOP APP NAVBAR (Shown Once Authenticated)
-       ========================================== -->
-  <header class="app-navbar" id="admin-top-navbar" style="display: none;">
-    <div class="nav-left" style="display: flex; align-items: center;">
-      <div class="nav-brand" style="cursor: pointer;" onclick="adminApp.navigateHome()">
-        <span>Hermes<span class="brand-dot">.io</span></span>
-      </div>
-      
-      <span class="admin-pill-tag">
-        <i class="ph-fill ph-shield-check"></i>
-        <span>Overseer Console</span>
-      </span>
+  <!-- ==========================================================================
+       2. COMMAND CENTER WORKSPACE (SIDEBAR + MAIN CANVAS)
+       ========================================================================== -->
+  <div class="overseer-workspace" id="admin-main-workspace" style="display: none;">
 
-      <!-- Live Global Stats in Header -->
-      <div class="stats-pills-row" id="navbar-stats-pills">
-        <div class="stat-pill">
-          <i class="ph ph-users"></i>
-          <span>Learners: <strong id="pill-user-count">—</strong></span>
+    <!-- Left Overseer Command Rail (Sidebar) -->
+    <aside class="overseer-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand-icon">
+          <i class="ph-fill ph-terminal-window"></i>
         </div>
-        <div class="stat-pill">
-          <i class="ph ph-tree-structure"></i>
-          <span>Trees: <strong id="pill-roadmap-count">—</strong></span>
-        </div>
-        <div class="stat-pill">
-          <i class="ph ph-chart-line-up"></i>
-          <span>Mastery: <strong id="pill-mastery-rate">—%</strong></span>
+        <div class="sidebar-brand-text">
+          <span class="sidebar-brand-title">Hermes Overseer</span>
+          <span class="sidebar-brand-subtitle">Telemetry Matrix</span>
         </div>
       </div>
-    </div>
 
-    <div class="nav-right" style="display: flex; align-items: center; gap: 12px;">
-      <!-- Sync Button -->
-      <button class="btn-icon" onclick="adminApp.loadDashboardData()" title="Sync Telemetry" aria-label="Sync Telemetry">
-        <i class="ph ph-arrows-clockwise" id="nav-sync-icon"></i>
-      </button>
+      <div class="sidebar-nav-section">
+        <span class="sidebar-section-label">Observability</span>
 
-      <!-- Theme Switcher -->
-      <button class="btn-icon" id="admin-theme-btn" title="Toggle Theme" aria-label="Toggle Theme">
-        <i class="ph ph-sun"></i>
-      </button>
+        <button class="sidebar-nav-item active" id="nav-btn-directory" onclick="adminApp.navigateBackToDirectory()">
+          <div class="sni-left">
+            <i class="ph ph-users-three"></i>
+            <span>Learner Matrix</span>
+          </div>
+          <span class="sidebar-badge" id="side-learners-count">—</span>
+        </button>
 
-      <!-- Admin Identity Pill -->
-      <div class="stat-pill" style="padding: 4px 10px;" id="admin-identity-pill">
-        <div id="admin-avatar-small" style="width: 22px; height: 22px; border-radius: 50%; overflow: hidden;"></div>
-        <span style="font-weight: 600;" id="admin-email-display">Overseer</span>
-      </div>
+        <button class="sidebar-nav-item" onclick="adminApp.filterBy('has_roadmaps')">
+          <div class="sni-left">
+            <i class="ph ph-tree-structure"></i>
+            <span>Curricula Trees</span>
+          </div>
+          <span class="sidebar-badge" id="side-roadmaps-count">—</span>
+        </button>
 
-      <!-- Sign Out Button -->
-      <button class="btn btn-secondary btn-sm" id="btn-admin-logout" title="Sign out of Overseer Terminal">
-        <i class="ph ph-sign-out"></i>
-        <span>Exit Terminal</span>
-      </button>
-    </div>
-  </header>
+        <button class="sidebar-nav-item" onclick="adminApp.filterBy('has_quizzes')">
+          <div class="sni-left">
+            <i class="ph ph-exam"></i>
+            <span>Exam Diagnostics</span>
+          </div>
+          <span class="sidebar-badge" id="side-quizzes-count">—</span>
+        </button>
 
-  <!-- ==========================================
-       MAIN ADMIN CONSOLE BODY
-       ========================================== -->
-  <main class="admin-container" id="admin-main-container" style="display: none;">
+        <span class="sidebar-section-label" style="margin-top: 14px;">Terminal Controls</span>
 
-    <!-- VIEW 1: GLOBAL DIRECTORY VIEW -->
-    <div id="view-user-directory">
-
-      <!-- Hero Title Banner -->
-      <section class="admin-hero-header">
-        <div class="ahh-left">
-          <h1>
-            <span>Learner Progression & Curricula Registry</span>
-          </h1>
-          <p>Real-time telemetry audit for personalized roadmap architectures, milestone completion trajectories, and exam mastery metrics.</p>
-        </div>
-
-        <div class="ahh-actions">
-          <button class="btn btn-secondary btn-sm" onclick="adminApp.loadDashboardData()">
+        <button class="sidebar-nav-item" onclick="adminApp.loadDashboardData()">
+          <div class="sni-left">
             <i class="ph ph-arrows-clockwise"></i>
-            <span>Refresh Data</span>
+            <span>Sync Live Telemetry</span>
+          </div>
+        </button>
+
+        <button class="sidebar-nav-item" onclick="adminApp.exportPlatformDossier()">
+          <div class="sni-left">
+            <i class="ph ph-download-simple"></i>
+            <span>Export Registry JSON</span>
+          </div>
+        </button>
+
+        <!-- System Heartbeat Box -->
+        <div class="sidebar-system-box" style="margin-top: auto;">
+          <div class="ssb-header">
+            <span>Link Telemetry</span>
+            <div class="ssb-status-live">
+              <span class="status-pulse-dot"></span>
+              <span>ONLINE</span>
+            </div>
+          </div>
+          <div style="font-size: 11.5px; color: var(--text-secondary); font-family: var(--font-mono); line-height: 1.6;">
+            Latency: <strong style="color: var(--overseer-cyan);" id="hud-latency-val">9ms</strong><br>
+            Security: <strong>HMAC-SHA256</strong><br>
+            Mode: <strong>Serverless Matrix</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overseer User Profile Footer -->
+      <div class="sidebar-user-footer">
+        <div class="suf-identity">
+          <div class="suf-avatar" id="sidebar-admin-avatar"></div>
+          <div class="suf-text">
+            <div class="suf-name" id="sidebar-admin-name">Cronus</div>
+            <div class="suf-role">Terminal Overseer</div>
+          </div>
+        </div>
+
+        <button class="hud-action-btn" style="padding: 6px 10px;" onclick="adminApp.logout()" title="Exit Terminal">
+          <i class="ph ph-sign-out"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Command Canvas -->
+    <div class="overseer-main-canvas">
+
+      <!-- Top Executive HUD Bar -->
+      <header class="command-hud-bar">
+        <div class="chb-left">
+          <div class="hud-breadcrumbs">
+            <span>Overseer Console</span>
+            <span style="color: var(--text-muted);">/</span>
+            <strong id="top-nav-current-view">Learner Progression & Curricula Registry</strong>
+          </div>
+        </div>
+
+        <div class="chb-right">
+          <!-- Cyber Clock -->
+          <div class="cyber-clock-box">
+            <i class="ph ph-clock"></i>
+            <span id="cyber-clock-display">00:00:00 UTC</span>
+          </div>
+
+          <!-- Theme Switcher -->
+          <button class="hud-action-btn" id="admin-theme-btn" title="Toggle Theme">
+            <i class="ph ph-sun"></i>
+          </button>
+
+          <!-- Refresh Data -->
+          <button class="hud-action-btn" onclick="adminApp.loadDashboardData()" title="Sync Telemetry">
+            <i class="ph ph-arrows-clockwise" id="hud-sync-icon"></i>
+            <span>Sync</span>
+          </button>
+
+          <!-- Exit Terminal -->
+          <button class="hud-action-btn" onclick="adminApp.logout()">
+            <i class="ph ph-power"></i>
+            <span>Lock</span>
           </button>
         </div>
-      </section>
+      </header>
 
-      <!-- Telemetry Hero KPI Grid -->
-      <section class="telemetry-metrics-grid">
-        <div class="telemetry-metric-card">
-          <div class="tm-header">
-            <span class="tm-title">REGISTERED LEARNERS</span>
-            <div class="tm-icon-wrap tm-icon-indigo"><i class="ph ph-users-three"></i></div>
+      <!-- Main Canvas Container -->
+      <main class="overseer-content-wrap">
+
+        <!-- ==========================================
+             VIEW 1: GLOBAL LEARNER REGISTRY MATRIX
+             ========================================== -->
+        <div id="view-user-directory">
+
+          <!-- Telemetry Bento KPI Grid -->
+          <section class="telemetry-bento-grid">
+            <!-- Metric 1: Learners -->
+            <div class="bento-kpi-card" style="--card-glow-color: #6366F1;">
+              <div class="bkc-top">
+                <span class="bkc-title">Learners Registry</span>
+                <div class="bkc-icon-ring ring-indigo"><i class="ph ph-users-three"></i></div>
+              </div>
+              <div class="bkc-value-row">
+                <span class="bkc-number" id="kpi-total-users">—</span>
+                <span class="bkc-pill-metric pill-growth"><i class="ph ph-arrow-up-right"></i> Synced</span>
+              </div>
+              <div class="bkc-footer">
+                <i class="ph ph-database"></i>
+                <span>Active platform learner accounts</span>
+              </div>
+            </div>
+
+            <!-- Metric 2: Curricula -->
+            <div class="bento-kpi-card" style="--card-glow-color: #06B6D4;">
+              <div class="bkc-top">
+                <span class="bkc-title">Curricula Graphs</span>
+                <div class="bkc-icon-ring ring-cyan"><i class="ph ph-tree-structure"></i></div>
+              </div>
+              <div class="bkc-value-row">
+                <span class="bkc-number" id="kpi-total-roadmaps">—</span>
+                <span class="bkc-pill-metric pill-growth"><i class="ph ph-sparkle"></i> Synthesized</span>
+              </div>
+              <div class="bkc-footer">
+                <i class="ph ph-cpu"></i>
+                <span>AI Constellations + Smart Trees</span>
+              </div>
+            </div>
+
+            <!-- Metric 3: Mastery -->
+            <div class="bento-kpi-card" style="--card-glow-color: #10B981;">
+              <div class="bkc-top">
+                <span class="bkc-title">Global Mastery</span>
+                <div class="bkc-icon-ring ring-emerald"><i class="ph ph-chart-line-up"></i></div>
+              </div>
+              <div class="bkc-value-row">
+                <span class="bkc-number" id="kpi-global-progress">—%</span>
+                <span class="bkc-pill-metric pill-growth"><i class="ph ph-check-circle"></i> Ratio</span>
+              </div>
+              <div class="bkc-footer">
+                <i class="ph ph-trophy"></i>
+                <span>Platform milestone completion rate</span>
+              </div>
+            </div>
+
+            <!-- Metric 4: Exams -->
+            <div class="bento-kpi-card" style="--card-glow-color: #F43F5E;">
+              <div class="bkc-top">
+                <span class="bkc-title">Exam Performance</span>
+                <div class="bkc-icon-ring ring-rose"><i class="ph ph-exam"></i></div>
+              </div>
+              <div class="bkc-value-row">
+                <span class="bkc-number" id="kpi-quizzes-taken">—</span>
+                <span class="bkc-pill-metric pill-growth" id="kpi-quiz-avg-score">—% Avg</span>
+              </div>
+              <div class="bkc-footer">
+                <i class="ph ph-seal-check"></i>
+                <span>Verified module assessments</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Search & Controls Bar -->
+          <section class="controls-deck-bar">
+            <!-- Search -->
+            <div class="search-telemetry-box">
+              <i class="ph ph-magnifying-glass"></i>
+              <input type="text" id="admin-user-search" class="search-telemetry-input" placeholder="Search learner by name, email, or user identifier...">
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="filter-chips-cluster">
+              <button class="filter-chip-btn active" id="chip-filter-all" onclick="adminApp.setFilter('all')">All Learners</button>
+              <button class="filter-chip-btn" id="chip-filter-roadmaps" onclick="adminApp.setFilter('has_roadmaps')">With Roadmaps</button>
+              <button class="filter-chip-btn" id="chip-filter-progress" onclick="adminApp.setFilter('high_progress')">Mastery &gt; 50%</button>
+              <button class="filter-chip-btn" id="chip-filter-quizzes" onclick="adminApp.setFilter('has_quizzes')">Completed Exams</button>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <!-- Sort Selector -->
+              <select id="admin-user-sort" class="deck-sort-select">
+                <option value="recent">Newest Joined</option>
+                <option value="roadmaps">Most Roadmaps</option>
+                <option value="progress">Highest Mastery</option>
+                <option value="name">Alphabetical (A-Z)</option>
+              </select>
+
+              <!-- View Mode Toggle -->
+              <div class="view-mode-toggle-group">
+                <button class="vmt-btn active" id="view-mode-grid" title="Cards Grid Matrix" onclick="adminApp.setViewMode('grid')">
+                  <i class="ph ph-squares-four"></i>
+                </button>
+                <button class="vmt-btn" id="view-mode-table" title="Enterprise Table" onclick="adminApp.setViewMode('table')">
+                  <i class="ph ph-table"></i>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- VIEW MODE A: Cards Matrix Grid -->
+          <section class="telemetry-cards-matrix" id="user-cards-container">
+            <!-- Rendered dynamically -->
+          </section>
+
+          <!-- VIEW MODE B: Enterprise Data Table -->
+          <section class="enterprise-table-frame" id="user-table-container" style="display: none;">
+            <table class="enterprise-data-table">
+              <thead>
+                <tr>
+                  <th>Learner Profile</th>
+                  <th>User ID</th>
+                  <th>Curricula Trees</th>
+                  <th>Study Hours</th>
+                  <th>Mastery Progress</th>
+                  <th>Exam Mastery</th>
+                  <th>Audit Action</th>
+                </tr>
+              </thead>
+              <tbody id="user-table-tbody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Empty Search State -->
+          <div id="users-empty-state" class="empty-telemetry-state" style="display: none;">
+            <i class="ph ph-user-circle-dashed"></i>
+            <h3>No Learners Found</h3>
+            <p>No telemetry records match your current search filters.</p>
           </div>
-          <div class="tm-value" id="kpi-total-users">—</div>
-          <div class="tm-subtext">
-            <i class="ph ph-database"></i>
-            <span>Active database accounts</span>
-          </div>
+
         </div>
 
-        <div class="telemetry-metric-card">
-          <div class="tm-header">
-            <span class="tm-title">GENERATED ROADMAPS</span>
-            <div class="tm-icon-wrap tm-icon-emerald"><i class="ph ph-tree-structure"></i></div>
-          </div>
-          <div class="tm-value" id="kpi-total-roadmaps">—</div>
-          <div class="tm-subtext">
-            <i class="ph ph-sparkle"></i>
-            <span>AI + Smart offline trees</span>
-          </div>
-        </div>
+        <!-- ==========================================
+             VIEW 2: MASTER LEARNER DOSSIER DEEP DIVE
+             ========================================== -->
+        <div id="view-user-detail" class="dossier-slide-canvas" style="display: none;">
 
-        <div class="telemetry-metric-card">
-          <div class="tm-header">
-            <span class="tm-title">GLOBAL MASTERY AVG</span>
-            <div class="tm-icon-wrap tm-icon-amber"><i class="ph ph-chart-line-up"></i></div>
-          </div>
-          <div class="tm-value" id="kpi-global-progress">—%</div>
-          <div class="tm-subtext">
-            <i class="ph ph-check-circle"></i>
-            <span>Milestone completion rate</span>
-          </div>
-        </div>
-
-        <div class="telemetry-metric-card">
-          <div class="tm-header">
-            <span class="tm-title">EXAMS ATTEMPTED</span>
-            <div class="tm-icon-wrap tm-icon-rose"><i class="ph ph-exam"></i></div>
-          </div>
-          <div class="tm-value" id="kpi-quizzes-taken">—</div>
-          <div class="tm-subtext">
-            <i class="ph ph-trophy"></i>
-            <span id="kpi-quiz-avg-score">—% average score</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Search & Controls Bar -->
-      <section class="admin-controls-bar">
-        <div class="admin-search-wrap">
-          <i class="ph ph-magnifying-glass"></i>
-          <input type="text" id="admin-user-search" class="admin-search-input" placeholder="Search learner by name, email, or user ID...">
-        </div>
-
-        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-          <select id="admin-user-filter" class="admin-select-input">
-            <option value="all">All Learners</option>
-            <option value="has_roadmaps">With Roadmaps</option>
-            <option value="high_progress">Progress &gt; 50%</option>
-            <option value="has_quizzes">Taken Exams</option>
-          </select>
-
-          <select id="admin-user-sort" class="admin-select-input">
-            <option value="recent">Newest Joined</option>
-            <option value="roadmaps">Most Roadmaps</option>
-            <option value="progress">Highest Progress</option>
-            <option value="name">Alphabetical (A-Z)</option>
-          </select>
-
-          <!-- View Toggle -->
-          <div class="view-toggle-wrap">
-            <button class="view-toggle-btn active" id="view-mode-grid" title="Cards Grid View" onclick="adminApp.setViewMode('grid')">
-              <i class="ph ph-squares-four"></i>
+          <!-- Navigation & Action Bar -->
+          <div class="dossier-nav-bar">
+            <button class="dossier-back-btn" onclick="adminApp.navigateBackToDirectory()">
+              <i class="ph ph-arrow-left"></i>
+              <span>Return to Learner Matrix</span>
             </button>
-            <button class="view-toggle-btn" id="view-mode-table" title="Compact Table View" onclick="adminApp.setViewMode('table')">
-              <i class="ph ph-table"></i>
+
+            <div style="display: flex; gap: 10px;">
+              <button class="hud-action-btn" onclick="adminApp.copyTelemetryJSON()">
+                <i class="ph ph-code"></i>
+                <span>Copy JSON Telemetry</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Dossier Hero Header Card -->
+          <div class="dossier-cockpit-hero" id="user-hero-container">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Deep-Dive Navigation Tabs -->
+          <div class="dossier-tab-strip">
+            <button class="dts-tab-btn active" id="tab-btn-roadmaps" onclick="adminApp.switchTab('roadmaps')">
+              <i class="ph ph-tree-structure"></i>
+              <span>Curricula & Milestones (<span id="user-roadmaps-count">0</span>)</span>
+            </button>
+            <button class="dts-tab-btn" id="tab-btn-quizzes" onclick="adminApp.switchTab('quizzes')">
+              <i class="ph ph-exam"></i>
+              <span>Exams & Quizzes (<span id="user-quizzes-count">0</span>)</span>
+            </button>
+            <button class="dts-tab-btn" id="tab-btn-telemetry" onclick="adminApp.switchTab('telemetry')">
+              <i class="ph ph-terminal"></i>
+              <span>Raw Telemetry Stream</span>
             </button>
           </div>
+
+          <!-- Tab 1: User's Roadmaps & Milestones -->
+          <div id="tab-content-roadmaps">
+            <div id="user-roadmaps-list">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Tab 2: User's Exam Performance -->
+          <div id="tab-content-quizzes" style="display: none;">
+            <div class="enterprise-table-frame">
+              <table class="enterprise-data-table">
+                <thead>
+                  <tr>
+                    <th>Module / Topic</th>
+                    <th>Target Roadmap</th>
+                    <th>Score</th>
+                    <th>Percentage</th>
+                    <th>Mastery Status</th>
+                    <th>Timestamp</th>
+                  </tr>
+                </thead>
+                <tbody id="user-quizzes-tbody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+            <div id="quizzes-empty-state" class="empty-telemetry-state" style="display: none; margin-top: 16px;">
+              <i class="ph ph-clipboard-text"></i>
+              <h3>No Exams Attempted</h3>
+              <p>This learner has not yet completed any module assessments.</p>
+            </div>
+          </div>
+
+          <!-- Tab 3: Raw Telemetry Stream -->
+          <div id="tab-content-telemetry" style="display: none;">
+            <pre id="raw-telemetry-pre" style="background: var(--overseer-surface); padding: 26px; border-radius: 16px; border: 1px solid var(--overseer-border); color: #A5B4FC; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; overflow-x: auto; max-height: 540px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);"></pre>
+          </div>
+
         </div>
-      </section>
 
-      <!-- Users Cards Grid View -->
-      <section class="user-cards-grid" id="user-cards-container">
-        <!-- Dynamically populated via JS -->
-      </section>
-
-      <!-- Alternative Data Table View -->
-      <section class="admin-table-container" id="user-table-container" style="display: none;">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Learner Profile</th>
-              <th>User ID</th>
-              <th>Roadmaps</th>
-              <th>Hours Learned</th>
-              <th>Avg Mastery</th>
-              <th>Exam Score</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="user-table-tbody">
-            <!-- Dynamically populated via JS -->
-          </tbody>
-        </table>
-      </section>
-
-      <!-- Empty Search State -->
-      <div id="users-empty-state" class="empty-state-box" style="display: none;">
-        <i class="ph ph-user-circle-dashed"></i>
-        <h3>No learners match your query</h3>
-        <p>Try clearing filters or adjusting your search term.</p>
-      </div>
+      </main>
 
     </div>
-
-    <!-- VIEW 2: TRANSIT / SPECIFIC USER DETAIL VIEW -->
-    <div id="view-user-detail" class="transit-view-wrapper" style="display: none;">
-      
-      <!-- Breadcrumb Bar -->
-      <div class="transit-breadcrumb-bar">
-        <button class="transit-nav-back" onclick="adminApp.navigateBackToDirectory()">
-          <i class="ph ph-arrow-left"></i>
-          <span>Return to Learner Directory</span>
-        </button>
-        <span style="color: var(--text-muted); font-size: 13px;">/</span>
-        <span style="color: var(--text-secondary); font-size: 13px; font-weight: 600;" id="breadcrumb-user-name">Learner Dossier</span>
-      </div>
-
-      <!-- User Hero Dossier Header -->
-      <div class="user-hero-card" id="user-hero-container">
-        <!-- Rendered dynamically -->
-      </div>
-
-      <!-- Navigation Tabs -->
-      <div class="transit-tabs">
-        <button class="transit-tab-btn active" id="tab-btn-roadmaps" onclick="adminApp.switchTab('roadmaps')">
-          <i class="ph ph-tree-structure"></i>
-          <span>Curricula & Milestones (<span id="user-roadmaps-count">0</span>)</span>
-        </button>
-        <button class="transit-tab-btn" id="tab-btn-quizzes" onclick="adminApp.switchTab('quizzes')">
-          <i class="ph ph-exam"></i>
-          <span>Exams & Quizzes (<span id="user-quizzes-count">0</span>)</span>
-        </button>
-        <button class="transit-tab-btn" id="tab-btn-telemetry" onclick="adminApp.switchTab('telemetry')">
-          <i class="ph ph-code"></i>
-          <span>Raw System JSON</span>
-        </button>
-      </div>
-
-      <!-- Tab Content 1: User's Roadmaps & Milestones -->
-      <div id="tab-content-roadmaps">
-        <div class="roadmaps-detail-grid" id="user-roadmaps-list">
-          <!-- Dynamically populated -->
-        </div>
-      </div>
-
-      <!-- Tab Content 2: Exam & Quiz Performance -->
-      <div id="tab-content-quizzes" style="display: none;">
-        <div class="admin-table-container">
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Module / Topic</th>
-                <th>Target Roadmap</th>
-                <th>Score</th>
-                <th>Performance</th>
-                <th>Mastery Status</th>
-                <th>Attempted Date</th>
-              </tr>
-            </thead>
-            <tbody id="user-quizzes-tbody">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
-        </div>
-        <div id="quizzes-empty-state" class="empty-state-box" style="display: none; margin-top: 16px;">
-          <i class="ph ph-clipboard-text"></i>
-          <h3>No Exam Attempts Recorded</h3>
-          <p>This learner has not yet completed any module mastery quizzes.</p>
-        </div>
-      </div>
-
-      <!-- Tab Content 3: Raw Telemetry -->
-      <div id="tab-content-telemetry" style="display: none;">
-        <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-          <button class="btn btn-secondary btn-sm" onclick="adminApp.copyTelemetryJSON()">
-            <i class="ph ph-copy"></i> Copy Raw JSON
-          </button>
-        </div>
-        <pre id="raw-telemetry-pre" style="background: var(--bg-surface); padding: 24px; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); color: #A5B4FC; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; overflow-x: auto; max-height: 520px;"></pre>
-      </div>
-
-    </div>
-
-  </main>
-
-  <!-- Admin Notification Toast -->
-  <div id="admin-toast">
-    <i class="ph ph-info" id="toast-icon"></i>
-    <span id="toast-text">Message</span>
   </div>
 
-  <!-- Admin Application Logic -->
+  <!-- Admin Toast Notification -->
+  <div id="admin-toast">
+    <i class="ph ph-info" id="toast-icon"></i>
+    <span id="toast-text">Notification</span>
+  </div>
+
+  <!-- ==========================================================================
+       HERMES OVERSEER ENGINE (VANILLA JS APP)
+       ========================================================================== -->
   <script>
-    class HermesAdminApp {
+    class HermesOverseerApp {
       constructor() {
         this.token = sessionStorage.getItem('hermes_admin_token') || localStorage.getItem('hermes_admin_token') || '';
         this.users = [];
@@ -1208,9 +1675,11 @@
         this.selectedUserQuizzes = [];
         this.activeTab = 'roadmaps';
         this.viewMode = 'grid';
+        this.filterMode = 'all';
 
         this.initTheme();
         this.bindEvents();
+        this.startCyberClock();
         this.checkAuth();
       }
 
@@ -1234,6 +1703,18 @@
         }
       }
 
+      startCyberClock() {
+        const clockEl = document.getElementById('cyber-clock-display');
+        const update = () => {
+          if (!clockEl) return;
+          const now = new Date();
+          const utcStr = now.toISOString().substring(11, 19) + ' UTC';
+          clockEl.textContent = utcStr;
+        };
+        update();
+        setInterval(update, 1000);
+      }
+
       showToast(text, isError = false) {
         const toast = document.getElementById('admin-toast');
         const icon = document.getElementById('toast-icon');
@@ -1242,27 +1723,18 @@
 
         icon.className = isError ? 'ph ph-x-circle' : 'ph ph-check-circle';
         span.textContent = text;
-        toast.style.borderColor = isError ? '#F43F5E' : '#4F46E5';
+        toast.style.borderColor = isError ? '#F43F5E' : '#6366F1';
         toast.classList.add('visible');
 
         setTimeout(() => {
           toast.classList.remove('visible');
-        }, 3000);
+        }, 3200);
       }
 
       bindEvents() {
-        // Theme toggle
         document.getElementById('admin-theme-btn')?.addEventListener('click', () => this.toggleTheme());
-
-        // Login form
         document.getElementById('admin-login-form')?.addEventListener('submit', (e) => this.handleLogin(e));
-
-        // Logout button
-        document.getElementById('btn-admin-logout')?.addEventListener('click', () => this.logout());
-
-        // Search & Filters
         document.getElementById('admin-user-search')?.addEventListener('input', () => this.renderUsersDirectory());
-        document.getElementById('admin-user-filter')?.addEventListener('change', () => this.renderUsersDirectory());
         document.getElementById('admin-user-sort')?.addEventListener('change', () => this.renderUsersDirectory());
       }
 
@@ -1279,7 +1751,7 @@
           const data = await res.json();
           if (data && data.authenticated) {
             this.showGate(false);
-            this.renderAdminProfilePill(data.admin);
+            this.renderOverseerProfile(data.admin);
             this.loadDashboardData();
           } else {
             this.showGate(true);
@@ -1291,12 +1763,10 @@
 
       showGate(visible) {
         const gate = document.getElementById('admin-gate-overlay');
-        const navbar = document.getElementById('admin-top-navbar');
-        const main = document.getElementById('admin-main-container');
+        const workspace = document.getElementById('admin-main-workspace');
 
         if (gate) gate.style.display = visible ? 'flex' : 'none';
-        if (navbar) navbar.style.display = visible ? 'none' : 'flex';
-        if (main) main.style.display = visible ? 'none' : 'block';
+        if (workspace) workspace.style.display = visible ? 'none' : 'flex';
       }
 
       async handleLogin(e) {
@@ -1308,7 +1778,7 @@
         const submitBtn = document.getElementById('btn-admin-submit');
 
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `<i class="ph ph-spinner ph-spin"></i> Authenticating...`;
+        submitBtn.innerHTML = `<i class="ph ph-spinner ph-spin"></i> Decrypting...`;
 
         try {
           const res = await fetch('/api/admin/login', {
@@ -1324,8 +1794,8 @@
             localStorage.setItem('hermes_admin_token', data.token);
             errBox.style.display = 'none';
             this.showGate(false);
-            this.renderAdminProfilePill(data.admin);
-            this.showToast('Overseer terminal unlocked.', false);
+            this.renderOverseerProfile(data.admin);
+            this.showToast('Overseer terminal decrypted & online.', false);
             this.loadDashboardData();
           } else {
             errBox.style.display = 'flex';
@@ -1337,7 +1807,7 @@
           errText.textContent = 'Server connection error.';
         } finally {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = `<i class="ph ph-key"></i> <span>Authenticate Terminal</span>`;
+          submitBtn.innerHTML = `<i class="ph ph-key"></i> <span>Decrypt Terminal</span>`;
         }
       }
 
@@ -1351,28 +1821,34 @@
         sessionStorage.removeItem('hermes_admin_token');
         localStorage.removeItem('hermes_admin_token');
         this.showGate(true);
-        this.showToast('Session terminated.', false);
+        this.showToast('Overseer session terminated.', false);
       }
 
-      renderAdminProfilePill(admin) {
-        const container = document.getElementById('admin-avatar-small');
-        if (container && window.CelestialAvatars) {
-          container.innerHTML = window.CelestialAvatars.generate(admin?.email || 'cronus.xz@void.vz', 24);
+      renderOverseerProfile(admin) {
+        const avatarBox = document.getElementById('sidebar-admin-avatar');
+        if (avatarBox && window.CelestialAvatars) {
+          avatarBox.innerHTML = window.CelestialAvatars.generate(admin?.email || 'cronus.xz@void.vz', 36);
         }
-        const display = document.getElementById('admin-email-display');
-        if (display && admin?.email) {
-          display.textContent = admin.email;
+        const nameEl = document.getElementById('sidebar-admin-name');
+        if (nameEl) {
+          nameEl.textContent = admin?.name || 'Cronus (Overseer)';
         }
       }
 
       async loadDashboardData() {
-        const syncIcon = document.getElementById('nav-sync-icon');
+        const syncIcon = document.getElementById('hud-sync-icon');
         if (syncIcon) syncIcon.classList.add('ph-spin');
+
+        const startTime = performance.now();
 
         try {
           const res = await fetch('/api/admin/users', {
             headers: { 'Authorization': `Bearer ${this.token}`, 'x-admin-token': this.token }
           });
+          const latency = Math.round(performance.now() - startTime);
+          const latencyEl = document.getElementById('hud-latency-val');
+          if (latencyEl) latencyEl.textContent = `${latency}ms`;
+
           if (!res.ok) {
             if (res.status === 401 || res.status === 403) this.logout();
             return;
@@ -1384,7 +1860,7 @@
           this.renderUsersDirectory();
         } catch (err) {
           console.error(err);
-          this.showToast('Failed to load telemetry data.', true);
+          this.showToast('Failed to sync telemetry stream.', true);
         } finally {
           if (syncIcon) syncIcon.classList.remove('ph-spin');
         }
@@ -1395,12 +1871,33 @@
         document.getElementById('kpi-total-roadmaps').textContent = stats.totalRoadmaps ?? 0;
         document.getElementById('kpi-global-progress').textContent = `${stats.avgPlatformProgress ?? 0}%`;
         document.getElementById('kpi-quizzes-taken').textContent = stats.totalQuizzesCompleted ?? 0;
-        document.getElementById('kpi-quiz-avg-score').textContent = `${stats.avgQuizScore ?? 0}% average score`;
+        document.getElementById('kpi-quiz-avg-score').textContent = `${stats.avgQuizScore ?? 0}% Avg`;
 
-        // Navbar Pills
-        document.getElementById('pill-user-count').textContent = stats.totalUsers ?? this.users.length;
-        document.getElementById('pill-roadmap-count').textContent = stats.totalRoadmaps ?? 0;
-        document.getElementById('pill-mastery-rate').textContent = `${stats.avgPlatformProgress ?? 0}%`;
+        // Sidebar Badges
+        document.getElementById('side-learners-count').textContent = stats.totalUsers ?? this.users.length;
+        document.getElementById('side-roadmaps-count').textContent = stats.totalRoadmaps ?? 0;
+        document.getElementById('side-quizzes-count').textContent = stats.totalQuizzesCompleted ?? 0;
+      }
+
+      setFilter(filter) {
+        this.filterMode = filter;
+        const chips = ['all', 'roadmaps', 'progress', 'quizzes'];
+        chips.forEach(c => {
+          const el = document.getElementById(`chip-filter-${c}`);
+          if (el) el.classList.remove('active');
+        });
+
+        if (filter === 'all') document.getElementById('chip-filter-all')?.classList.add('active');
+        if (filter === 'has_roadmaps') document.getElementById('chip-filter-roadmaps')?.classList.add('active');
+        if (filter === 'high_progress') document.getElementById('chip-filter-progress')?.classList.add('active');
+        if (filter === 'has_quizzes') document.getElementById('chip-filter-quizzes')?.classList.add('active');
+
+        this.renderUsersDirectory();
+      }
+
+      filterBy(filter) {
+        this.navigateBackToDirectory();
+        this.setFilter(filter);
       }
 
       setViewMode(mode) {
@@ -1431,12 +1928,11 @@
         if (!gridContainer || !tableBody) return;
 
         const searchTerm = (document.getElementById('admin-user-search')?.value || '').toLowerCase().trim();
-        const filterVal = document.getElementById('admin-user-filter')?.value || 'all';
         const sortVal = document.getElementById('admin-user-sort')?.value || 'recent';
 
         let list = [...this.users];
 
-        // Filter
+        // Search Filter
         if (searchTerm) {
           list = list.filter(u => 
             (u.name || '').toLowerCase().includes(searchTerm) ||
@@ -1445,11 +1941,12 @@
           );
         }
 
-        if (filterVal === 'has_roadmaps') {
+        // Chip Filter
+        if (this.filterMode === 'has_roadmaps') {
           list = list.filter(u => (u.roadmapsCount || 0) > 0);
-        } else if (filterVal === 'high_progress') {
+        } else if (this.filterMode === 'high_progress') {
           list = list.filter(u => (u.avgProgress || 0) >= 50);
-        } else if (filterVal === 'has_quizzes') {
+        } else if (this.filterMode === 'has_quizzes') {
           list = list.filter(u => (u.quizzesCount || 0) > 0);
         }
 
@@ -1470,55 +1967,55 @@
 
         emptyState.style.display = 'none';
 
-        // Render Card Grid
+        // 1. Render Cybernetic Cards
         gridContainer.innerHTML = list.map(u => {
           const progress = Math.min(100, Math.max(0, Math.round(u.avgProgress || 0)));
           const avatarSvg = window.CelestialAvatars 
-            ? window.CelestialAvatars.generate(u.email || u.id, 62) 
+            ? window.CelestialAvatars.generate(u.email || u.id, 64) 
             : `<div style="background:#4F46E5;width:100%;height:100%"></div>`;
 
           return `
-            <div class="user-card" onclick="adminApp.inspectUser('${u.id}')">
-              <div class="uc-top">
-                <div class="celestial-avatar-frame">
+            <div class="cyber-user-card" onclick="adminApp.inspectUser('${u.id}')">
+              <div class="cuc-top">
+                <div class="cuc-avatar-halo">
                   ${avatarSvg}
                 </div>
-                <div class="uc-info">
-                  <div class="uc-name">
+                <div class="cuc-identity-block">
+                  <div class="cuc-user-name">
                     <span>${this.escapeHTML(u.name || 'Anonymous Learner')}</span>
-                    <i class="ph-fill ph-check-circle" style="color:#34D399;font-size:14px;" title="Verified Learner"></i>
+                    <i class="ph-fill ph-check-circle" style="color:#10B981;font-size:14px;" title="Verified Learner Node"></i>
                   </div>
-                  <div class="uc-email">${this.escapeHTML(u.email || 'guest@hermes.io')}</div>
-                  <div class="uc-id-tag">ID: ${this.escapeHTML(u.id)}</div>
+                  <div class="cuc-user-email">${this.escapeHTML(u.email || 'guest@hermes.io')}</div>
+                  <div class="cuc-id-chip">ID: ${this.escapeHTML(u.id)}</div>
                 </div>
               </div>
 
-              <div class="uc-metrics-row">
-                <div class="uc-metric-item">
-                  <span class="uc-metric-val">${u.roadmapsCount || 0}</span>
-                  <span class="uc-metric-lbl">Trees</span>
+              <div class="cuc-telemetry-triad">
+                <div class="ctt-cell">
+                  <span class="ctt-number">${u.roadmapsCount || 0}</span>
+                  <span class="ctt-lbl">Trees</span>
                 </div>
-                <div class="uc-metric-item">
-                  <span class="uc-metric-val">${u.totalCompletedHours || 0}h</span>
-                  <span class="uc-metric-lbl">Learned</span>
+                <div class="ctt-cell">
+                  <span class="ctt-number">${u.totalCompletedHours || 0}h</span>
+                  <span class="ctt-lbl">Learned</span>
                 </div>
-                <div class="uc-metric-item">
-                  <span class="uc-metric-val">${u.quizzesCount || 0}</span>
-                  <span class="uc-metric-lbl">Exams</span>
-                </div>
-              </div>
-
-              <div class="uc-progress-wrap">
-                <div class="uc-progress-header">
-                  <span>Curriculum Mastery</span>
-                  <span style="font-weight: 700; color: var(--text-primary); font-family: var(--font-mono);">${progress}%</span>
-                </div>
-                <div class="uc-progress-bar">
-                  <div class="uc-progress-fill" style="width: ${progress}%;"></div>
+                <div class="ctt-cell">
+                  <span class="ctt-number">${u.quizzesCount || 0}</span>
+                  <span class="ctt-lbl">Exams</span>
                 </div>
               </div>
 
-              <div class="uc-action-btn">
+              <div class="cuc-progress-section">
+                <div class="cuc-progress-label">
+                  <span>Curriculum Mastery Trajectory</span>
+                  <strong style="color:var(--text-primary); font-family:var(--font-mono);">${progress}%</strong>
+                </div>
+                <div class="cuc-progress-track">
+                  <div class="cuc-progress-bar" style="width: ${progress}%;"></div>
+                </div>
+              </div>
+
+              <div class="cuc-card-footer">
                 <span>Inspect Dossier & Progression</span>
                 <i class="ph ph-arrow-right"></i>
               </div>
@@ -1526,20 +2023,18 @@
           `;
         }).join('');
 
-        // Render Data Table
+        // 2. Render Enterprise Table
         tableBody.innerHTML = list.map(u => {
           const progress = Math.min(100, Math.max(0, Math.round(u.avgProgress || 0)));
           const avatarSvg = window.CelestialAvatars 
-            ? window.CelestialAvatars.generate(u.email || u.id, 32)
+            ? window.CelestialAvatars.generate(u.email || u.id, 34) 
             : '';
-
-          const joinedStr = u.createdAt ? new Date(u.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent';
 
           return `
             <tr style="cursor: pointer;" onclick="adminApp.inspectUser('${u.id}')">
               <td>
                 <div style="display:flex;align-items:center;gap:12px;">
-                  <div style="width:34px;height:34px;border-radius:50%;overflow:hidden;border:1px solid rgba(255,255,255,0.15);background:#060913;flex-shrink:0;">
+                  <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;border:1px solid rgba(255,255,255,0.15);background:#050711;flex-shrink:0;">
                     ${avatarSvg}
                   </div>
                   <div>
@@ -1548,24 +2043,24 @@
                   </div>
                 </div>
               </td>
-              <td><span class="chip" style="font-family:var(--font-mono);font-size:11.5px;">${u.id}</span></td>
+              <td><span class="cyber-chip" style="font-family:var(--font-mono);">${u.id}</span></td>
               <td><strong style="font-family:var(--font-mono);">${u.roadmapsCount || 0}</strong></td>
               <td><span style="font-family:var(--font-mono);">${u.totalCompletedHours || 0}h / ${u.totalHours || 0}h</span></td>
               <td>
-                <div style="display:flex;align-items:center;gap:8px;">
-                  <div class="uc-progress-bar" style="width:60px;height:6px;">
-                    <div class="uc-progress-fill" style="width:${progress}%;"></div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="cuc-progress-track" style="width:65px;height:7px;">
+                    <div class="cuc-progress-bar" style="width:${progress}%;"></div>
                   </div>
                   <strong style="font-family:var(--font-mono);font-size:12.5px;">${progress}%</strong>
                 </div>
               </td>
               <td>
-                <span class="score-badge ${u.avgQuizScore >= 80 ? 'score-pass' : (u.avgQuizScore >= 60 ? 'score-warn' : 'score-fail')}">
+                <span class="exam-grade-badge ${u.avgQuizScore >= 80 ? 'grade-mastered' : (u.avgQuizScore >= 60 ? 'grade-passed' : 'grade-review')}">
                   ${u.avgQuizScore || 0}%
                 </span>
               </td>
               <td>
-                <button class="btn btn-secondary btn-sm" style="padding:4px 10px;font-size:12px;" onclick="event.stopPropagation();adminApp.inspectUser('${u.id}')">
+                <button class="hud-action-btn" style="padding:4px 10px;font-size:12px;" onclick="event.stopPropagation();adminApp.inspectUser('${u.id}')">
                   Audit <i class="ph ph-arrow-right"></i>
                 </button>
               </td>
@@ -1580,7 +2075,7 @@
             headers: { 'Authorization': `Bearer ${this.token}`, 'x-admin-token': this.token }
           });
           if (!res.ok) {
-            this.showToast('Failed to retrieve user telemetry.', true);
+            this.showToast('Failed to retrieve learner dossier.', true);
             return;
           }
 
@@ -1589,19 +2084,18 @@
           this.selectedUserRoadmaps = data.roadmaps || [];
           this.selectedUserQuizzes = data.quizzes || [];
 
-          document.getElementById('breadcrumb-user-name').textContent = data.user.name || 'Learner Dossier';
+          document.getElementById('top-nav-current-view').textContent = `Learner Dossier: ${data.user.name || data.user.id}`;
           this.renderUserHero(data.user);
           this.renderUserRoadmaps();
           this.renderUserQuizzes();
           document.getElementById('raw-telemetry-pre').textContent = JSON.stringify(data, null, 2);
 
-          // Transition smoothly into detail view
           document.getElementById('view-user-directory').style.display = 'none';
           document.getElementById('view-user-detail').style.display = 'block';
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (err) {
           console.error(err);
-          this.showToast('Error opening user dossier.', true);
+          this.showToast('Error opening dossier.', true);
         }
       }
 
@@ -1610,42 +2104,42 @@
         if (!container) return;
 
         const avatarSvg = window.CelestialAvatars 
-          ? window.CelestialAvatars.generate(user.email || user.id, 88)
+          ? window.CelestialAvatars.generate(user.email || user.id, 92) 
           : '';
 
         const joinedStr = user.createdAt ? new Date(user.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'Recent';
 
         container.innerHTML = `
-          <div class="uh-identity">
-            <div class="uh-avatar-huge">
+          <div class="dch-identity">
+            <div class="dch-avatar-huge">
               ${avatarSvg}
             </div>
-            <div class="uh-details">
+            <div class="dch-title-wrap">
               <h2>${this.escapeHTML(user.name || 'Anonymous Learner')}</h2>
               <p>${this.escapeHTML(user.email)}</p>
-              <div style="display:flex;gap:8px;margin-top:8px;align-items:center;">
-                <span class="admin-pill-tag">${user.id}</span>
-                <span style="font-size:12.5px;color:var(--text-muted);"><i class="ph ph-calendar-blank"></i> Member since ${joinedStr}</span>
+              <div style="display:flex;gap:8px;margin-top:10px;align-items:center;">
+                <span class="cyber-chip"><i class="ph ph-identification-card"></i> ${user.id}</span>
+                <span style="font-size:12.5px;color:var(--text-muted);"><i class="ph ph-calendar-blank"></i> Enrolled: ${joinedStr}</span>
               </div>
             </div>
           </div>
 
-          <div class="uh-stats-row">
-            <div class="uh-stat-box">
-              <div class="uh-stat-num">${this.selectedUserRoadmaps.length}</div>
-              <div class="uh-stat-desc">Roadmaps</div>
+          <div class="dch-stats-dock">
+            <div class="dch-stat-pod">
+              <div class="dsp-value">${this.selectedUserRoadmaps.length}</div>
+              <div class="dsp-label">Curricula Trees</div>
             </div>
-            <div class="uh-stat-box">
-              <div class="uh-stat-num">${user.totalCompletedHours || 0}h / ${user.totalHours || 0}h</div>
-              <div class="uh-stat-desc">Hours Learned</div>
+            <div class="dch-stat-pod">
+              <div class="dsp-value">${user.totalCompletedHours || 0}h / ${user.totalHours || 0}h</div>
+              <div class="dsp-label">Hours Invested</div>
             </div>
-            <div class="uh-stat-box">
-              <div class="uh-stat-num">${user.avgProgress || 0}%</div>
-              <div class="uh-stat-desc">Mastery Ratio</div>
+            <div class="dch-stat-pod">
+              <div class="dsp-value">${user.avgProgress || 0}%</div>
+              <div class="dsp-label">Mastery Ratio</div>
             </div>
-            <div class="uh-stat-box">
-              <div class="uh-stat-num">${this.selectedUserQuizzes.length}</div>
-              <div class="uh-stat-desc">Exams Taken</div>
+            <div class="dch-stat-pod">
+              <div class="dsp-value">${this.selectedUserQuizzes.length}</div>
+              <div class="dsp-label">Exams Completed</div>
             </div>
           </div>
         `;
@@ -1660,10 +2154,10 @@
 
         if (this.selectedUserRoadmaps.length === 0) {
           container.innerHTML = `
-            <div class="empty-state-box">
+            <div class="empty-telemetry-state">
               <i class="ph ph-tree-structure"></i>
-              <h3>No Roadmaps Created Yet</h3>
-              <p>This learner has not generated or personalized any curricula.</p>
+              <h3>No Curricula Trees Synthesized</h3>
+              <p>This learner has not generated or imported any learning roadmaps.</p>
             </div>
           `;
           return;
@@ -1673,57 +2167,56 @@
           const nodes = r.nodes || [];
           const progress = Math.min(100, Math.max(0, Math.round(r.overallProgress || 0)));
 
-          // Render milestone rows
           const milestoneNodesHtml = nodes.slice(0, 6).map(n => {
-            const statusClass = n.status === 'completed' ? 'status-completed' : (n.status === 'in_progress' ? 'status-in_progress' : 'status-not_started');
+            const beaconClass = n.status === 'completed' ? 'beacon-completed' : (n.status === 'in_progress' ? 'beacon-in_progress' : 'beacon-not_started');
             return `
-              <div class="milestone-node-row">
-                <div class="mn-left">
-                  <div class="mn-status-dot ${statusClass}"></div>
+              <div class="milestone-checkpoint-row">
+                <div class="mcr-left">
+                  <div class="mcr-status-beacon ${beaconClass}"></div>
                   <strong style="color:var(--text-primary);">${this.escapeHTML(n.title)}</strong>
                 </div>
                 <div style="display:flex;gap:12px;align-items:center;color:var(--text-muted);font-size:12px;">
                   <span>${n.estimatedHours || 0} hrs</span>
-                  <span class="chip" style="padding:1px 8px;text-transform:capitalize;">${n.status || 'not_started'}</span>
+                  <span class="cyber-chip" style="padding:2px 8px;text-transform:capitalize;">${n.status || 'not_started'}</span>
                 </div>
               </div>
             `;
           }).join('');
 
           return `
-            <div class="admin-roadmap-item">
-              <div class="ari-top">
+            <div class="dossier-roadmap-card">
+              <div class="drc-top">
                 <div style="flex:1;">
-                  <div class="ari-title">${this.escapeHTML(r.title)}</div>
-                  <div class="ari-goal">${this.escapeHTML(r.goal || 'No goal description provided.')}</div>
+                  <div class="drc-title">${this.escapeHTML(r.title)}</div>
+                  <div class="drc-goal">${this.escapeHTML(r.goal || 'No goal description logged.')}</div>
                   
-                  <div class="ari-meta-chips">
-                    <span class="chip"><i class="ph ph-briefcase"></i> ${this.escapeHTML(r.targetRole || 'General')}</span>
-                    <span class="chip"><i class="ph ph-gauge"></i> ${this.escapeHTML(r.skillLevel || 'Beginner')}</span>
-                    <span class="chip"><i class="ph ph-cpu"></i> Engine: ${this.escapeHTML(r.engine || 'hermes-ai')}</span>
-                    <span class="chip"><i class="ph ph-clock"></i> ${r.completedHours || 0}h / ${r.totalHours || 0}h</span>
+                  <div class="drc-chips-row">
+                    <span class="cyber-chip"><i class="ph ph-briefcase"></i> ${this.escapeHTML(r.targetRole || 'General')}</span>
+                    <span class="cyber-chip"><i class="ph ph-gauge"></i> ${this.escapeHTML(r.skillLevel || 'Beginner')}</span>
+                    <span class="cyber-chip"><i class="ph ph-cpu"></i> Engine: ${this.escapeHTML(r.engine || 'hermes-ai')}</span>
+                    <span class="cyber-chip"><i class="ph ph-clock"></i> ${r.completedHours || 0}h / ${r.totalHours || 0}h</span>
                   </div>
                 </div>
 
                 <div style="min-width: 140px; text-align: right;">
-                  <div style="font-size: 24px; font-weight: 800; font-family: var(--font-mono); color: var(--accent-primary-text);">${progress}%</div>
-                  <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Curriculum Progress</div>
+                  <div style="font-size: 26px; font-weight: 800; font-family: var(--font-mono); color: var(--overseer-cyan);">${progress}%</div>
+                  <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Curriculum Completion</div>
                 </div>
               </div>
 
               <!-- Progress bar -->
-              <div class="uc-progress-bar" style="height: 8px;">
-                <div class="uc-progress-fill" style="width: ${progress}%;"></div>
+              <div class="cuc-progress-track" style="height: 9px;">
+                <div class="cuc-progress-bar" style="width: ${progress}%;"></div>
               </div>
 
-              <!-- Milestone Tree Explorer -->
-              <div class="milestone-tree-box">
-                <div class="mtb-title">
+              <!-- Milestone Explorer Box -->
+              <div class="milestone-constellation-box">
+                <div class="mcb-header">
                   <i class="ph ph-list-numbers"></i>
-                  <span>Curriculum Architecture & Milestones (${nodes.length} checkpoints)</span>
+                  <span>Milestone Constellation Nodes (${nodes.length} checkpoints)</span>
                 </div>
                 ${milestoneNodesHtml}
-                ${nodes.length > 6 ? `<div style="text-align:center;padding-top:8px;font-size:12px;color:var(--text-muted);">+ ${nodes.length - 6} additional sub-units in tree</div>` : ''}
+                ${nodes.length > 6 ? `<div style="text-align:center;padding-top:8px;font-size:12px;color:var(--text-muted);">+ ${nodes.length - 6} additional sub-units in tree architecture</div>` : ''}
               </div>
             </div>
           `;
@@ -1745,7 +2238,7 @@
 
         tbody.innerHTML = this.selectedUserQuizzes.map(q => {
           const pct = Math.round(q.percentage || 0);
-          const scoreClass = pct >= 80 ? 'score-pass' : (pct >= 60 ? 'score-warn' : 'score-fail');
+          const scoreClass = pct >= 80 ? 'grade-mastered' : (pct >= 60 ? 'grade-passed' : 'grade-review');
           const statusText = pct >= 80 ? '🏆 Mastered' : (pct >= 60 ? '⚡ Passed' : '🔄 Review Required');
           const dateStr = q.created_at || q.createdAt 
             ? new Date(q.created_at || q.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
@@ -1760,7 +2253,7 @@
                 ${this.escapeHTML(q.roadmap_title || q.roadmapTitle || 'General Tree')}
               </td>
               <td>
-                <span class="score-badge ${scoreClass}">
+                <span class="exam-grade-badge ${scoreClass}">
                   ${q.score || 0} / ${q.total_questions || q.totalQuestions || 5}
                 </span>
               </td>
@@ -1768,7 +2261,7 @@
                 <strong style="font-family:var(--font-mono);">${pct}%</strong>
               </td>
               <td>
-                <span class="chip" style="font-size:12px;font-weight:600;">${statusText}</span>
+                <span class="cyber-chip" style="font-size:12px;font-weight:700;">${statusText}</span>
               </td>
               <td style="color:var(--text-muted);font-size:12px;font-family:var(--font-mono);">
                 ${dateStr}
@@ -1799,15 +2292,29 @@
         });
       }
 
+      exportPlatformDossier() {
+        const payload = {
+          exportedAt: new Date().toISOString(),
+          system: 'Hermes Overseer Telemetry Console',
+          usersCount: this.users.length,
+          users: this.users
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `hermes_overseer_export_${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        this.showToast('Platform telemetry exported.', false);
+      }
+
       navigateBackToDirectory() {
         document.getElementById('view-user-detail').style.display = 'none';
         document.getElementById('view-user-directory').style.display = 'block';
+        document.getElementById('top-nav-current-view').textContent = 'Learner Progression & Curricula Registry';
         this.selectedUser = null;
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-
-      navigateHome() {
-        this.navigateBackToDirectory();
       }
 
       escapeHTML(str) {
@@ -1818,10 +2325,10 @@
       }
     }
 
-    // Initialize application when DOM is ready
+    // Mount on DOM Ready
     let adminApp;
     document.addEventListener('DOMContentLoaded', () => {
-      adminApp = new HermesAdminApp();
+      adminApp = new HermesOverseerApp();
       window.adminApp = adminApp;
     });
   </script>

@@ -3,1112 +3,2334 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hermes.io — Admin Dashboard</title>
-  <meta name="robots" content="noindex,nofollow">
+  <title>Hermes.io — Overseer Command Terminal & Telemetry Matrix</title>
+  <meta name="robots" content="noindex, nofollow">
 
-  <!-- Plus Jakarta Sans & JetBrains Mono -->
+  <!-- Plus Jakarta Sans & JetBrains Mono Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Phosphor Icons -->
   <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
   <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
 
-  <!-- Hermes CSS -->
+  <!-- Hermes CSS Design Tokens -->
   <link rel="stylesheet" href="css/styles.css?v=8">
 
+  <!-- Procedural Celestial Avatars -->
+  <script src="js/celestial-avatars.js"></script>
+
   <style>
-    /* ======================================
-       Admin Dashboard — Dark Theme Overrides
-       ====================================== */
+    /* ==========================================================================
+       HERMES OVERSEER TERMINAL — EXECUTIVE COMMAND SYSTEM DESIGN
+       ========================================================================== */
+    
     :root {
-      --bg-body: #0A0A0F;
-      --bg-surface: #111118;
-      --bg-surface-elevated: #16161F;
-      --bg-surface-hover: #1E1E2A;
-      --text-primary: #EAEAEA;
-      --text-secondary: #A3A3A3;
-      --text-muted: #737373;
-      --border-subtle: #232333;
-      --border-strong: #2E2E40;
-      --accent-primary: #4F46E5;
-      --accent-primary-hover: #4338CA;
-      --accent-primary-fade: rgba(79,70,229,0.15);
-      --accent-primary-text: #A5B4FC;
-      --accent-success: #6EE7B7;
-      --accent-success-fade: rgba(110,231,183,0.15);
-      --accent-danger: #F87171;
-      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
-      --shadow-md: 0 4px 20px rgba(0,0,0,0.5);
-      --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
-      --radius-sm: 6px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --overseer-bg: #07070E;
+      --overseer-surface: #0E101D;
+      --overseer-surface-elevated: #15182C;
+      --overseer-surface-card: #121424;
+      --overseer-border: rgba(255, 255, 255, 0.08);
+      --overseer-border-glow: rgba(99, 102, 241, 0.35);
+      --overseer-accent: #6366F1;
+      --overseer-accent-glow: rgba(99, 102, 241, 0.5);
+      --overseer-cyan: #06B6D4;
+      --overseer-emerald: #10B981;
+      --overseer-amber: #F59E0B;
+      --overseer-rose: #F43F5E;
+      --overseer-sidebar-width: 260px;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    [data-theme="light"] {
+      --overseer-bg: #F4F6FC;
+      --overseer-surface: #FFFFFF;
+      --overseer-surface-elevated: #EEF2FF;
+      --overseer-surface-card: #FFFFFF;
+      --overseer-border: rgba(0, 0, 0, 0.08);
+      --overseer-border-glow: rgba(79, 70, 229, 0.25);
+    }
 
-    html, body {
-      font-family: var(--font-sans);
-      background: var(--bg-body);
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--overseer-bg);
       color: var(--text-primary);
+      font-family: var(--font-sans);
       min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* ---- Navbar ---- */
-    .admin-navbar {
+    /* ==========================================================================
+       1. SECURITY CLEARANCE AUTHENTICATION GATE (FULL VIEWPORT)
+       ========================================================================== */
+    .admin-gate-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: radial-gradient(circle at 50% 30%, #121428 0%, #06060B 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: hidden;
+    }
+
+    .cosmic-cyber-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 75%);
+      pointer-events: none;
+    }
+
+    .gate-ambient-glow {
+      position: absolute;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.22) 0%, rgba(6, 182, 212, 0.08) 40%, rgba(0,0,0,0) 70%);
+      filter: blur(60px);
+      pointer-events: none;
+      animation: ambientPulse 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes ambientPulse {
+      0% { transform: scale(0.9) translate(-20px, -20px); opacity: 0.6; }
+      100% { transform: scale(1.1) translate(20px, 20px); opacity: 0.9; }
+    }
+
+    .admin-gate-card {
+      width: 100%;
+      max-width: 460px;
+      background: rgba(14, 16, 29, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 44px 40px;
+      box-shadow: 
+        0 24px 70px rgba(0, 0, 0, 0.75), 
+        0 0 0 1px rgba(99, 102, 241, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      animation: gateReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes gateReveal {
+      0% { opacity: 0; transform: scale(0.94) translateY(18px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .gate-top-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: #A5B4FC;
+      margin-bottom: 20px;
+    }
+
+    .cosmic-gate-emblem {
+      width: 76px;
+      height: 76px;
+      border-radius: 22px;
+      margin: 0 auto 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #4338CA 0%, #6366F1 50%, #06B6D4 100%);
+      box-shadow: 0 0 45px rgba(99, 102, 241, 0.55), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+      font-size: 36px;
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .gate-field-label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #94A3B8;
+      margin-bottom: 8px;
+    }
+
+    .gate-input-box {
+      width: 100%;
+      padding: 13px 18px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(8, 10, 18, 0.85);
+      color: #F8FAFC;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: var(--font-sans);
+    }
+    .gate-input-box:focus {
+      border-color: var(--overseer-accent);
+      background: rgba(12, 14, 26, 0.95);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    }
+
+    /* ==========================================================================
+       2. COMMAND CENTER WORKSPACE ARCHITECTURE (SIDEBAR + MAIN CANVAS)
+       ========================================================================== */
+    .overseer-workspace {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Sleek Cyber Command Rail (Sidebar) */
+    .overseer-sidebar {
+      width: var(--overseer-sidebar-width);
+      background: var(--overseer-surface);
+      border-right: 1px solid var(--overseer-border);
+      display: flex;
+      flex-direction: column;
       position: sticky;
       top: 0;
+      height: 100vh;
+      flex-shrink: 0;
       z-index: 100;
-      height: 60px;
-      background: rgba(17,17,24,0.9);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-subtle);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 24px 22px;
+      border-bottom: 1px solid var(--overseer-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #4F46E5, #06B6D4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFF;
+      font-size: 20px;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+      flex-shrink: 0;
+    }
+
+    .sidebar-brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-brand-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+    .sidebar-brand-subtitle {
+      font-size: 10.5px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--overseer-cyan);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .sidebar-nav-section {
+      padding: 20px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow-y: auto;
+    }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 8px 12px 6px;
+    }
+
+    .sidebar-nav-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 28px;
-      gap: 16px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: transparent;
+      border: 1px solid transparent;
     }
-
-    .nav-brand-admin {
+    .sidebar-nav-item:hover {
+      background: var(--overseer-surface-elevated);
+      color: var(--text-primary);
+    }
+    .sidebar-nav-item.active {
+      background: rgba(99, 102, 241, 0.12);
+      border-color: rgba(99, 102, 241, 0.3);
+      color: #A5B4FC;
+    }
+    .sni-left {
       display: flex;
       align-items: center;
       gap: 10px;
-      text-decoration: none;
+    }
+    .sni-left i {
+      font-size: 18px;
     }
 
-    .nav-brand-logo {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, #4F46E5, #7C3AED);
+    .sidebar-badge {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      padding: 2px 7px;
+      border-radius: 9999px;
+      background: var(--overseer-surface-elevated);
+      color: var(--text-secondary);
+      border: 1px solid var(--overseer-border);
+    }
+    .sidebar-nav-item.active .sidebar-badge {
+      background: rgba(99, 102, 241, 0.25);
+      color: #C7D2FE;
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .sidebar-system-box {
+      margin: 12px 16px;
+      padding: 14px;
+      border-radius: 12px;
+      background: var(--overseer-surface-elevated);
+      border: 1px solid var(--overseer-border);
+    }
+    .ssb-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .ssb-status-live {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #34D399;
+      font-weight: 600;
+    }
+    .status-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 10px #10B981;
+      animation: pulseGreen 2s infinite;
+    }
+    @keyframes pulseGreen {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    .sidebar-user-footer {
+      padding: 18px;
+      border-top: 1px solid var(--overseer-border);
+      background: var(--overseer-surface);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .suf-identity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .suf-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      flex-shrink: 0;
+      background: #060814;
+    }
+    .suf-text {
+      min-width: 0;
+    }
+    .suf-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .suf-role {
+      font-size: 11px;
+      color: var(--overseer-cyan);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Main Command Canvas */
+    .overseer-main-canvas {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Cyber Command HUD Navbar */
+    .command-hud-bar {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      height: 64px;
+      background: rgba(14, 16, 29, 0.85);
+      border-bottom: 1px solid var(--overseer-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+
+    .chb-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hud-breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+    .hud-breadcrumbs strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .cyber-clock-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      background: var(--overseer-surface-elevated);
+      border: 1px solid var(--overseer-border);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .cyber-clock-box strong {
+      color: var(--overseer-cyan);
+    }
+
+    .chb-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hud-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 14px;
       border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid var(--overseer-border);
+      background: var(--overseer-surface-elevated);
+      color: var(--text-secondary);
+    }
+    .hud-action-btn:hover {
+      border-color: var(--overseer-accent);
+      color: var(--text-primary);
+      transform: translateY(-1px);
+    }
+    .hud-action-btn.btn-cyber-primary {
+      background: linear-gradient(135deg, #4F46E5, #6366F1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #FFF;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
+    }
+    .hud-action-btn.btn-cyber-primary:hover {
+      box-shadow: 0 4px 18px rgba(99, 102, 241, 0.5);
+    }
+
+    /* Canvas Body Content */
+    .overseer-content-wrap {
+      padding: 32px 36px 90px;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ==========================================================================
+       3. TELEMETRY BENTO KPI GRID
+       ========================================================================== */
+    .telemetry-bento-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 1200px) {
+      .telemetry-bento-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 680px) {
+      .telemetry-bento-grid { grid-template-columns: 1fr; }
+    }
+
+    .bento-kpi-card {
+      background: var(--overseer-surface-card);
+      border: 1px solid var(--overseer-border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bento-kpi-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--overseer-border-glow);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28), 0 0 0 1px var(--overseer-accent-glow);
+    }
+    .bento-kpi-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--card-glow-color, var(--overseer-accent)), transparent);
+      opacity: 0.7;
+    }
+
+    .bkc-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .bkc-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+    .bkc-icon-ring {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .ring-indigo { background: rgba(99, 102, 241, 0.12); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.25); }
+    .ring-cyan { background: rgba(6, 182, 212, 0.12); color: #22D3EE; border: 1px solid rgba(6, 182, 212, 0.25); }
+    .ring-emerald { background: rgba(16, 185, 129, 0.12); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.25); }
+    .ring-rose { background: rgba(244, 63, 94, 0.12); color: #FB7185; border: 1px solid rgba(244, 63, 94, 0.25); }
+
+    .bkc-value-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .bkc-number {
+      font-size: 36px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+    .bkc-pill-metric {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-family: var(--font-mono);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .pill-growth { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    .bkc-footer {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .bkc-footer i { font-size: 14px; opacity: 0.8; }
+
+    /* ==========================================================================
+       4. COMMAND MATRIX CONTROLS (SEARCH, FILTERS, VIEW MODES)
+       ========================================================================== */
+    .controls-deck-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      padding: 16px 20px;
+      background: var(--overseer-surface);
+      border: 1px solid var(--overseer-border);
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-telemetry-box {
+      flex: 1;
+      min-width: 280px;
+      position: relative;
+    }
+    .search-telemetry-box i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 18px;
+    }
+    .search-telemetry-input {
+      width: 100%;
+      padding: 11px 16px 11px 44px;
+      border-radius: 9999px;
+      border: 1px solid var(--overseer-border);
+      background: var(--overseer-surface-elevated);
+      color: var(--text-primary);
+      font-size: 13.5px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .search-telemetry-input:focus {
+      border-color: var(--overseer-accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+    }
+
+    .filter-chips-cluster {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip-btn {
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      border: 1px solid var(--overseer-border);
+      background: var(--overseer-surface-elevated);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-chip-btn:hover {
+      border-color: var(--overseer-accent);
+      color: var(--text-primary);
+    }
+    .filter-chip-btn.active {
+      background: rgba(99, 102, 241, 0.18);
+      border-color: var(--overseer-accent);
+      color: #A5B4FC;
+    }
+
+    .deck-sort-select {
+      padding: 8px 14px;
+      border-radius: 9999px;
+      border: 1px solid var(--overseer-border);
+      background: var(--overseer-surface-elevated);
+      color: var(--text-primary);
+      font-size: 12.5px;
+      font-weight: 500;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .view-mode-toggle-group {
+      display: flex;
+      border: 1px solid var(--overseer-border);
+      background: var(--overseer-surface-elevated);
+      border-radius: 9999px;
+      padding: 3px;
+    }
+    .vmt-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      color: var(--text-muted);
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-
-    .nav-brand-logo i { color: #fff; font-size: 16px; }
-
-    .nav-brand-text {
-      font-size: 18px;
-      font-weight: 800;
+    .vmt-btn.active {
+      background: var(--overseer-surface);
       color: var(--text-primary);
-      letter-spacing: -0.3px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     }
 
-    .nav-brand-text span { color: var(--accent-primary-text); }
+    /* ==========================================================================
+       5. CYBERNETIC CARDS MATRIX (GRID VIEW)
+       ========================================================================== */
+    .telemetry-cards-matrix {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      gap: 22px;
+    }
 
-    .nav-badge {
+    .cyber-user-card {
+      background: var(--overseer-surface-card);
+      border: 1px solid var(--overseer-border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .cyber-user-card:hover {
+      border-color: var(--overseer-border-glow);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--overseer-accent-glow);
+      transform: translateY(-4px);
+    }
+
+    .cuc-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .cuc-avatar-halo {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+      background: #050711;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .cuc-avatar-halo svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .cuc-identity-block {
+      flex: 1;
+      min-width: 0;
+    }
+    .cuc-user-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cuc-user-email {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+    .cuc-id-chip {
+      display: inline-block;
       font-size: 11px;
-      font-weight: 600;
-      background: var(--accent-primary-fade);
-      color: var(--accent-primary-text);
-      border: 1px solid rgba(79,70,229,0.3);
-      border-radius: 20px;
-      padding: 3px 10px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      margin-top: 5px;
+    }
+
+    .cuc-telemetry-triad {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 10px;
+      background: var(--overseer-surface-elevated);
+      border: 1px solid var(--overseer-border);
+      text-align: center;
+    }
+    .ctt-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .ctt-number {
+      font-size: 16px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--text-primary);
+    }
+    .ctt-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
       letter-spacing: 0.05em;
       text-transform: uppercase;
     }
 
-    .nav-right-admin { display: flex; align-items: center; gap: 12px; }
-
-    .nav-stat {
+    .cuc-progress-section {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .cuc-progress-label {
+      display: flex;
+      justify-content: space-between;
       font-size: 12px;
-      color: var(--text-muted);
-      font-family: var(--font-mono);
+      color: var(--text-secondary);
+    }
+    .cuc-progress-track {
+      height: 8px;
+      background: var(--overseer-surface-elevated);
+      border-radius: 9999px;
+      overflow: hidden;
+      border: 1px solid var(--overseer-border);
+    }
+    .cuc-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #4F46E5, #06B6D4);
+      border-radius: 9999px;
+      transition: width 0.4s ease;
     }
 
-    .btn-logout {
+    .cuc-card-footer {
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 7px 14px;
-      background: rgba(248,113,113,0.1);
-      border: 1px solid rgba(248,113,113,0.25);
-      border-radius: var(--radius-md);
-      color: #FCA5A5;
-      font-family: var(--font-sans);
-      font-size: 13px;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--overseer-border);
+      font-size: 12.5px;
       font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
+      color: #A5B4FC;
+      transition: color 0.2s;
+    }
+    .cyber-user-card:hover .cuc-card-footer {
+      color: #C7D2FE;
     }
 
-    .btn-logout:hover {
-      background: rgba(248,113,113,0.18);
-      border-color: rgba(248,113,113,0.4);
+    /* ==========================================================================
+       6. ENTERPRISE TELEMETRY TABLE (COMPACT VIEW)
+       ========================================================================== */
+    .enterprise-table-frame {
+      background: var(--overseer-surface-card);
+      border: 1px solid var(--overseer-border);
+      border-radius: 16px;
+      overflow-x: auto;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
     }
 
-    /* ---- Main Layout ---- */
-    .admin-main {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 32px 28px;
+    .enterprise-data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
     }
-
-    /* ---- Page Header ---- */
-    .page-header {
-      margin-bottom: 28px;
-    }
-
-    .page-title {
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--text-primary);
-      letter-spacing: -0.4px;
-      margin-bottom: 4px;
-    }
-
-    .page-title .accent { color: var(--accent-primary-text); }
-
-    .page-subtitle {
-      font-size: 14px;
+    .enterprise-data-table th {
+      background: var(--overseer-surface-elevated);
       color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--overseer-border);
+      white-space: nowrap;
+    }
+    .enterprise-data-table td {
+      padding: 16px 20px;
+      font-size: 13.5px;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--overseer-border);
+      vertical-align: middle;
+    }
+    .enterprise-data-table tr:last-child td { border-bottom: none; }
+    .enterprise-data-table tr:hover td { background: var(--overseer-surface-elevated); }
+
+    /* ==========================================================================
+       7. MASTER USER DOSSIER & MILESTONE TREE EXPLORER
+       ========================================================================== */
+    .dossier-slide-canvas {
+      animation: dossierReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes dossierReveal {
+      0% { opacity: 0; transform: translateY(14px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
 
-    /* ---- Search & Controls ---- */
-    .controls-row {
+    .dossier-nav-bar {
       display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
+      gap: 16px;
       margin-bottom: 24px;
       flex-wrap: wrap;
     }
 
-    .search-wrap {
-      flex: 1;
-      min-width: 200px;
-      max-width: 360px;
+    .dossier-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: 9999px;
+      background: var(--overseer-surface);
+      border: 1px solid var(--overseer-border);
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .dossier-back-btn:hover {
+      background: var(--overseer-surface-elevated);
+      border-color: var(--overseer-accent);
+      color: #A5B4FC;
+      transform: translateX(-3px);
+    }
+
+    .dossier-cockpit-hero {
+      background: var(--overseer-surface-card);
+      border: 1px solid var(--overseer-border);
+      border-radius: 18px;
+      padding: 36px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16);
       position: relative;
+      overflow: hidden;
     }
-
-    .search-wrap i {
+    .dossier-cockpit-hero::before {
+      content: '';
       position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      font-size: 15px;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 9px 12px 9px 38px;
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      color: var(--text-primary);
-      font-family: var(--font-sans);
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .search-input::placeholder { color: var(--text-muted); }
-    .search-input:focus {
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
-    }
-
-    .stats-pills { display: flex; gap: 10px; margin-left: auto; flex-wrap: wrap; }
-
-    .stat-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      white-space: nowrap;
-    }
-
-    .stat-pill i { font-size: 14px; }
-    .stat-pill .val { color: var(--text-primary); font-size: 14px; font-weight: 700; }
-
-    /* ---- Card Grid ---- */
-    .users-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    .user-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      box-shadow: var(--shadow-md);
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-      cursor: default;
-    }
-
-    .user-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(79,70,229,0.3);
-      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(79,70,229,0.1);
-    }
-
-    .card-top {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-
-    .planet-avatar {
-      width: 52px;
-      height: 52px;
+      top: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
       border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .dch-identity {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .dch-avatar-huge {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
       overflow: hidden;
+      background: #050711;
       flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
+    .dch-avatar-huge svg { width: 100%; height: 100%; }
 
-    .planet-avatar svg, .planet-avatar img {
-      width: 100%;
-      height: 100%;
-    }
-
-    .card-user-info { flex: 1; min-width: 0; }
-
-    .card-user-name {
-      font-size: 15px;
-      font-weight: 700;
+    .dch-title-wrap h2 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
       color: var(--text-primary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-bottom: 2px;
-    }
-
-    .card-user-email {
-      font-size: 12px;
-      color: var(--text-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* ---- Card Stats ---- */
-    .card-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .stat-box {
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 10px 12px;
-    }
-
-    .stat-box-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text-muted);
       margin-bottom: 4px;
     }
+    .dch-title-wrap p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
 
-    .stat-box-value {
+    .dch-stats-dock {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .dch-stat-pod {
+      text-align: right;
+    }
+    @media (max-width: 600px) {
+      .dch-stat-pod { text-align: left; }
+    }
+    .dsp-value {
+      font-size: 28px;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+    .dsp-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Tabs & Panels */
+    .dossier-tab-strip {
+      display: flex;
+      gap: 12px;
+      border-bottom: 1px solid var(--overseer-border);
+      margin-bottom: 24px;
+    }
+    .dts-tab-btn {
+      padding: 12px 22px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      transition: all 0.2s;
+    }
+    .dts-tab-btn.active {
+      color: var(--overseer-accent);
+      border-bottom-color: var(--overseer-accent);
+    }
+    .dts-tab-btn:hover:not(.active) {
+      color: var(--text-primary);
+    }
+
+    /* Roadmap Item in Dossier */
+    .dossier-roadmap-card {
+      background: var(--overseer-surface-card);
+      border: 1px solid var(--overseer-border);
+      border-radius: 16px;
+      padding: 26px 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+      margin-bottom: 20px;
+    }
+
+    .drc-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .drc-title {
       font-size: 20px;
       font-weight: 800;
       color: var(--text-primary);
-      font-family: var(--font-mono);
-    }
-
-    /* ---- Progress bar ---- */
-    .progress-wrap { margin-bottom: 16px; }
-
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--text-muted);
       margin-bottom: 6px;
     }
-
-    .progress-bar-bg {
-      height: 6px;
-      background: var(--bg-surface-elevated);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent-primary), #7C3AED);
-      border-radius: 3px;
-      transition: width 0.5s ease;
-    }
-
-    /* ---- Last active ---- */
-    .card-meta {
-      font-size: 11px;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-bottom: 14px;
-    }
-
-    /* ---- View button ---- */
-    .btn-view {
-      width: 100%;
-      padding: 9px;
-      background: var(--accent-primary-fade);
-      border: 1px solid rgba(79,70,229,0.25);
-      border-radius: var(--radius-md);
-      color: var(--accent-primary-text);
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .btn-view:hover {
-      background: rgba(79,70,229,0.25);
-      border-color: rgba(79,70,229,0.4);
-    }
-
-    /* ---- Detail Panel ---- */
-    .detail-panel {
-      display: none;
-    }
-
-    .detail-panel.active { display: block; }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      color: var(--text-secondary);
-      font-family: var(--font-sans);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-      margin-bottom: 24px;
-    }
-
-    .back-btn:hover { background: var(--bg-surface-hover); color: var(--text-primary); }
-
-    .detail-profile {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      padding: 24px 28px;
-      margin-bottom: 28px;
-      box-shadow: var(--shadow-md);
-    }
-
-    .detail-avatar {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      overflow: hidden;
-      flex-shrink: 0;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-    }
-
-    .detail-avatar svg, .detail-avatar img {
-      width: 100%;
-      height: 100%;
-    }
-
-    .detail-user-name {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--text-primary);
-      margin-bottom: 4px;
-    }
-
-    .detail-user-email {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-    }
-
-    .detail-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-
-    .chip {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 20px;
-      border: 1px solid var(--border-subtle);
-      background: var(--bg-surface-elevated);
-      color: var(--text-secondary);
-    }
-
-    /* ---- Section heading ---- */
-    .section-heading {
+    .drc-goal {
       font-size: 14px;
-      font-weight: 700;
-      color: var(--text-primary);
-      letter-spacing: 0.02em;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .drc-chips-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .cyber-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 11px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--overseer-surface-elevated);
+      border: 1px solid var(--overseer-border);
+      color: var(--text-secondary);
+    }
+
+    /* Milestone Explorer Tree Box */
+    .milestone-constellation-box {
+      padding: 20px 22px;
+      border-radius: 12px;
+      background: var(--overseer-surface-elevated);
+      border: 1px solid var(--overseer-border);
+    }
+    .mcb-header {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       margin-bottom: 14px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-
-    .section-heading i { color: var(--accent-primary-text); font-size: 16px; }
-
-    /* ---- Tables ---- */
-    .data-table-wrap {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: var(--shadow-md);
-      margin-bottom: 28px;
-    }
-
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .data-table th {
-      padding: 12px 16px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--text-muted);
-      background: var(--bg-surface-elevated);
-      border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .data-table td {
-      padding: 13px 16px;
-      font-size: 13px;
-      color: var(--text-secondary);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-
-    .data-table tr:last-child td { border-bottom: none; }
-
-    .data-table tr:hover td { background: var(--bg-surface-hover); }
-
-    .data-table td strong { color: var(--text-primary); font-weight: 600; }
-
-    .progress-mini-bar {
+    .milestone-checkpoint-row {
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+      padding: 11px 16px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: var(--overseer-surface-card);
+      border: 1px solid var(--overseer-border);
+      font-size: 13.5px;
     }
-
-    .progress-mini-bg {
-      flex: 1;
-      height: 5px;
-      background: var(--bg-surface-elevated);
-      border-radius: 3px;
-      overflow: hidden;
+    .mcr-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-
-    .progress-mini-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent-primary), #7C3AED);
-      border-radius: 3px;
+    .mcr-status-beacon {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
     }
+    .beacon-completed { background: #10B981; box-shadow: 0 0 10px #10B981; }
+    .beacon-in_progress { background: #F59E0B; box-shadow: 0 0 10px #F59E0B; }
+    .beacon-not_started { background: #64748B; }
 
-    .score-badge {
+    /* Score Badges */
+    .exam-grade-badge {
       display: inline-flex;
       align-items: center;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 12px;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 9999px;
       font-weight: 700;
       font-family: var(--font-mono);
+      font-size: 12px;
     }
+    .grade-mastered { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.35); }
+    .grade-passed { background: rgba(245, 158, 11, 0.15); color: #FBBF24; border: 1px solid rgba(245, 158, 11, 0.35); }
+    .grade-review { background: rgba(244, 63, 94, 0.15); color: #FB7185; border: 1px solid rgba(244, 63, 94, 0.35); }
 
-    .score-badge.good { background: var(--accent-success-fade); color: var(--accent-success); }
-    .score-badge.mid  { background: rgba(251,191,36,0.12); color: #FCD34D; }
-    .score-badge.low  { background: rgba(248,113,113,0.12); color: #FCA5A5; }
-
-    /* ---- Loading & Empty States ---- */
-    .state-loading, .state-empty {
+    .empty-telemetry-state {
       text-align: center;
       padding: 64px 24px;
       color: var(--text-muted);
+      background: var(--overseer-surface-card);
+      border: 1px dashed var(--overseer-border);
+      border-radius: 16px;
     }
+    .empty-telemetry-state i { font-size: 48px; margin-bottom: 12px; opacity: 0.6; }
+    .empty-telemetry-state h3 { font-size: 18px; color: var(--text-primary); margin-bottom: 6px; }
 
-    .state-loading .spinner-ring {
-      width: 40px;
-      height: 40px;
-      border: 3px solid var(--border-subtle);
-      border-top-color: var(--accent-primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
-    }
-
-    .state-empty i { font-size: 40px; margin-bottom: 12px; display: block; }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ---- Toast ---- */
-    .admin-toast {
+    /* Toast Notification */
+    #admin-toast {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      z-index: 9999;
-      padding: 12px 18px;
-      border-radius: var(--radius-md);
-      background: var(--bg-surface-elevated);
-      border: 1px solid var(--border-subtle);
-      font-size: 13px;
+      z-index: 1000000;
+      padding: 13px 22px;
+      border-radius: 10px;
+      background: #111322;
+      color: #E0E7FF;
+      border: 1px solid var(--overseer-accent);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+      font-size: 13.5px;
       font-weight: 600;
-      color: var(--text-primary);
-      box-shadow: var(--shadow-lg);
       display: flex;
       align-items: center;
-      gap: 8px;
-      transform: translateY(80px);
+      gap: 10px;
       opacity: 0;
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform: translateY(12px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    #admin-toast.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    .admin-toast.show { transform: translateY(0); opacity: 1; }
-    .admin-toast.error { border-color: rgba(248,113,113,0.3); color: #FCA5A5; }
-
-    @media (max-width: 640px) {
-      .admin-main { padding: 20px 16px; }
-      .admin-navbar { padding: 0 16px; }
-      .detail-profile { flex-direction: column; text-align: center; }
-      .detail-chips { justify-content: center; }
+    @media (max-width: 900px) {
+      .overseer-sidebar {
+        display: none;
+      }
+      .command-hud-bar {
+        padding: 0 18px;
+      }
+      .overseer-content-wrap {
+        padding: 20px 18px 80px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <header class="admin-navbar">
-    <a class="nav-brand-admin" href="/admin/dashboard">
-      <div class="nav-brand-logo"><i class="ph ph-planet"></i></div>
-      <div class="nav-brand-text">Hermes<span>.io</span></div>
-      <div class="nav-badge">Admin Panel</div>
-    </a>
-    <div class="nav-right-admin">
-      <span class="nav-stat" id="nav-stat-users">—</span>
-      <button class="btn-logout" id="btn-logout">
-        <i class="ph ph-sign-out"></i> Logout
-      </button>
-    </div>
-  </header>
+  <!-- ==========================================================================
+       1. SECURITY CLEARANCE ENCLAVE (FULL VIEWPORT LOGIN GATE)
+       ========================================================================== -->
+  <div class="admin-gate-overlay" id="admin-gate-overlay">
+    <div class="cosmic-cyber-grid"></div>
+    <div class="gate-ambient-glow"></div>
 
-  <!-- Main Content -->
-  <main class="admin-main">
+    <div class="admin-gate-card">
+      <div style="text-align: center;">
+        <span class="gate-top-badge">
+          <i class="ph-fill ph-shield-check"></i>
+          <span>Level 5 Overseer Enclave</span>
+        </span>
 
-    <!-- Users List View -->
-    <div id="view-users">
-      <div class="page-header">
-        <h1 class="page-title">User <span class="accent">Overview</span></h1>
-        <p class="page-subtitle">All registered Hermes.io users and their learning progress</p>
+        <div class="cosmic-gate-emblem">
+          <i class="ph-fill ph-fingerprint"></i>
+        </div>
+
+        <h2 style="font-size: 23px; font-weight: 800; color: #FFFFFF; margin-bottom: 6px; letter-spacing: -0.02em;">
+          Hermes Overseer Terminal
+        </h2>
+        <p style="font-size: 13px; color: #94A3B8; line-height: 1.5; margin-bottom: 24px;">
+          Synchronized telemetry interface. Authenticate overseer credentials to inspect global learner trees and exam diagnostics.
+        </p>
       </div>
 
-      <div class="controls-row">
-        <div class="search-wrap">
-          <i class="ph ph-magnifying-glass"></i>
-          <input class="search-input" id="search-input" type="text" placeholder="Search users by name or email…" />
+      <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <label class="gate-field-label">Overseer Username or Email</label>
+          <input type="text" id="admin-email-input" required class="gate-input-box" placeholder="" autocomplete="off">
         </div>
-        <div class="stats-pills">
-          <div class="stat-pill"><i class="ph ph-users"></i> Total <span class="val" id="stat-total">—</span></div>
-          <div class="stat-pill"><i class="ph ph-chart-bar"></i> Avg Progress <span class="val" id="stat-avg-progress">—</span></div>
+
+        <div>
+          <label class="gate-field-label">Access Cipher / Password</label>
+          <input type="password" id="admin-password-input" required class="gate-input-box" placeholder="" autocomplete="off">
+        </div>
+
+        <div id="gate-error-message" style="display: none; padding: 11px 14px; border-radius: 8px; background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.35); color: #FDA4AF; font-size: 13px; display: flex; align-items: center; gap: 8px;">
+          <i class="ph ph-warning-circle"></i>
+          <span id="gate-error-text">Access Denied: Invalid credentials.</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="btn-admin-submit" style="width: 100%; padding: 13px; font-size: 14px; font-weight: 700; margin-top: 6px; border-radius: 10px;">
+          <i class="ph ph-key"></i>
+          <span>Decrypt Terminal</span>
+        </button>
+
+        <p style="text-align: center; font-size: 12px; color: #64748B; margin-top: 10px;">
+          Return to <a href="/" style="color: #818CF8; text-decoration: none;">Public Learning Dashboard</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       2. COMMAND CENTER WORKSPACE (SIDEBAR + MAIN CANVAS)
+       ========================================================================== -->
+  <div class="overseer-workspace" id="admin-main-workspace" style="display: none;">
+
+    <!-- Left Overseer Command Rail (Sidebar) -->
+    <aside class="overseer-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand-icon">
+          <i class="ph-fill ph-terminal-window"></i>
+        </div>
+        <div class="sidebar-brand-text">
+          <span class="sidebar-brand-title">Hermes Overseer</span>
+          <span class="sidebar-brand-subtitle">Telemetry Matrix</span>
         </div>
       </div>
 
-      <div id="users-container">
-        <div class="state-loading">
-          <div class="spinner-ring"></div>
-          <p>Loading users…</p>
+      <div class="sidebar-nav-section">
+        <span class="sidebar-section-label">Observability</span>
+
+        <button class="sidebar-nav-item active" id="nav-btn-directory" onclick="adminApp.navigateBackToDirectory()">
+          <div class="sni-left">
+            <i class="ph ph-users-three"></i>
+            <span>Learner Matrix</span>
+          </div>
+          <span class="sidebar-badge" id="side-learners-count">—</span>
+        </button>
+
+        <button class="sidebar-nav-item" onclick="adminApp.filterBy('has_roadmaps')">
+          <div class="sni-left">
+            <i class="ph ph-tree-structure"></i>
+            <span>Curricula Trees</span>
+          </div>
+          <span class="sidebar-badge" id="side-roadmaps-count">—</span>
+        </button>
+
+        <button class="sidebar-nav-item" onclick="adminApp.filterBy('has_quizzes')">
+          <div class="sni-left">
+            <i class="ph ph-exam"></i>
+            <span>Exam Diagnostics</span>
+          </div>
+          <span class="sidebar-badge" id="side-quizzes-count">—</span>
+        </button>
+
+        <span class="sidebar-section-label" style="margin-top: 14px;">Terminal Controls</span>
+
+        <button class="sidebar-nav-item" onclick="adminApp.loadDashboardData()">
+          <div class="sni-left">
+            <i class="ph ph-arrows-clockwise"></i>
+            <span>Sync Live Telemetry</span>
+          </div>
+        </button>
+
+        <button class="sidebar-nav-item" onclick="adminApp.exportPlatformDossier()">
+          <div class="sni-left">
+            <i class="ph ph-download-simple"></i>
+            <span>Export Registry JSON</span>
+          </div>
+        </button>
+
+        <!-- System Heartbeat Box -->
+        <div class="sidebar-system-box" style="margin-top: auto;">
+          <div class="ssb-header">
+            <span>Link Telemetry</span>
+            <div class="ssb-status-live">
+              <span class="status-pulse-dot"></span>
+              <span>ONLINE</span>
+            </div>
+          </div>
+          <div style="font-size: 11.5px; color: var(--text-secondary); font-family: var(--font-mono); line-height: 1.6;">
+            Latency: <strong style="color: var(--overseer-cyan);" id="hud-latency-val">9ms</strong><br>
+            Security: <strong>HMAC-SHA256</strong><br>
+            Mode: <strong>Serverless Matrix</strong>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- User Detail View -->
-    <div id="view-detail" class="detail-panel">
-      <button class="back-btn" id="btn-back">
-        <i class="ph ph-arrow-left"></i> Back to Users
-      </button>
-
-      <div id="detail-profile-section"></div>
-      <div id="detail-roadmaps-section"></div>
-      <div id="detail-quizzes-section"></div>
-    </div>
-
-  </main>
-
-  <!-- Toast -->
-  <div class="admin-toast" id="admin-toast"></div>
-
-  <script>
-    // ========================================
-    // Planet Avatar Generator
-    // ========================================
-    function hashSeed(str) {
-      let h = 5381;
-      for (let i = 0; i < str.length; i++) {
-        h = ((h << 5) + h) + str.charCodeAt(i);
-        h = h & 0x7FFFFFFF;
-      }
-      return h;
-    }
-
-    const PALETTES = [
-      { planet: '#E8724A', ring: '#F0A07A', glow: 'rgba(232,114,74,0.4)'  }, // Rusty Orange
-      { planet: '#5EC9E8', ring: '#A0DCF0', glow: 'rgba(94,201,232,0.4)'  }, // Icy Blue
-      { planet: '#4AE88B', ring: '#7AF0B5', glow: 'rgba(74,232,139,0.4)'  }, // Emerald
-      { planet: '#B07FE8', ring: '#D0AAFF', glow: 'rgba(176,127,232,0.4)' }, // Lavender
-      { planet: '#E8774A', ring: '#FFAA80', glow: 'rgba(232,119,74,0.4)'  }, // Coral
-      { planet: '#E8C840', ring: '#F0E080', glow: 'rgba(232,200,64,0.4)'  }, // Golden
-      { planet: '#E84A6C', ring: '#FF80A0', glow: 'rgba(232,74,108,0.4)'  }, // Crimson
-      { planet: '#40C8B0', ring: '#80E8D8', glow: 'rgba(64,200,176,0.4)'  }, // Teal
-    ];
-
-    function generatePlanetAvatarSVG(seed, size = 100) {
-      const h = hashSeed(seed || 'default');
-      const palette = PALETTES[h % PALETTES.length];
-      const hasRing   = (h >> 3) % 3 !== 0;
-      const hasMoon   = (h >> 6) % 2 === 0;
-      const starCount = 6 + (h % 7);
-      const ringAngle = 15 + (h % 20);
-      const planetX   = size / 2;
-      const planetY   = size / 2;
-      const planetR   = size * 0.28;
-
-      let stars = '';
-      for (let i = 0; i < starCount; i++) {
-        const sx = ((hashSeed(seed + i) * 13) % (size - 8)) + 4;
-        const sy = ((hashSeed(seed + i + 99) * 17) % (size - 8)) + 4;
-        const sr = 0.5 + ((hashSeed(seed + i + 33)) % 10) * 0.1;
-        stars += `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${sr.toFixed(1)}" fill="rgba(255,255,255,${0.4 + ((hashSeed(seed+i+7)) % 6) * 0.1})" />`;
-      }
-
-      // Surface detail spots
-      const s1x = planetX - planetR * 0.3;
-      const s1y = planetY - planetR * 0.2;
-      const s2x = planetX + planetR * 0.25;
-      const s2y = planetY + planetR * 0.15;
-
-      let ring = '';
-      if (hasRing) {
-        const rx = planetR * 1.55;
-        const ry = planetR * 0.28;
-        ring = `
-          <ellipse cx="${planetX}" cy="${planetY}" rx="${rx}" ry="${ry}"
-            fill="none" stroke="${palette.ring}" stroke-width="3" opacity="0.55"
-            transform="rotate(${ringAngle}, ${planetX}, ${planetY})" />
-          <ellipse cx="${planetX}" cy="${planetY}" rx="${rx * 0.85}" ry="${ry * 0.85}"
-            fill="none" stroke="${palette.ring}" stroke-width="1.5" opacity="0.3"
-            transform="rotate(${ringAngle}, ${planetX}, ${planetY})" />
-        `;
-      }
-
-      let moon = '';
-      if (hasMoon) {
-        const mx = planetX + planetR * 1.5;
-        const my = planetY - planetR * 1.0;
-        moon = `<circle cx="${mx}" cy="${my}" r="${planetR * 0.22}" fill="#888" opacity="0.7" />`;
-      }
-
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
-        <!-- Background -->
-        <circle cx="${size/2}" cy="${size/2}" r="${size/2}" fill="#0A0A18" />
-        <!-- Stars -->
-        ${stars}
-        <!-- Ring behind planet -->
-        ${hasRing ? `<ellipse cx="${planetX}" cy="${planetY}" rx="${planetR * 1.55}" ry="${planetR * 0.28}"
-          fill="none" stroke="${palette.ring}" stroke-width="5" opacity="0.25"
-          transform="rotate(${ringAngle}, ${planetX}, ${planetY})" clip-path="url(#planet-clip-${h})" />` : ''}
-        <!-- Planet glow -->
-        <circle cx="${planetX}" cy="${planetY}" r="${planetR + 4}" fill="${palette.glow}" />
-        <!-- Planet -->
-        <circle cx="${planetX}" cy="${planetY}" r="${planetR}" fill="${palette.planet}" />
-        <!-- Surface shading -->
-        <circle cx="${planetX - planetR * 0.25}" cy="${planetY - planetR * 0.25}" r="${planetR * 0.7}"
-          fill="rgba(255,255,255,0.07)" />
-        <!-- Surface spots -->
-        <circle cx="${s1x}" cy="${s1y}" r="${planetR * 0.14}" fill="rgba(0,0,0,0.18)" />
-        <circle cx="${s2x}" cy="${s2y}" r="${planetR * 0.09}" fill="rgba(0,0,0,0.14)" />
-        <!-- Ring front -->
-        ${ring}
-        <!-- Moon -->
-        ${moon}
-      </svg>`;
-    }
-
-    // ========================================
-    // Admin Token
-    // ========================================
-    function getAdminToken() {
-      return sessionStorage.getItem('hermes_admin_token') || '';
-    }
-
-    function requireAuth() {
-      const token = getAdminToken();
-      if (!token) {
-        window.location.href = '/admin';
-        return false;
-      }
-      return true;
-    }
-
-    // ========================================
-    // Toast
-    // ========================================
-    let toastTimer;
-    function showToast(msg, type = 'info') {
-      const el = document.getElementById('admin-toast');
-      el.className = 'admin-toast' + (type === 'error' ? ' error' : '');
-      el.innerHTML = `<i class="ph ${type === 'error' ? 'ph-warning-circle' : 'ph-check-circle'}"></i> ${msg}`;
-      clearTimeout(toastTimer);
-      requestAnimationFrame(() => {
-        el.classList.add('show');
-        toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
-      });
-    }
-
-    // ========================================
-    // Date helpers
-    // ========================================
-    function fmtDate(iso) {
-      if (!iso) return 'N/A';
-      try {
-        return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-      } catch { return iso; }
-    }
-
-    function timeAgo(iso) {
-      if (!iso) return 'N/A';
-      const diff = Date.now() - new Date(iso).getTime();
-      const d = Math.floor(diff / 86400000);
-      if (d === 0) return 'Today';
-      if (d === 1) return 'Yesterday';
-      if (d < 30) return `${d} days ago`;
-      const m = Math.floor(d / 30);
-      if (m < 12) return `${m}mo ago`;
-      return `${Math.floor(m / 12)}yr ago`;
-    }
-
-    // ========================================
-    // Render Users Grid
-    // ========================================
-    let allUsers = [];
-
-    function renderUsers(users) {
-      const container = document.getElementById('users-container');
-      if (!users || users.length === 0) {
-        container.innerHTML = `<div class="state-empty">
-          <i class="ph ph-users-three"></i>
-          <p>No users found</p>
-        </div>`;
-        return;
-      }
-
-      const totalProgress = users.reduce((s, u) => s + (u.avgProgress || 0), 0);
-      const avgProgress = users.length ? Math.round(totalProgress / users.length) : 0;
-
-      document.getElementById('stat-total').textContent = users.length;
-      document.getElementById('stat-avg-progress').textContent = avgProgress + '%';
-      document.getElementById('nav-stat-users').textContent = `${users.length} users`;
-
-      const grid = document.createElement('div');
-      grid.className = 'users-grid';
-
-      users.forEach(user => {
-        const avatarSVG = generatePlanetAvatarSVG(user.email || user.id, 52);
-        const progress = Math.min(100, Math.round(user.avgProgress || 0));
-        const card = document.createElement('div');
-        card.className = 'user-card';
-        card.innerHTML = `
-          <div class="card-top">
-            <div class="planet-avatar">${avatarSVG}</div>
-            <div class="card-user-info">
-              <div class="card-user-name">${escapeHTML(user.name || 'Unknown')}</div>
-              <div class="card-user-email">${escapeHTML(user.email || '')}</div>
-            </div>
+      <!-- Overseer User Profile Footer -->
+      <div class="sidebar-user-footer">
+        <div class="suf-identity">
+          <div class="suf-avatar" id="sidebar-admin-avatar"></div>
+          <div class="suf-text">
+            <div class="suf-name" id="sidebar-admin-name">Cronus</div>
+            <div class="suf-role">Terminal Overseer</div>
           </div>
-          <div class="card-stats">
-            <div class="stat-box">
-              <div class="stat-box-label">Roadmaps</div>
-              <div class="stat-box-value">${user.roadmapCount || 0}</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-box-label">Avg Progress</div>
-              <div class="stat-box-value">${progress}%</div>
-            </div>
+        </div>
+
+        <button class="hud-action-btn" style="padding: 6px 10px;" onclick="adminApp.logout()" title="Exit Terminal">
+          <i class="ph ph-sign-out"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Command Canvas -->
+    <div class="overseer-main-canvas">
+
+      <!-- Top Executive HUD Bar -->
+      <header class="command-hud-bar">
+        <div class="chb-left">
+          <div class="hud-breadcrumbs">
+            <span>Overseer Console</span>
+            <span style="color: var(--text-muted);">/</span>
+            <strong id="top-nav-current-view">Learner Progression & Curricula Registry</strong>
           </div>
-          <div class="progress-wrap">
-            <div class="progress-label">
-              <span>Overall Progress</span>
-              <span>${progress}%</span>
-            </div>
-            <div class="progress-bar-bg">
-              <div class="progress-bar-fill" style="width:${progress}%"></div>
-            </div>
-          </div>
-          <div class="card-meta">
+        </div>
+
+        <div class="chb-right">
+          <!-- Cyber Clock -->
+          <div class="cyber-clock-box">
             <i class="ph ph-clock"></i>
-            Last active ${timeAgo(user.updatedAt || user.createdAt)}
+            <span id="cyber-clock-display">00:00:00 UTC</span>
           </div>
-          <button class="btn-view" data-uid="${escapeHTML(user.id)}">
-            <i class="ph ph-arrow-square-out"></i> View Details →
+
+          <!-- Theme Switcher -->
+          <button class="hud-action-btn" id="admin-theme-btn" title="Toggle Theme">
+            <i class="ph ph-sun"></i>
           </button>
-        `;
-        card.querySelector('.btn-view').addEventListener('click', () => openDetail(user));
-        grid.appendChild(card);
-      });
 
-      container.innerHTML = '';
-      container.appendChild(grid);
-    }
+          <!-- Refresh Data -->
+          <button class="hud-action-btn" onclick="adminApp.loadDashboardData()" title="Sync Telemetry">
+            <i class="ph ph-arrows-clockwise" id="hud-sync-icon"></i>
+            <span>Sync</span>
+          </button>
 
-    // ========================================
-    // Open Detail View
-    // ========================================
-    async function openDetail(user) {
-      if (!requireAuth()) return;
+          <!-- Exit Terminal -->
+          <button class="hud-action-btn" onclick="adminApp.logout()">
+            <i class="ph ph-power"></i>
+            <span>Lock</span>
+          </button>
+        </div>
+      </header>
 
-      document.getElementById('view-users').style.display = 'none';
-      const detail = document.getElementById('view-detail');
-      detail.classList.add('active');
+      <!-- Main Canvas Container -->
+      <main class="overseer-content-wrap">
 
-      // Profile header
-      const avatarSVG = generatePlanetAvatarSVG(user.email || user.id, 72);
-      document.getElementById('detail-profile-section').innerHTML = `
-        <div class="detail-profile">
-          <div class="detail-avatar">${avatarSVG}</div>
-          <div>
-            <div class="detail-user-name">${escapeHTML(user.name || 'Unknown')}</div>
-            <div class="detail-user-email">${escapeHTML(user.email || '')}</div>
-            <div class="detail-chips">
-              <div class="chip"><i class="ph ph-tree-structure"></i> ${user.roadmapCount || 0} roadmaps</div>
-              <div class="chip"><i class="ph ph-chart-bar"></i> ${Math.round(user.avgProgress || 0)}% avg progress</div>
-              <div class="chip"><i class="ph ph-calendar"></i> Joined ${fmtDate(user.createdAt)}</div>
+        <!-- ==========================================
+             VIEW 1: GLOBAL LEARNER REGISTRY MATRIX
+             ========================================== -->
+        <div id="view-user-directory">
+
+          <!-- Telemetry Bento KPI Grid -->
+          <section class="telemetry-bento-grid">
+            <!-- Metric 1: Learners -->
+            <div class="bento-kpi-card" style="--card-glow-color: #6366F1;">
+              <div class="bkc-top">
+                <span class="bkc-title">Learners Registry</span>
+                <div class="bkc-icon-ring ring-indigo"><i class="ph ph-users-three"></i></div>
+              </div>
+              <div class="bkc-value-row">
+                <span class="bkc-number" id="kpi-total-users">—</span>
+                <span class="bkc-pill-metric pill-growth"><i class="ph ph-arrow-up-right"></i> Synced</span>
+              </div>
+              <div class="bkc-footer">
+                <i class="ph ph-database"></i>
+                <span>Active platform learner accounts</span>
+              </div>
+            </div>
+
+            <!-- Metric 2: Curricula -->
+            <div class="bento-kpi-card" style="--card-glow-color: #06B6D4;">
+              <div class="bkc-top">
+                <span class="bkc-title">Curricula Graphs</span>
+                <div class="bkc-icon-ring ring-cyan"><i class="ph ph-tree-structure"></i></div>
+              </div>
+              <div class="bkc-value-row">
+                <span class="bkc-number" id="kpi-total-roadmaps">—</span>
+                <span class="bkc-pill-metric pill-growth"><i class="ph ph-sparkle"></i> Synthesized</span>
+              </div>
+              <div class="bkc-footer">
+                <i class="ph ph-cpu"></i>
+                <span>AI Constellations + Smart Trees</span>
+              </div>
+            </div>
+
+            <!-- Metric 3: Mastery -->
+            <div class="bento-kpi-card" style="--card-glow-color: #10B981;">
+              <div class="bkc-top">
+                <span class="bkc-title">Global Mastery</span>
+                <div class="bkc-icon-ring ring-emerald"><i class="ph ph-chart-line-up"></i></div>
+              </div>
+              <div class="bkc-value-row">
+                <span class="bkc-number" id="kpi-global-progress">—%</span>
+                <span class="bkc-pill-metric pill-growth"><i class="ph ph-check-circle"></i> Ratio</span>
+              </div>
+              <div class="bkc-footer">
+                <i class="ph ph-trophy"></i>
+                <span>Platform milestone completion rate</span>
+              </div>
+            </div>
+
+            <!-- Metric 4: Exams -->
+            <div class="bento-kpi-card" style="--card-glow-color: #F43F5E;">
+              <div class="bkc-top">
+                <span class="bkc-title">Exam Performance</span>
+                <div class="bkc-icon-ring ring-rose"><i class="ph ph-exam"></i></div>
+              </div>
+              <div class="bkc-value-row">
+                <span class="bkc-number" id="kpi-quizzes-taken">—</span>
+                <span class="bkc-pill-metric pill-growth" id="kpi-quiz-avg-score">—% Avg</span>
+              </div>
+              <div class="bkc-footer">
+                <i class="ph ph-seal-check"></i>
+                <span>Verified module assessments</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Search & Controls Bar -->
+          <section class="controls-deck-bar">
+            <!-- Search -->
+            <div class="search-telemetry-box">
+              <i class="ph ph-magnifying-glass"></i>
+              <input type="text" id="admin-user-search" class="search-telemetry-input" placeholder="Search learner by name, email, or user identifier...">
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="filter-chips-cluster">
+              <button class="filter-chip-btn active" id="chip-filter-all" onclick="adminApp.setFilter('all')">All Learners</button>
+              <button class="filter-chip-btn" id="chip-filter-roadmaps" onclick="adminApp.setFilter('has_roadmaps')">With Roadmaps</button>
+              <button class="filter-chip-btn" id="chip-filter-progress" onclick="adminApp.setFilter('high_progress')">Mastery &gt; 50%</button>
+              <button class="filter-chip-btn" id="chip-filter-quizzes" onclick="adminApp.setFilter('has_quizzes')">Completed Exams</button>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <!-- Sort Selector -->
+              <select id="admin-user-sort" class="deck-sort-select">
+                <option value="recent">Newest Joined</option>
+                <option value="roadmaps">Most Roadmaps</option>
+                <option value="progress">Highest Mastery</option>
+                <option value="name">Alphabetical (A-Z)</option>
+              </select>
+
+              <!-- View Mode Toggle -->
+              <div class="view-mode-toggle-group">
+                <button class="vmt-btn active" id="view-mode-grid" title="Cards Grid Matrix" onclick="adminApp.setViewMode('grid')">
+                  <i class="ph ph-squares-four"></i>
+                </button>
+                <button class="vmt-btn" id="view-mode-table" title="Enterprise Table" onclick="adminApp.setViewMode('table')">
+                  <i class="ph ph-table"></i>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- VIEW MODE A: Cards Matrix Grid -->
+          <section class="telemetry-cards-matrix" id="user-cards-container">
+            <!-- Rendered dynamically -->
+          </section>
+
+          <!-- VIEW MODE B: Enterprise Data Table -->
+          <section class="enterprise-table-frame" id="user-table-container" style="display: none;">
+            <table class="enterprise-data-table">
+              <thead>
+                <tr>
+                  <th>Learner Profile</th>
+                  <th>User ID</th>
+                  <th>Curricula Trees</th>
+                  <th>Study Hours</th>
+                  <th>Mastery Progress</th>
+                  <th>Exam Mastery</th>
+                  <th>Audit Action</th>
+                </tr>
+              </thead>
+              <tbody id="user-table-tbody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </section>
+
+          <!-- Empty Search State -->
+          <div id="users-empty-state" class="empty-telemetry-state" style="display: none;">
+            <i class="ph ph-user-circle-dashed"></i>
+            <h3>No Learners Found</h3>
+            <p>No telemetry records match your current search filters.</p>
+          </div>
+
+        </div>
+
+        <!-- ==========================================
+             VIEW 2: MASTER LEARNER DOSSIER DEEP DIVE
+             ========================================== -->
+        <div id="view-user-detail" class="dossier-slide-canvas" style="display: none;">
+
+          <!-- Navigation & Action Bar -->
+          <div class="dossier-nav-bar">
+            <button class="dossier-back-btn" onclick="adminApp.navigateBackToDirectory()">
+              <i class="ph ph-arrow-left"></i>
+              <span>Return to Learner Matrix</span>
+            </button>
+
+            <div style="display: flex; gap: 10px;">
+              <button class="hud-action-btn" onclick="adminApp.copyTelemetryJSON()">
+                <i class="ph ph-code"></i>
+                <span>Copy JSON Telemetry</span>
+              </button>
             </div>
           </div>
-        </div>
-      `;
 
-      // Load roadmaps
-      document.getElementById('detail-roadmaps-section').innerHTML = `
-        <div class="section-heading"><i class="ph ph-tree-structure"></i> Learning Roadmaps</div>
-        <div class="data-table-wrap"><div class="state-loading"><div class="spinner-ring"></div><p>Loading…</p></div></div>
-      `;
+          <!-- Dossier Hero Header Card -->
+          <div class="dossier-cockpit-hero" id="user-hero-container">
+            <!-- Rendered dynamically -->
+          </div>
 
-      document.getElementById('detail-quizzes-section').innerHTML = `
-        <div class="section-heading"><i class="ph ph-exam"></i> Quiz Results</div>
-        <div class="data-table-wrap"><div class="state-loading"><div class="spinner-ring"></div><p>Loading…</p></div></div>
-      `;
+          <!-- Deep-Dive Navigation Tabs -->
+          <div class="dossier-tab-strip">
+            <button class="dts-tab-btn active" id="tab-btn-roadmaps" onclick="adminApp.switchTab('roadmaps')">
+              <i class="ph ph-tree-structure"></i>
+              <span>Curricula & Milestones (<span id="user-roadmaps-count">0</span>)</span>
+            </button>
+            <button class="dts-tab-btn" id="tab-btn-quizzes" onclick="adminApp.switchTab('quizzes')">
+              <i class="ph ph-exam"></i>
+              <span>Exams & Quizzes (<span id="user-quizzes-count">0</span>)</span>
+            </button>
+            <button class="dts-tab-btn" id="tab-btn-telemetry" onclick="adminApp.switchTab('telemetry')">
+              <i class="ph ph-terminal"></i>
+              <span>Raw Telemetry Stream</span>
+            </button>
+          </div>
 
-      // Fetch roadmaps
-      try {
-        const rmRes = await fetch(`/api/admin/users/${user.id}/roadmaps`, {
-          headers: { 'x-admin-token': getAdminToken() }
-        });
-        const roadmaps = rmRes.ok ? await rmRes.json() : [];
-        renderRoadmapsTable(roadmaps);
-      } catch {
-        document.getElementById('detail-roadmaps-section').innerHTML += `<p style="color:var(--accent-danger);font-size:13px">Failed to load roadmaps</p>`;
-      }
-
-      // Fetch quizzes
-      try {
-        const qzRes = await fetch(`/api/admin/users/${user.id}/quizzes`, {
-          headers: { 'x-admin-token': getAdminToken() }
-        });
-        const quizzes = qzRes.ok ? await qzRes.json() : [];
-        renderQuizzesTable(quizzes);
-      } catch {
-        document.getElementById('detail-quizzes-section').innerHTML += `<p style="color:var(--accent-danger);font-size:13px">Failed to load quizzes</p>`;
-      }
-    }
-
-    function renderRoadmapsTable(roadmaps) {
-      const section = document.getElementById('detail-roadmaps-section');
-      if (!roadmaps || roadmaps.length === 0) {
-        section.innerHTML = `<div class="section-heading"><i class="ph ph-tree-structure"></i> Learning Roadmaps</div>
-          <div class="data-table-wrap"><div class="state-empty"><i class="ph ph-tree-structure"></i><p>No roadmaps yet</p></div></div>`;
-        return;
-      }
-
-      const rows = roadmaps.map(r => {
-        const pct = Math.min(100, Math.round(r.overallProgress || 0));
-        return `<tr>
-          <td><strong>${escapeHTML(r.title || 'Untitled')}</strong><br><span style="font-size:11px;color:var(--text-muted)">${escapeHTML(r.goal || '')}</span></td>
-          <td>
-            <div class="progress-mini-bar">
-              <div class="progress-mini-bg"><div class="progress-mini-fill" style="width:${pct}%"></div></div>
-              <span>${pct}%</span>
+          <!-- Tab 1: User's Roadmaps & Milestones -->
+          <div id="tab-content-roadmaps">
+            <div id="user-roadmaps-list">
+              <!-- Rendered dynamically -->
             </div>
-          </td>
-          <td>${r.totalHours || 0}h</td>
-          <td>${r.completedHours || 0}h</td>
-          <td>${fmtDate(r.createdAt)}</td>
-        </tr>`;
-      }).join('');
+          </div>
 
-      section.innerHTML = `
-        <div class="section-heading"><i class="ph ph-tree-structure"></i> Learning Roadmaps</div>
-        <div class="data-table-wrap">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Roadmap</th>
-                <th style="min-width:140px">Progress</th>
-                <th>Total Hours</th>
-                <th>Completed</th>
-                <th>Created</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
+          <!-- Tab 2: User's Exam Performance -->
+          <div id="tab-content-quizzes" style="display: none;">
+            <div class="enterprise-table-frame">
+              <table class="enterprise-data-table">
+                <thead>
+                  <tr>
+                    <th>Module / Topic</th>
+                    <th>Target Roadmap</th>
+                    <th>Score</th>
+                    <th>Percentage</th>
+                    <th>Mastery Status</th>
+                    <th>Timestamp</th>
+                  </tr>
+                </thead>
+                <tbody id="user-quizzes-tbody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+            <div id="quizzes-empty-state" class="empty-telemetry-state" style="display: none; margin-top: 16px;">
+              <i class="ph ph-clipboard-text"></i>
+              <h3>No Exams Attempted</h3>
+              <p>This learner has not yet completed any module assessments.</p>
+            </div>
+          </div>
+
+          <!-- Tab 3: Raw Telemetry Stream -->
+          <div id="tab-content-telemetry" style="display: none;">
+            <pre id="raw-telemetry-pre" style="background: var(--overseer-surface); padding: 26px; border-radius: 16px; border: 1px solid var(--overseer-border); color: #A5B4FC; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; overflow-x: auto; max-height: 540px; box-shadow: 0 4px 20px rgba(0,0,0,0.2);"></pre>
+          </div>
+
         </div>
-      `;
-    }
 
-    function renderQuizzesTable(quizzes) {
-      const section = document.getElementById('detail-quizzes-section');
-      if (!quizzes || quizzes.length === 0) {
-        section.innerHTML = `<div class="section-heading"><i class="ph ph-exam"></i> Quiz Results</div>
-          <div class="data-table-wrap"><div class="state-empty"><i class="ph ph-exam"></i><p>No quiz results yet</p></div></div>`;
-        return;
+      </main>
+
+    </div>
+  </div>
+
+  <!-- Admin Toast Notification -->
+  <div id="admin-toast">
+    <i class="ph ph-info" id="toast-icon"></i>
+    <span id="toast-text">Notification</span>
+  </div>
+
+  <!-- ==========================================================================
+       HERMES OVERSEER ENGINE (VANILLA JS APP)
+       ========================================================================== -->
+  <script>
+    class HermesOverseerApp {
+      constructor() {
+        this.token = sessionStorage.getItem('hermes_admin_token') || localStorage.getItem('hermes_admin_token') || '';
+        this.users = [];
+        this.selectedUser = null;
+        this.selectedUserRoadmaps = [];
+        this.selectedUserQuizzes = [];
+        this.activeTab = 'roadmaps';
+        this.viewMode = 'grid';
+        this.filterMode = 'all';
+
+        this.initTheme();
+        this.bindEvents();
+        this.startCyberClock();
+        this.checkAuth();
       }
 
-      const rows = quizzes.map(q => {
-        const score = Math.round(q.score || 0);
-        const cls = score >= 80 ? 'good' : score >= 50 ? 'mid' : 'low';
-        return `<tr>
-          <td><strong>${escapeHTML(q.roadmapTitle || q.moduleTitle || 'Unknown')}</strong></td>
-          <td><span class="score-badge ${cls}">${score}%</span></td>
-          <td>${fmtDate(q.createdAt || q.created_at)}</td>
-        </tr>`;
-      }).join('');
+      initTheme() {
+        const saved = localStorage.getItem('hermes_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', saved);
+        const icon = document.querySelector('#admin-theme-btn i');
+        if (icon) {
+          icon.className = saved === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
+        }
+      }
 
-      section.innerHTML = `
-        <div class="section-heading"><i class="ph ph-exam"></i> Quiz Results</div>
-        <div class="data-table-wrap">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Module / Roadmap</th>
-                <th>Score</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        </div>
-      `;
-    }
+      toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('hermes_theme', next);
+        const icon = document.querySelector('#admin-theme-btn i');
+        if (icon) {
+          icon.className = next === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
+        }
+      }
 
-    // ========================================
-    // Back button
-    // ========================================
-    document.getElementById('btn-back').addEventListener('click', () => {
-      document.getElementById('view-detail').classList.remove('active');
-      document.getElementById('view-users').style.display = '';
-    });
+      startCyberClock() {
+        const clockEl = document.getElementById('cyber-clock-display');
+        const update = () => {
+          if (!clockEl) return;
+          const now = new Date();
+          const utcStr = now.toISOString().substring(11, 19) + ' UTC';
+          clockEl.textContent = utcStr;
+        };
+        update();
+        setInterval(update, 1000);
+      }
 
-    // ========================================
-    // Search
-    // ========================================
-    document.getElementById('search-input').addEventListener('input', function () {
-      const q = this.value.toLowerCase();
-      const filtered = allUsers.filter(u =>
-        (u.name || '').toLowerCase().includes(q) ||
-        (u.email || '').toLowerCase().includes(q)
-      );
-      renderUsers(filtered);
-    });
+      showToast(text, isError = false) {
+        const toast = document.getElementById('admin-toast');
+        const icon = document.getElementById('toast-icon');
+        const span = document.getElementById('toast-text');
+        if (!toast) return;
 
-    // ========================================
-    // Logout
-    // ========================================
-    document.getElementById('btn-logout').addEventListener('click', async () => {
-      try {
-        await fetch('/api/admin/logout', {
-          method: 'POST',
-          headers: { 'x-admin-token': getAdminToken() }
-        });
-      } catch {}
-      sessionStorage.removeItem('hermes_admin_token');
-      window.location.href = '/admin';
-    });
+        icon.className = isError ? 'ph ph-x-circle' : 'ph ph-check-circle';
+        span.textContent = text;
+        toast.style.borderColor = isError ? '#F43F5E' : '#6366F1';
+        toast.classList.add('visible');
 
-    // ========================================
-    // HTML Escape
-    // ========================================
-    function escapeHTML(str) {
-      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
+        setTimeout(() => {
+          toast.classList.remove('visible');
+        }, 3200);
+      }
 
-    // ========================================
-    // Load Users
-    // ========================================
-    async function loadUsers() {
-      if (!requireAuth()) return;
+      bindEvents() {
+        document.getElementById('admin-theme-btn')?.addEventListener('click', () => this.toggleTheme());
+        document.getElementById('admin-login-form')?.addEventListener('submit', (e) => this.handleLogin(e));
+        document.getElementById('admin-user-search')?.addEventListener('input', () => this.renderUsersDirectory());
+        document.getElementById('admin-user-sort')?.addEventListener('change', () => this.renderUsersDirectory());
+      }
 
-      try {
-        const res = await fetch('/api/admin/users', {
-          headers: { 'x-admin-token': getAdminToken() }
-        });
-
-        if (res.status === 401 || res.status === 403) {
-          sessionStorage.removeItem('hermes_admin_token');
-          window.location.href = '/admin';
+      async checkAuth() {
+        if (!this.token) {
+          this.showGate(true);
           return;
         }
 
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        try {
+          const res = await fetch('/api/admin/me', {
+            headers: { 'Authorization': `Bearer ${this.token}`, 'x-admin-token': this.token }
+          });
+          const data = await res.json();
+          if (data && data.authenticated) {
+            this.showGate(false);
+            this.renderOverseerProfile(data.admin);
+            this.loadDashboardData();
+          } else {
+            this.showGate(true);
+          }
+        } catch (err) {
+          this.showGate(true);
+        }
+      }
 
-        allUsers = await res.json();
-        renderUsers(allUsers);
-      } catch (err) {
-        document.getElementById('users-container').innerHTML = `
-          <div class="state-empty">
-            <i class="ph ph-warning-circle" style="color:var(--accent-danger)"></i>
-            <p>Failed to load users: ${escapeHTML(err.message)}</p>
+      showGate(visible) {
+        const gate = document.getElementById('admin-gate-overlay');
+        const workspace = document.getElementById('admin-main-workspace');
+
+        if (gate) gate.style.display = visible ? 'flex' : 'none';
+        if (workspace) workspace.style.display = visible ? 'none' : 'flex';
+      }
+
+      async handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('admin-email-input').value.trim();
+        const password = document.getElementById('admin-password-input').value.trim();
+        const errBox = document.getElementById('gate-error-message');
+        const errText = document.getElementById('gate-error-text');
+        const submitBtn = document.getElementById('btn-admin-submit');
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<i class="ph ph-spinner ph-spin"></i> Decrypting...`;
+
+        try {
+          const res = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            this.token = data.token;
+            sessionStorage.setItem('hermes_admin_token', data.token);
+            localStorage.setItem('hermes_admin_token', data.token);
+            errBox.style.display = 'none';
+            this.showGate(false);
+            this.renderOverseerProfile(data.admin);
+            this.showToast('Overseer terminal decrypted & online.', false);
+            this.loadDashboardData();
+          } else {
+            errBox.style.display = 'flex';
+            errText.textContent = data.error || 'Access Denied: Invalid credentials.';
+            this.showToast('Authentication failed.', true);
+          }
+        } catch (err) {
+          errBox.style.display = 'flex';
+          errText.textContent = 'Server connection error.';
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i class="ph ph-key"></i> <span>Decrypt Terminal</span>`;
+        }
+      }
+
+      logout() {
+        fetch('/api/admin/logout', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${this.token}`, 'x-admin-token': this.token }
+        }).catch(() => {});
+
+        this.token = '';
+        sessionStorage.removeItem('hermes_admin_token');
+        localStorage.removeItem('hermes_admin_token');
+        this.showGate(true);
+        this.showToast('Overseer session terminated.', false);
+      }
+
+      renderOverseerProfile(admin) {
+        const avatarBox = document.getElementById('sidebar-admin-avatar');
+        if (avatarBox && window.CelestialAvatars) {
+          avatarBox.innerHTML = window.CelestialAvatars.generate(admin?.email || 'cronus.xz@void.vz', 36);
+        }
+        const nameEl = document.getElementById('sidebar-admin-name');
+        if (nameEl) {
+          nameEl.textContent = admin?.name || 'Cronus (Overseer)';
+        }
+      }
+
+      async loadDashboardData() {
+        const syncIcon = document.getElementById('hud-sync-icon');
+        if (syncIcon) syncIcon.classList.add('ph-spin');
+
+        const startTime = performance.now();
+
+        try {
+          const res = await fetch('/api/admin/users', {
+            headers: { 'Authorization': `Bearer ${this.token}`, 'x-admin-token': this.token }
+          });
+          const latency = Math.round(performance.now() - startTime);
+          const latencyEl = document.getElementById('hud-latency-val');
+          if (latencyEl) latencyEl.textContent = `${latency}ms`;
+
+          if (!res.ok) {
+            if (res.status === 401 || res.status === 403) this.logout();
+            return;
+          }
+
+          const data = await res.json();
+          this.users = data.users || [];
+          this.renderKPIs(data.stats || {});
+          this.renderUsersDirectory();
+        } catch (err) {
+          console.error(err);
+          this.showToast('Failed to sync telemetry stream.', true);
+        } finally {
+          if (syncIcon) syncIcon.classList.remove('ph-spin');
+        }
+      }
+
+      renderKPIs(stats) {
+        document.getElementById('kpi-total-users').textContent = stats.totalUsers ?? this.users.length;
+        document.getElementById('kpi-total-roadmaps').textContent = stats.totalRoadmaps ?? 0;
+        document.getElementById('kpi-global-progress').textContent = `${stats.avgPlatformProgress ?? 0}%`;
+        document.getElementById('kpi-quizzes-taken').textContent = stats.totalQuizzesCompleted ?? 0;
+        document.getElementById('kpi-quiz-avg-score').textContent = `${stats.avgQuizScore ?? 0}% Avg`;
+
+        // Sidebar Badges
+        document.getElementById('side-learners-count').textContent = stats.totalUsers ?? this.users.length;
+        document.getElementById('side-roadmaps-count').textContent = stats.totalRoadmaps ?? 0;
+        document.getElementById('side-quizzes-count').textContent = stats.totalQuizzesCompleted ?? 0;
+      }
+
+      setFilter(filter) {
+        this.filterMode = filter;
+        const chips = ['all', 'roadmaps', 'progress', 'quizzes'];
+        chips.forEach(c => {
+          const el = document.getElementById(`chip-filter-${c}`);
+          if (el) el.classList.remove('active');
+        });
+
+        if (filter === 'all') document.getElementById('chip-filter-all')?.classList.add('active');
+        if (filter === 'has_roadmaps') document.getElementById('chip-filter-roadmaps')?.classList.add('active');
+        if (filter === 'high_progress') document.getElementById('chip-filter-progress')?.classList.add('active');
+        if (filter === 'has_quizzes') document.getElementById('chip-filter-quizzes')?.classList.add('active');
+
+        this.renderUsersDirectory();
+      }
+
+      filterBy(filter) {
+        this.navigateBackToDirectory();
+        this.setFilter(filter);
+      }
+
+      setViewMode(mode) {
+        this.viewMode = mode;
+        const gridBtn = document.getElementById('view-mode-grid');
+        const tableBtn = document.getElementById('view-mode-table');
+        const gridContainer = document.getElementById('user-cards-container');
+        const tableContainer = document.getElementById('user-table-container');
+
+        if (mode === 'grid') {
+          gridBtn?.classList.add('active');
+          tableBtn?.classList.remove('active');
+          if (gridContainer) gridContainer.style.display = 'grid';
+          if (tableContainer) tableContainer.style.display = 'none';
+        } else {
+          tableBtn?.classList.add('active');
+          gridBtn?.classList.remove('active');
+          if (gridContainer) gridContainer.style.display = 'none';
+          if (tableContainer) tableContainer.style.display = 'block';
+        }
+        this.renderUsersDirectory();
+      }
+
+      renderUsersDirectory() {
+        const gridContainer = document.getElementById('user-cards-container');
+        const tableBody = document.getElementById('user-table-tbody');
+        const emptyState = document.getElementById('users-empty-state');
+        if (!gridContainer || !tableBody) return;
+
+        const searchTerm = (document.getElementById('admin-user-search')?.value || '').toLowerCase().trim();
+        const sortVal = document.getElementById('admin-user-sort')?.value || 'recent';
+
+        let list = [...this.users];
+
+        // Search Filter
+        if (searchTerm) {
+          list = list.filter(u => 
+            (u.name || '').toLowerCase().includes(searchTerm) ||
+            (u.email || '').toLowerCase().includes(searchTerm) ||
+            (u.id || '').toLowerCase().includes(searchTerm)
+          );
+        }
+
+        // Chip Filter
+        if (this.filterMode === 'has_roadmaps') {
+          list = list.filter(u => (u.roadmapsCount || 0) > 0);
+        } else if (this.filterMode === 'high_progress') {
+          list = list.filter(u => (u.avgProgress || 0) >= 50);
+        } else if (this.filterMode === 'has_quizzes') {
+          list = list.filter(u => (u.quizzesCount || 0) > 0);
+        }
+
+        // Sort
+        list.sort((a, b) => {
+          if (sortVal === 'roadmaps') return (b.roadmapsCount || 0) - (a.roadmapsCount || 0);
+          if (sortVal === 'progress') return (b.avgProgress || 0) - (a.avgProgress || 0);
+          if (sortVal === 'name') return (a.name || '').localeCompare(b.name || '');
+          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+        });
+
+        if (list.length === 0) {
+          gridContainer.innerHTML = '';
+          tableBody.innerHTML = '';
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        // 1. Render Cybernetic Cards
+        gridContainer.innerHTML = list.map(u => {
+          const progress = Math.min(100, Math.max(0, Math.round(u.avgProgress || 0)));
+          const avatarSvg = window.CelestialAvatars 
+            ? window.CelestialAvatars.generate(u.email || u.id, 64) 
+            : `<div style="background:#4F46E5;width:100%;height:100%"></div>`;
+
+          return `
+            <div class="cyber-user-card" onclick="adminApp.inspectUser('${u.id}')">
+              <div class="cuc-top">
+                <div class="cuc-avatar-halo">
+                  ${avatarSvg}
+                </div>
+                <div class="cuc-identity-block">
+                  <div class="cuc-user-name">
+                    <span>${this.escapeHTML(u.name || 'Anonymous Learner')}</span>
+                    <i class="ph-fill ph-check-circle" style="color:#10B981;font-size:14px;" title="Verified Learner Node"></i>
+                  </div>
+                  <div class="cuc-user-email">${this.escapeHTML(u.email || 'guest@hermes.io')}</div>
+                  <div class="cuc-id-chip">ID: ${this.escapeHTML(u.id)}</div>
+                </div>
+              </div>
+
+              <div class="cuc-telemetry-triad">
+                <div class="ctt-cell">
+                  <span class="ctt-number">${u.roadmapsCount || 0}</span>
+                  <span class="ctt-lbl">Trees</span>
+                </div>
+                <div class="ctt-cell">
+                  <span class="ctt-number">${u.totalCompletedHours || 0}h</span>
+                  <span class="ctt-lbl">Learned</span>
+                </div>
+                <div class="ctt-cell">
+                  <span class="ctt-number">${u.quizzesCount || 0}</span>
+                  <span class="ctt-lbl">Exams</span>
+                </div>
+              </div>
+
+              <div class="cuc-progress-section">
+                <div class="cuc-progress-label">
+                  <span>Curriculum Mastery Trajectory</span>
+                  <strong style="color:var(--text-primary); font-family:var(--font-mono);">${progress}%</strong>
+                </div>
+                <div class="cuc-progress-track">
+                  <div class="cuc-progress-bar" style="width: ${progress}%;"></div>
+                </div>
+              </div>
+
+              <div class="cuc-card-footer">
+                <span>Inspect Dossier & Progression</span>
+                <i class="ph ph-arrow-right"></i>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // 2. Render Enterprise Table
+        tableBody.innerHTML = list.map(u => {
+          const progress = Math.min(100, Math.max(0, Math.round(u.avgProgress || 0)));
+          const avatarSvg = window.CelestialAvatars 
+            ? window.CelestialAvatars.generate(u.email || u.id, 34) 
+            : '';
+
+          return `
+            <tr style="cursor: pointer;" onclick="adminApp.inspectUser('${u.id}')">
+              <td>
+                <div style="display:flex;align-items:center;gap:12px;">
+                  <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;border:1px solid rgba(255,255,255,0.15);background:#050711;flex-shrink:0;">
+                    ${avatarSvg}
+                  </div>
+                  <div>
+                    <strong style="color:var(--text-primary);">${this.escapeHTML(u.name || 'Anonymous')}</strong>
+                    <div style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono);">${this.escapeHTML(u.email)}</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="cyber-chip" style="font-family:var(--font-mono);">${u.id}</span></td>
+              <td><strong style="font-family:var(--font-mono);">${u.roadmapsCount || 0}</strong></td>
+              <td><span style="font-family:var(--font-mono);">${u.totalCompletedHours || 0}h / ${u.totalHours || 0}h</span></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="cuc-progress-track" style="width:65px;height:7px;">
+                    <div class="cuc-progress-bar" style="width:${progress}%;"></div>
+                  </div>
+                  <strong style="font-family:var(--font-mono);font-size:12.5px;">${progress}%</strong>
+                </div>
+              </td>
+              <td>
+                <span class="exam-grade-badge ${u.avgQuizScore >= 80 ? 'grade-mastered' : (u.avgQuizScore >= 60 ? 'grade-passed' : 'grade-review')}">
+                  ${u.avgQuizScore || 0}%
+                </span>
+              </td>
+              <td>
+                <button class="hud-action-btn" style="padding:4px 10px;font-size:12px;" onclick="event.stopPropagation();adminApp.inspectUser('${u.id}')">
+                  Audit <i class="ph ph-arrow-right"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      async inspectUser(userId) {
+        try {
+          const res = await fetch(`/api/admin/users/${encodeURIComponent(userId)}`, {
+            headers: { 'Authorization': `Bearer ${this.token}`, 'x-admin-token': this.token }
+          });
+          if (!res.ok) {
+            this.showToast('Failed to retrieve learner dossier.', true);
+            return;
+          }
+
+          const data = await res.json();
+          this.selectedUser = data.user;
+          this.selectedUserRoadmaps = data.roadmaps || [];
+          this.selectedUserQuizzes = data.quizzes || [];
+
+          document.getElementById('top-nav-current-view').textContent = `Learner Dossier: ${data.user.name || data.user.id}`;
+          this.renderUserHero(data.user);
+          this.renderUserRoadmaps();
+          this.renderUserQuizzes();
+          document.getElementById('raw-telemetry-pre').textContent = JSON.stringify(data, null, 2);
+
+          document.getElementById('view-user-directory').style.display = 'none';
+          document.getElementById('view-user-detail').style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (err) {
+          console.error(err);
+          this.showToast('Error opening dossier.', true);
+        }
+      }
+
+      renderUserHero(user) {
+        const container = document.getElementById('user-hero-container');
+        if (!container) return;
+
+        const avatarSvg = window.CelestialAvatars 
+          ? window.CelestialAvatars.generate(user.email || user.id, 92) 
+          : '';
+
+        const joinedStr = user.createdAt ? new Date(user.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'Recent';
+
+        container.innerHTML = `
+          <div class="dch-identity">
+            <div class="dch-avatar-huge">
+              ${avatarSvg}
+            </div>
+            <div class="dch-title-wrap">
+              <h2>${this.escapeHTML(user.name || 'Anonymous Learner')}</h2>
+              <p>${this.escapeHTML(user.email)}</p>
+              <div style="display:flex;gap:8px;margin-top:10px;align-items:center;">
+                <span class="cyber-chip"><i class="ph ph-identification-card"></i> ${user.id}</span>
+                <span style="font-size:12.5px;color:var(--text-muted);"><i class="ph ph-calendar-blank"></i> Enrolled: ${joinedStr}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dch-stats-dock">
+            <div class="dch-stat-pod">
+              <div class="dsp-value">${this.selectedUserRoadmaps.length}</div>
+              <div class="dsp-label">Curricula Trees</div>
+            </div>
+            <div class="dch-stat-pod">
+              <div class="dsp-value">${user.totalCompletedHours || 0}h / ${user.totalHours || 0}h</div>
+              <div class="dsp-label">Hours Invested</div>
+            </div>
+            <div class="dch-stat-pod">
+              <div class="dsp-value">${user.avgProgress || 0}%</div>
+              <div class="dsp-label">Mastery Ratio</div>
+            </div>
+            <div class="dch-stat-pod">
+              <div class="dsp-value">${this.selectedUserQuizzes.length}</div>
+              <div class="dsp-label">Exams Completed</div>
+            </div>
           </div>
         `;
-        showToast('Failed to load users', 'error');
+
+        document.getElementById('user-roadmaps-count').textContent = this.selectedUserRoadmaps.length;
+        document.getElementById('user-quizzes-count').textContent = this.selectedUserQuizzes.length;
+      }
+
+      renderUserRoadmaps() {
+        const container = document.getElementById('user-roadmaps-list');
+        if (!container) return;
+
+        if (this.selectedUserRoadmaps.length === 0) {
+          container.innerHTML = `
+            <div class="empty-telemetry-state">
+              <i class="ph ph-tree-structure"></i>
+              <h3>No Curricula Trees Synthesized</h3>
+              <p>This learner has not generated or imported any learning roadmaps.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = this.selectedUserRoadmaps.map((r) => {
+          const nodes = r.nodes || [];
+          const progress = Math.min(100, Math.max(0, Math.round(r.overallProgress || 0)));
+
+          const milestoneNodesHtml = nodes.slice(0, 6).map(n => {
+            const beaconClass = n.status === 'completed' ? 'beacon-completed' : (n.status === 'in_progress' ? 'beacon-in_progress' : 'beacon-not_started');
+            return `
+              <div class="milestone-checkpoint-row">
+                <div class="mcr-left">
+                  <div class="mcr-status-beacon ${beaconClass}"></div>
+                  <strong style="color:var(--text-primary);">${this.escapeHTML(n.title)}</strong>
+                </div>
+                <div style="display:flex;gap:12px;align-items:center;color:var(--text-muted);font-size:12px;">
+                  <span>${n.estimatedHours || 0} hrs</span>
+                  <span class="cyber-chip" style="padding:2px 8px;text-transform:capitalize;">${n.status || 'not_started'}</span>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          return `
+            <div class="dossier-roadmap-card">
+              <div class="drc-top">
+                <div style="flex:1;">
+                  <div class="drc-title">${this.escapeHTML(r.title)}</div>
+                  <div class="drc-goal">${this.escapeHTML(r.goal || 'No goal description logged.')}</div>
+                  
+                  <div class="drc-chips-row">
+                    <span class="cyber-chip"><i class="ph ph-briefcase"></i> ${this.escapeHTML(r.targetRole || 'General')}</span>
+                    <span class="cyber-chip"><i class="ph ph-gauge"></i> ${this.escapeHTML(r.skillLevel || 'Beginner')}</span>
+                    <span class="cyber-chip"><i class="ph ph-cpu"></i> Engine: ${this.escapeHTML(r.engine || 'hermes-ai')}</span>
+                    <span class="cyber-chip"><i class="ph ph-clock"></i> ${r.completedHours || 0}h / ${r.totalHours || 0}h</span>
+                  </div>
+                </div>
+
+                <div style="min-width: 140px; text-align: right;">
+                  <div style="font-size: 26px; font-weight: 800; font-family: var(--font-mono); color: var(--overseer-cyan);">${progress}%</div>
+                  <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Curriculum Completion</div>
+                </div>
+              </div>
+
+              <!-- Progress bar -->
+              <div class="cuc-progress-track" style="height: 9px;">
+                <div class="cuc-progress-bar" style="width: ${progress}%;"></div>
+              </div>
+
+              <!-- Milestone Explorer Box -->
+              <div class="milestone-constellation-box">
+                <div class="mcb-header">
+                  <i class="ph ph-list-numbers"></i>
+                  <span>Milestone Constellation Nodes (${nodes.length} checkpoints)</span>
+                </div>
+                ${milestoneNodesHtml}
+                ${nodes.length > 6 ? `<div style="text-align:center;padding-top:8px;font-size:12px;color:var(--text-muted);">+ ${nodes.length - 6} additional sub-units in tree architecture</div>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      renderUserQuizzes() {
+        const tbody = document.getElementById('user-quizzes-tbody');
+        const emptyState = document.getElementById('quizzes-empty-state');
+        if (!tbody) return;
+
+        if (this.selectedUserQuizzes.length === 0) {
+          tbody.innerHTML = '';
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        tbody.innerHTML = this.selectedUserQuizzes.map(q => {
+          const pct = Math.round(q.percentage || 0);
+          const scoreClass = pct >= 80 ? 'grade-mastered' : (pct >= 60 ? 'grade-passed' : 'grade-review');
+          const statusText = pct >= 80 ? '🏆 Mastered' : (pct >= 60 ? '⚡ Passed' : '🔄 Review Required');
+          const dateStr = q.created_at || q.createdAt 
+            ? new Date(q.created_at || q.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+            : 'Recent';
+
+          return `
+            <tr>
+              <td>
+                <strong style="color:var(--text-primary);">${this.escapeHTML(q.module_title || q.moduleTitle || 'Curriculum Milestone')}</strong>
+              </td>
+              <td style="color:var(--text-secondary);font-size:13px;">
+                ${this.escapeHTML(q.roadmap_title || q.roadmapTitle || 'General Tree')}
+              </td>
+              <td>
+                <span class="exam-grade-badge ${scoreClass}">
+                  ${q.score || 0} / ${q.total_questions || q.totalQuestions || 5}
+                </span>
+              </td>
+              <td>
+                <strong style="font-family:var(--font-mono);">${pct}%</strong>
+              </td>
+              <td>
+                <span class="cyber-chip" style="font-size:12px;font-weight:700;">${statusText}</span>
+              </td>
+              <td style="color:var(--text-muted);font-size:12px;font-family:var(--font-mono);">
+                ${dateStr}
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      switchTab(tab) {
+        this.activeTab = tab;
+        const tabs = ['roadmaps', 'quizzes', 'telemetry'];
+        tabs.forEach(t => {
+          const btn = document.getElementById(`tab-btn-${t}`);
+          const content = document.getElementById(`tab-content-${t}`);
+          if (btn) btn.classList.toggle('active', t === tab);
+          if (content) content.style.display = t === tab ? 'block' : 'none';
+        });
+      }
+
+      copyTelemetryJSON() {
+        const text = document.getElementById('raw-telemetry-pre')?.textContent || '';
+        if (!text) return;
+        navigator.clipboard.writeText(text).then(() => {
+          this.showToast('Raw telemetry JSON copied to clipboard!', false);
+        }).catch(() => {
+          this.showToast('Could not copy JSON.', true);
+        });
+      }
+
+      exportPlatformDossier() {
+        const payload = {
+          exportedAt: new Date().toISOString(),
+          system: 'Hermes Overseer Telemetry Console',
+          usersCount: this.users.length,
+          users: this.users
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `hermes_overseer_export_${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        this.showToast('Platform telemetry exported.', false);
+      }
+
+      navigateBackToDirectory() {
+        document.getElementById('view-user-detail').style.display = 'none';
+        document.getElementById('view-user-directory').style.display = 'block';
+        document.getElementById('top-nav-current-view').textContent = 'Learner Progression & Curricula Registry';
+        this.selectedUser = null;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      escapeHTML(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>'"]/g, 
+          tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
       }
     }
 
-    // ========================================
-    // Boot
-    // ========================================
-    loadUsers();
+    // Mount on DOM Ready
+    let adminApp;
+    document.addEventListener('DOMContentLoaded', () => {
+      adminApp = new HermesOverseerApp();
+      window.adminApp = adminApp;
+    });
   </script>
 </body>
 </html>
