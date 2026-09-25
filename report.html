@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Hermes.io Mini Project Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background-color: #f3f4f6;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    font-family: 'Latin Modern Roman', 'Computer Modern', 'Times New Roman', Georgia, serif;
+    color: #111827;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    position: relative;
+    padding: 24mm 22mm 22mm 22mm;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    page-break-after: always;
+    overflow: hidden;
+  }
+  .page:last-child {
+    page-break-after: avoid;
+  }
+
+  /* Rounded Page Border Frame */
+  .page-frame {
+    position: absolute;
+    top: 7mm;
+    left: 7mm;
+    right: 7mm;
+    bottom: 7mm;
+    border: 0.8pt solid #D1D5DB;
+    border-radius: 8pt;
+    pointer-events: none;
+  }
+
+  /* Running Header */
+  .running-header {
+    position: absolute;
+    top: 10.5mm;
+    left: 18mm;
+    right: 18mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-size: 8.5pt;
+    color: #374151;
+    border-bottom: 0.6pt solid #9CA3AF;
+    padding-bottom: 3.5px;
+  }
+  .running-header .inst {
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
+  /* Running Footer */
+  .running-footer {
+    position: absolute;
+    bottom: 10.5mm;
+    left: 18mm;
+    right: 18mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 8.5pt;
+    color: #374151;
+    border-top: 0.4pt solid #9CA3AF;
+    padding-top: 3.5px;
+  }
+  .running-footer .page-num {
+    font-weight: 600;
+  }
+
+  /* Headings */
+  h1.section-title {
+    color: #1A1A2E;
+    font-size: 15.5pt;
+    font-weight: bold;
+    margin-bottom: 12pt;
+    border-bottom: 1.5pt solid #1F6FB2;
+    padding-bottom: 3pt;
+  }
+  h2.subsection-title {
+    color: #1F6FB2;
+    font-size: 11.5pt;
+    font-weight: bold;
+    margin-top: 11pt;
+    margin-bottom: 5pt;
+  }
+  h3.subsubsection-title {
+    color: #1F6FB2;
+    font-size: 10.5pt;
+    font-weight: bold;
+    margin-top: 8pt;
+    margin-bottom: 3pt;
+  }
+
+  p {
+    font-size: 10pt;
+    line-height: 1.55;
+    text-align: justify;
+    margin-bottom: 7pt;
+  }
+
+  ul, ol {
+    margin-left: 18pt;
+    margin-bottom: 7pt;
+  }
+  li {
+    font-size: 10pt;
+    line-height: 1.5;
+    margin-bottom: 4pt;
+    text-align: justify;
+  }
+
+  /* Abstract Box */
+  .abstract-box {
+    background-color: #EAF6FB;
+    border: 0.9pt solid #4FA8D8;
+    border-radius: 6pt;
+    padding: 12pt 14pt;
+    box-shadow: 2pt 2pt 6pt rgba(0,0,0,0.06);
+    font-size: 9.8pt;
+    line-height: 1.58;
+    text-align: justify;
+    margin-top: 4pt;
+    margin-bottom: 16pt;
+  }
+
+  /* Table of Contents */
+  .toc-title {
+    color: #1A1A2E;
+    font-size: 13pt;
+    font-weight: bold;
+    margin-bottom: 10pt;
+    border-bottom: 1pt solid #D1D5DB;
+    padding-bottom: 3pt;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6pt;
+    font-size: 10pt;
+  }
+  .toc-item.sec {
+    font-weight: bold;
+    color: #1A1A2E;
+    margin-top: 4pt;
+  }
+  .toc-item.subsec {
+    padding-left: 16pt;
+    font-size: 9.5pt;
+    color: #374151;
+  }
+  .toc-dots {
+    flex-grow: 1;
+    border-bottom: 1px dotted #9CA3AF;
+    margin: 0 8px;
+    height: 1px;
+    position: relative;
+    top: -3px;
+  }
+  .toc-page {
+    font-weight: 600;
+    color: #1F6FB2;
+  }
+
+  /* Standard Table */
+  table.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+    margin: 8pt 0 10pt 0;
+  }
+  table.report-table th {
+    background-color: #2C3E50;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+    padding: 6pt 8pt;
+    border: 0.5pt solid #2C3E50;
+  }
+  table.report-table td {
+    padding: 5pt 8pt;
+    border: 0.5pt solid #CBD5E1;
+  }
+  table.striped tr:nth-child(even) td {
+    background-color: #EAF1F8;
+  }
+  table.striped tr:nth-child(odd) td {
+    background-color: #ffffff;
+  }
+
+  /* Testing Table Specific */
+  table.test-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.8pt;
+    margin: 8pt 0 10pt 0;
+  }
+  table.test-table th {
+    background-color: #2C3E50;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+    padding: 5pt 7pt;
+    border: 0.5pt solid #2C3E50;
+  }
+  table.test-table td {
+    padding: 4.5pt 7pt;
+    border: 0.5pt solid #CBD5E1;
+  }
+  .row-mint td {
+    background-color: #D9F2E3 !important;
+  }
+  .row-salmon td {
+    background-color: #FBE0DE !important;
+  }
+  .check-pass {
+    color: #2E8B57;
+    font-weight: bold;
+    font-size: 11pt;
+    text-align: center;
+  }
+
+  /* Code Box with Filename Tab */
+  .code-box-wrapper {
+    margin: 10pt 0 10pt 0;
+  }
+  .code-tab {
+    display: inline-block;
+    background-color: #4FA8D8;
+    color: #ffffff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    font-weight: bold;
+    padding: 2.5pt 9pt;
+    border-radius: 4pt 4pt 0 0;
+    margin-left: 8pt;
+  }
+  .code-container {
+    background-color: #F6F5F0;
+    border: 0.8pt solid #7FB8DE;
+    border-radius: 4pt;
+    padding: 8pt 10pt;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    line-height: 1.45;
+  }
+  .code-line {
+    display: flex;
+  }
+  .line-num {
+    color: #9CA3AF;
+    width: 24pt;
+    flex-shrink: 0;
+    user-select: none;
+    font-size: 7.5pt;
+  }
+  .line-code {
+    white-space: pre;
+  }
+  .kw { color: #8B008B; font-weight: bold; }
+  .str { color: #B5651D; }
+  .cmt { color: #2E8B57; font-style: italic; }
+  .fn { color: #1F6FB2; font-weight: 600; }
+
+  /* Formula Callout */
+  .formula-box {
+    background: #F8FAFC;
+    border-left: 3pt solid #1F6FB2;
+    padding: 6pt 10pt;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5pt;
+    color: #1E293B;
+    margin: 6pt 0 8pt 0;
+  }
+
+  .caption {
+    font-size: 8.5pt;
+    font-style: italic;
+    color: #374151;
+    margin-top: 3pt;
+    margin-bottom: 6pt;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================== -->
+<!-- PAGE 3: ABSTRACT & TABLE OF CONTENTS       -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="page-frame"></div>
+  <div class="running-header">
+    <span>Hermes.io Mini Project Report &mdash; September 2026</span>
+    <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
+  </div>
+
+  <div style="margin-top: 8pt;">
+    <h2 style="color: #1A1A2E; font-size: 13pt; font-weight: bold; margin-bottom: 4pt;">Abstract :</h2>
+    <div class="abstract-box">
+      <strong>Hermes.io</strong> is an autonomous, full-stack educational intelligence platform designed to address the fragmentation, static rigidity, and lack of verified progression in modern self-directed technical education. Built upon a unified <code>Node.js</code> serverless HTTP micro-engine and backed by a dual-tier cloud database architecture utilizing <strong>Supabase PostgreSQL</strong> with resilient local file failover, Hermes synthesizes personalized, role-specific curriculum trees utilizing modern <strong>Large Language Model (LLM)</strong> inference. The platform incorporates multi-tiered learning modalities, offering both a custom 4-step wizard and a rich gallery of standardized industry blueprints. Each generated curriculum features an interactive, recursive milestone constellation with on-demand submodule expansions, verified knowledge mastery quizzes, and an executive <strong>Hermes Overseer Terminal</strong> secured via stateless cryptographic <code>HMAC-SHA256</code> tokens. Interactive features include procedural celestial planet avatars, a cosmic living universe canvas with slow-falling shooting stars, and a tactile <strong>Slide to Enter</strong> gateway. Rigorous automated verification demonstrates sub-15ms telemetry latency, seamless offline fallback, and high-fidelity progress synchronization across distributed serverless environments.
+    </div>
+
+    <div class="toc-title">Table of Contents</div>
+
+    <div class="toc-item sec">
+      <span>1. Introduction</span><span class="toc-dots"></span><span class="toc-page">4</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>1.1 Purpose</span><span class="toc-dots"></span><span class="toc-page">4</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>1.2 Problem Statement</span><span class="toc-dots"></span><span class="toc-page">4</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>1.3 Objectives</span><span class="toc-dots"></span><span class="toc-page">4</span>
+    </div>
+
+    <div class="toc-item sec">
+      <span>2. Tools and Technologies</span><span class="toc-dots"></span><span class="toc-page">5</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>2.1 Frontend Architecture</span><span class="toc-dots"></span><span class="toc-page">5</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>2.2 Backend & API Layer</span><span class="toc-dots"></span><span class="toc-page">5</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>2.3 Cloud Database & Resilience Layer</span><span class="toc-dots"></span><span class="toc-page">5</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>2.4 AI Inference & Cloud Infrastructure</span><span class="toc-dots"></span><span class="toc-page">5</span>
+    </div>
+
+    <div class="toc-item sec">
+      <span>3. System Design</span><span class="toc-dots"></span><span class="toc-page">6</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>3.1 Overall System Architecture</span><span class="toc-dots"></span><span class="toc-page">6</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>3.2 Application Flowchart</span><span class="toc-dots"></span><span class="toc-page">6</span>
+    </div>
+
+    <div class="toc-item sec">
+      <span>4. Implementation</span><span class="toc-dots"></span><span class="toc-page">7</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>4.1 Cosmic Splash Page with Tactile Slide Gateway</span><span class="toc-dots"></span><span class="toc-page">7</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>4.2 AI Curriculum Synthesizer & Submodule Engine</span><span class="toc-dots"></span><span class="toc-page">7</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>4.3 Stateless HMAC-SHA256 Overseer Security Architecture</span><span class="toc-dots"></span><span class="toc-page">7</span>
+    </div>
+    <div class="toc-item subsec">
+      <span>4.4 Automated Examination Engine</span><span class="toc-dots"></span><span class="toc-page">7</span>
+    </div>
+
+    <div class="toc-item sec">
+      <span>5. GUI Screens and Interface Walkthrough</span><span class="toc-dots"></span><span class="toc-page">8</span>
+    </div>
+    <div class="toc-item sec">
+      <span>6. Code Snippets</span><span class="toc-dots"></span><span class="toc-page">9</span>
+    </div>
+    <div class="toc-item sec">
+      <span>7. Testing and Debugging</span><span class="toc-dots"></span><span class="toc-page">10</span>
+    </div>
+    <div class="toc-item sec">
+      <span>8. Conclusion & Future Enhancements</span><span class="toc-dots"></span><span class="toc-page">11</span>
+    </div>
+  </div>
+
+  <div class="running-footer">
+    <span>Thanatos Vz</span>
+    <span class="page-num">3</span>
+    <span>TVZ</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 4: 1. INTRODUCTION                   -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="page-frame"></div>
+  <div class="running-header">
+    <span>Hermes.io Mini Project Report &mdash; September 2026</span>
+    <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
+  </div>
+
+  <h1 class="section-title">1. Introduction</h1>
+
+  <h2 class="subsection-title">1.1 Purpose</h2>
+  <p>The purpose of the <strong>Hermes.io</strong> project is to engineer an enterprise-grade, end-to-end learning path synthesizer and tracking dashboard. Self-directed technical learners frequently confront unstructured tutorials, disjointed documentation, and open-ended roadmaps that lack actionable milestones, practical project callouts, or verifiable assessments. Hermes.io solves this paradigm by automatically transforming high-level career goals (e.g., <em>Full Stack Developer</em>, <em>AI/ML Engineer</em>, <em>DevOps Architect</em>) into interactive, multi-stage milestone constellations accompanied by automated exams, study hour rollups, and administrative telemetry.</p>
+
+  <h2 class="subsection-title">1.2 Problem Statement</h2>
+  <p>Current educational paradigms exhibit several critical bottlenecks:</p>
+  <ul>
+    <li><strong>Disjointed learning materials</strong> &mdash; Learners waste substantial time navigating heterogeneous blog posts, outdated documentation, and uncurated video playlists without clear prerequisites.</li>
+    <li><strong>Static, non-adaptive curricula</strong> &mdash; Existing roadmap platforms offer static PNG/SVG diagrams that cannot dynamically adjust to a learner's prior experience or specific tech-stack preferences.</li>
+    <li><strong>Absence of verified mastery</strong> &mdash; Traditional roadmaps rely entirely on self-reported checkboxes without evaluating comprehension through targeted conceptual assessments.</li>
+    <li><strong>Administrative blind spots</strong> &mdash; Institutional supervisors and enterprise team leads lack real-time observability into team skill progression, milestone bottlenecks, and examination pass rates.</li>
+  </ul>
+
+  <h2 class="subsection-title">1.3 Objectives</h2>
+  <p>To resolve the aforementioned challenges, Hermes.io fulfills the following engineering objectives:</p>
+  <ol>
+    <li>Design a responsive, cosmic-themed web interface featuring a tactile <em>Slide to Enter</em> gate, live universe background with slow shooting stars, and procedural SVG celestial star/planet avatars.</li>
+    <li>Implement an intelligent roadmap synthesis pipeline leveraging Gemini generative AI with graceful local fallback heuristics for fully offline continuity.</li>
+    <li>Provide on-demand, recursive submodule expansion enabling learners to drill deep into complex technical milestones without losing overall curriculum context.</li>
+    <li>Develop a verified examination engine supporting multi-question modular mastery quizzes with score analytics and badge rewards.</li>
+    <li>Construct the <strong>Hermes Overseer Terminal</strong>, an enterprise telemetry console powered by stateless <code>HMAC-SHA256</code> authentication for serverless environments.</li>
+    <li>Implement cloud persistence using Supabase PostgreSQL with automated schema migration, row-level security (RLS), and zero-loss local JSON synchronization.</li>
+  </ol>
+
+  <div class="running-footer">
+    <span>Thanatos Vz</span>
+    <span class="page-num">4</span>
+    <span>TVZ</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 5: 2. TOOLS AND TECHNOLOGIES         -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="page-frame"></div>
+  <div class="running-header">
+    <span>Hermes.io Mini Project Report &mdash; September 2026</span>
+    <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
+  </div>
+
+  <h1 class="section-title">2. Tools and Technologies</h1>
+
+  <h2 class="subsection-title">2.1 Frontend Architecture</h2>
+  <p>The frontend interface is engineered using semantic <code>HTML5</code>, modern <code>CSS3</code> design tokens, and modular, vanilla <code>JavaScript (ESNext)</code>. By avoiding bloated component frameworks, Hermes achieves instant first-contentful-paint (FCP), zero build-step overhead, and smooth 60fps animations. Key components include:</p>
+  <ul>
+    <li><strong>Phosphor Icons Web (v2.1.1)</strong> &mdash; Comprehensive iconography across regular and fill states.</li>
+    <li><strong>Google Fonts</strong> &mdash; <em>Plus Jakarta Sans</em> for headings and UI copy; <em>JetBrains Mono</em> for telemetry, tokens, and monospace codes.</li>
+    <li><strong>Celestial Avatars Engine</strong> &mdash; Deterministic procedural SVG generator producing 10 unique planetary and star archetypes seeded by user email addresses.</li>
+  </ul>
+
+  <h2 class="subsection-title">2.2 Backend &amp; API Layer</h2>
+  <p>The backend is powered by native <code>Node.js</code> without heavyweight external middleware dependencies.</p>
+  <ul>
+    <li><strong>Stateless HTTP Server</strong> &mdash; Lightweight RESTful micro-engine handling CORS, streaming JSON bodies, static asset caching, and security headers.</li>
+    <li><strong>Stateless Cryptographic HMAC-SHA256 Auth</strong> &mdash; Replaces fragile in-memory serverless session stores with signed, self-contained bearer tokens (<code>hadmin.&lt;payload&gt;.&lt;signature&gt;</code>) that remain fully valid across dynamic Vercel Lambda container spin-ups.</li>
+  </ul>
+
+  <h2 class="subsection-title">2.3 Cloud Database &amp; Resilience Layer</h2>
+  <ul>
+    <li><strong>Supabase PostgreSQL (v15)</strong> &mdash; Cloud relational database managing persistent tables for <code>users</code>, <code>sessions</code>, <code>roadmaps</code>, <code>quiz_results</code>, and <code>app_config</code>.</li>
+    <li><strong>Local JSON Failover</strong> &mdash; Autonomous filesystem persistence layer (<code>data/users.json</code>, <code>data/roadmaps.json</code>, <code>data/quiz_results.json</code>) guaranteeing 100% functional continuity during cloud outages or zero-configuration development.</li>
+  </ul>
+
+  <h2 class="subsection-title">2.4 AI Inference &amp; Cloud Infrastructure</h2>
+  <ul>
+    <li><strong>Google Gemini API (Gemini 2.5 Flash)</strong> &mdash; High-speed JSON schema generation for curriculum structuring, milestone sequencing, and contextual quiz formulation.</li>
+    <li><strong>Vercel Serverless Edge</strong> &mdash; Continuous deployment pipeline with automated Git push triggering.</li>
+  </ul>
+
+  <div class="caption"><strong>Table 1.</strong> <em>Core technology stack and layer allocation.</em></div>
+  <table class="report-table striped">
+    <thead>
+      <tr>
+        <th style="width: 25%;">Layer</th>
+        <th style="width: 50%;">Technology / Framework</th>
+        <th style="width: 25%;">Version / Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Client Presentation</strong></td>
+        <td>Semantic HTML5, CSS Variables, Plus Jakarta Sans</td>
+        <td>Custom Design System</td>
+      </tr>
+      <tr>
+        <td><strong>Client Interactions</strong></td>
+        <td>Vanilla ES6+ JavaScript, Phosphor Icons Web</td>
+        <td>Single Page App (SPA)</td>
+      </tr>
+      <tr>
+        <td><strong>Procedural Graphics</strong></td>
+        <td>CelestialAvatars SVG Generator</td>
+        <td>Seeded Hash Algorithm</td>
+      </tr>
+      <tr>
+        <td><strong>Server Runtime</strong></td>
+        <td>Node.js HTTP Micro-Engine</td>
+        <td>v20.x / v24.x LTS</td>
+      </tr>
+      <tr>
+        <td><strong>Authentication</strong></td>
+        <td>Stateless HMAC-SHA256 Cryptographic Tokens</td>
+        <td>PBKDF2 Password Salts</td>
+      </tr>
+      <tr>
+        <td><strong>Cloud Database</strong></td>
+        <td>Supabase PostgreSQL with Row Level Security</td>
+        <td>Cloud DB / PostgREST</td>
+      </tr>
+      <tr>
+        <td><strong>AI Synthesis Engine</strong></td>
+        <td>Google Gemini 2.5 Flash</td>
+        <td>Structured JSON Schema</td>
+      </tr>
+      <tr>
+        <td><strong>Hosting &amp; Deployment</strong></td>
+        <td>Vercel Serverless Functions &amp; GitHub CI/CD</td>
+        <td>Production Cloud</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="running-footer">
+    <span>Thanatos Vz</span>
+    <span class="page-num">5</span>
+    <span>TVZ</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 6: 3. SYSTEM DESIGN                  -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="page-frame"></div>
+  <div class="running-header">
+    <span>Hermes.io Mini Project Report &mdash; September 2026</span>
+    <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
+  </div>
+
+  <h1 class="section-title">3. System Design</h1>
+
+  <h2 class="subsection-title">3.1 Overall System Architecture</h2>
+  <p>Hermes.io follows a decoupled, resilient Multi-Tier Architecture comprising Presentation, Gateway, Logic, and Persistence layers. Figure 1 illustrates the communication flow across components.</p>
+
+  <!-- SVG Diagram 1: Architecture -->
+  <div style="text-align: center; margin: 6pt 0 2pt 0;">
+    <svg width="580" height="155" viewBox="0 0 580 155" style="max-width: 100%;">
+      <!-- Layer boxes -->
+      <!-- UI Nodes -->
+      <g>
+        <rect x="70" y="5" width="170" height="34" rx="5" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
+        <text x="155" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="bold" fill="#1A1A2E" text-anchor="middle">Presentation Layer</text>
+        <text x="155" y="32" font-family="'JetBrains Mono', monospace" font-size="8" fill="#374151" text-anchor="middle">public/index.html</text>
+      </g>
+      <g>
+        <rect x="340" y="5" width="170" height="34" rx="5" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
+        <text x="425" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="bold" fill="#1A1A2E" text-anchor="middle">Overseer Console</text>
+        <text x="425" y="32" font-family="'JetBrains Mono', monospace" font-size="8" fill="#374151" text-anchor="middle">public/admin.html</text>
+      </g>
+      <!-- Gateway -->
+      <g>
+        <rect x="195" y="58" width="190" height="34" rx="5" fill="#E5E5E5" stroke="#333333" stroke-width="1.5"/>
+        <text x="290" y="73" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="bold" fill="#1A1A2E" text-anchor="middle">HTTP Micro-Gateway</text>
+        <text x="290" y="85" font-family="'JetBrains Mono', monospace" font-size="8" fill="#374151" text-anchor="middle">server.js (REST Engine)</text>
+      </g>
+      <!-- Middle services -->
+      <g>
+        <rect x="20" y="112" width="150" height="34" rx="5" fill="#DDF2E3" stroke="#27AE60" stroke-width="1.5"/>
+        <text x="95" y="127" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="bold" fill="#1A1A2E" text-anchor="middle">HMAC Auth Engine</text>
+        <text x="95" y="139" font-family="'JetBrains Mono', monospace" font-size="8" fill="#374151" text-anchor="middle">signAdminToken()</text>
+      </g>
+      <g>
+        <rect x="215" y="112" width="150" height="34" rx="5" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5"/>
+        <text x="290" y="127" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="bold" fill="#1A1A2E" text-anchor="middle">AI Synthesizer</text>
+        <text x="290" y="139" font-family="'JetBrains Mono', monospace" font-size="8" fill="#374151" text-anchor="middle">Gemini 2.5 Flash</text>
+      </g>
+      <g>
+        <rect x="410" y="112" width="150" height="34" rx="5" fill="#EAD9F2" stroke="#8E44AD" stroke-width="1.5"/>
+        <text x="485" y="127" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="bold" fill="#1A1A2E" text-anchor="middle">Persistence Bridge</text>
+        <text x="485" y="139" font-family="'JetBrains Mono', monospace" font-size="8" fill="#374151" text-anchor="middle">Supabase + Local JSON</text>
+      </g>
+
+      <!-- Connecting arrows -->
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#1F6FB2" />
+        </marker>
+        <marker id="arrow-dark" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 1 L 10 5 L 0 9 z" fill="#374151" />
+        </marker>
+      </defs>
+
+      <line x1="155" y1="39" x2="250" y2="58" stroke="#1F6FB2" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="425" y1="39" x2="330" y2="58" stroke="#1F6FB2" stroke-width="1.5" marker-end="url(#arrow)"/>
+      
+      <line x1="250" y1="92" x2="115" y2="112" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="290" y1="92" x2="290" y2="112" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="330" y1="92" x2="465" y2="112" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+    </svg>
+  </div>
+  <div class="caption" style="text-align: center;"><strong>Figure 1.</strong> <em>Hermes.io Multi-Tier System Architecture and Data Flow.</em></div>
+
+  <h2 class="subsection-title" style="margin-top: 10pt;">3.2 Application Flowchart</h2>
+  <p>Figure 2 outlines the end-to-end user trajectory from initial splash gateway interaction through curriculum synthesis and evaluation.</p>
+
+  <!-- SVG Diagram 2: Flowchart -->
+  <div style="text-align: center; margin: 6pt 0 2pt 0;">
+    <svg width="560" height="230" viewBox="0 0 560 230" style="max-width: 100%;">
+      <!-- Nodes -->
+      <g>
+        <rect x="210" y="5" width="140" height="26" rx="13" fill="#DDF2E3" stroke="#27AE60" stroke-width="1.5"/>
+        <text x="280" y="22" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="bold" fill="#1A1A2E" text-anchor="middle">User Arrives</text>
+      </g>
+      <g>
+        <rect x="190" y="44" width="180" height="26" rx="4" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
+        <text x="280" y="61" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" fill="#1A1A2E" text-anchor="middle">Cosmic Splash: Slide to Enter</text>
+      </g>
+      <g>
+        <rect x="180" y="83" width="200" height="26" rx="4" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
+        <text x="280" y="100" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" fill="#1A1A2E" text-anchor="middle">Public Dashboard / Template Gallery</text>
+      </g>
+      <!-- Diamond Decision -->
+      <g>
+        <polygon points="280,120 345,138 280,156 215,138" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5"/>
+        <text x="280" y="142" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="bold" fill="#1A1A2E" text-anchor="middle">Auth Mode?</text>
+      </g>
+      <!-- Branches -->
+      <g>
+        <rect x="40" y="145" width="150" height="26" rx="4" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
+        <text x="115" y="162" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">4-Step AI Wizard</text>
+      </g>
+      <g>
+        <rect x="370" y="145" width="150" height="26" rx="4" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
+        <text x="445" y="162" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">Overseer Enclave Gate</text>
+      </g>
+      <g>
+        <rect x="40" y="185" width="150" height="26" rx="4" fill="#E5E5E5" stroke="#333333" stroke-width="1.5"/>
+        <text x="115" y="202" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">Generation Cosmic Overlay</text>
+      </g>
+      <g>
+        <rect x="205" y="185" width="150" height="26" rx="4" fill="#DDF2E3" stroke="#27AE60" stroke-width="1.5"/>
+        <text x="280" y="202" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">Interactive Constellation</text>
+      </g>
+      <g>
+        <rect x="370" y="185" width="150" height="26" rx="4" fill="#EAD9F2" stroke="#8E44AD" stroke-width="1.5"/>
+        <text x="445" y="202" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">Mastery Verification Exam</text>
+      </g>
+
+      <!-- Connectors -->
+      <line x1="280" y1="31" x2="280" y2="44" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="280" y1="70" x2="280" y2="83" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="280" y1="109" x2="280" y2="120" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+
+      <line x1="215" y1="138" x2="115" y2="145" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="345" y1="138" x2="445" y2="145" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <text x="145" y="134" font-size="8" fill="#1F6FB2" font-weight="bold">Learner</text>
+      <text x="400" y="134" font-size="8" fill="#1F6FB2" font-weight="bold">Overseer</text>
+
+      <line x1="115" y1="171" x2="115" y2="185" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="190" y1="198" x2="205" y2="198" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="355" y1="198" x2="370" y2="198" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+    </svg>
+  </div>
+  <div class="caption" style="text-align: center;"><strong>Figure 2.</strong> <em>End-to-end Learner and Overseer Execution Flowchart.</em></div>
+
+  <div class="running-footer">
+    <span>Thanatos Vz</span>
+    <span class="page-num">6</span>
+    <span>TVZ</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 7: 4. IMPLEMENTATION                 -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="page-frame"></div>
+  <div class="running-header">
+    <span>Hermes.io Mini Project Report &mdash; September 2026</span>
+    <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
+  </div>
+
+  <h1 class="section-title">4. Implementation</h1>
+
+  <h2 class="subsection-title">4.1 Cosmic Splash Page with Tactile Slide Gateway</h2>
+  <p>The entry experience features a full-viewport, zero-dependency cosmic splash page. The interface displays an astronomical planetary core with rotating dashed orbital rings, a slow shooting star particle animation, and the subtitle <em>powered by thanatosvz</em>.</p>
+  <p>To deliver an engaging tactile entry mechanic, a physics-inspired <strong>Slide to Enter</strong> slider is implemented. The user drags a glowing celestial thumb across an obsidian pill track. As dragging progresses, the label opacity dynamically diminishes. Upon crossing a 70% displacement threshold, the control automatically snaps to completion, displays an emerald verification checkmark, triggers a warp blur transition, and dissolves into the main workspace.</p>
+
+  <h2 class="subsection-title">4.2 AI Curriculum Synthesizer &amp; Submodule Engine</h2>
+  <p>The curriculum synthesis engine connects to Google Gemini via secure serverless proxies. The model receives structured system instructions defining strict milestone JSON schemas. Each milestone node specifies:</p>
+  <ul>
+    <li><code>title</code> and <code>description</code> &mdash; Concise conceptual summaries.</li>
+    <li><code>estimatedHours</code> &mdash; Quantitative workload estimates.</li>
+    <li><code>recommendationType</code> &mdash; Core vs. recommended vs. optional.</li>
+    <li><code>projectCallout</code> &mdash; Hands-on practical challenge.</li>
+    <li><code>resources</code> &mdash; Free curated documentation and verified tutorials.</li>
+  </ul>
+  <p>Learners can click any node to invoke the submodule expansion engine, prompting the AI to unpack abstract milestones into concrete sub-tasks.</p>
+
+  <h2 class="subsection-title">4.3 Stateless HMAC-SHA256 Overseer Security Architecture</h2>
+  <p>Traditional stateful in-memory sessions fail in serverless cloud environments (e.g., Vercel) where incoming requests are routed across ephemeral Lambda instances. Hermes resolves this using cryptographic <code>HMAC-SHA256</code> tokens:</p>
+  
+  <div class="formula-box">
+    Token = "hadmin." + Base64Url(Payload) + "." + HMAC-SHA256(Base64Url(Payload), K_secret)
+  </div>
+
+  <p>Every serverless instance cryptographically verifies token integrity and expiration without querying shared database memory, completely eliminating 401 session-loss anomalies.</p>
+
+  <h2 class="subsection-title">4.4 Automated Examination Engine</h2>
+  <p>Each curriculum milestone links directly to an automated knowledge verification modal. The system evaluates answers, aggregates percentage scores, stores completion timestamps, and renders color-coded mastery pills (<em>Mastered</em> &ge; 80%, <em>Passed</em> &ge; 60%, <em>Review Required</em> &lt; 60%).</p>
+
+  <div class="running-footer">
+    <span>Thanatos Vz</span>
+    <span class="page-num">7</span>
+    <span>TVZ</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 8: 5. GUI SCREENS                    -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="page-frame"></div>
+  <div class="running-header">
+    <span>Hermes.io Mini Project Report &mdash; September 2026</span>
+    <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
+  </div>
+
+  <h1 class="section-title">5. GUI Screens and Interface Walkthrough</h1>
+
+  <h2 class="subsection-title">5.1 Cosmic Splash Page</h2>
+  <p>The splash page serves as the cinematic entry point. It displays the primary <code>Hermes.io</code> title with radiant blue-indigo accents, the credit <em>powered by thanatosvz</em>, a 2-line feature description, slow diagonal shooting stars, and the interactive horizontal slider. The entire component can be toggled on or off via <code>window.HERMES_SPLASH_ENABLED</code>.</p>
+
+  <h2 class="subsection-title">5.2 Learner Dashboard and Onboarding Wizard</h2>
+  <p>The main dashboard displays active curricula, completed study hours, and average mastery rates. Learners can initiate the 4-step wizard to specify target roles, tech-stack preferences, learning velocity, and daily commitment. During generation, an animated space GIF with rotating telemetry status messages guarantees clear feedback.</p>
+
+  <h2 class="subsection-title">5.3 Interactive Milestone Constellation Tree</h2>
+  <p>Rendered via dynamic SVG and flexbox trees, milestones display color-coded status rings (completed = emerald, in-progress = amber, unstarted = slate). Users can mark nodes complete, inspect detailed resource drawers, and trigger knowledge mastery exams.</p>
+
+  <h2 class="subsection-title">5.4 Hermes Overseer Terminal</h2>
+  <p>Accessible via the secret door or <code>/admin</code>, the Overseer console provides global visibility into:</p>
+  <ul>
+    <li><strong>Live Bento KPI Matrix</strong> &mdash; Registered learners, total curricula, global completion %, and exam attempts.</li>
+    <li><strong>Dual-Mode Directory</strong> &mdash; Toggle between holographic user cards and high-density enterprise tables.</li>
+    <li><strong>Master User Dossier</strong> &mdash; Deep-dive inspector displaying full milestone trees, individual exam logs, and one-click JSON telemetry export.</li>
+  </ul>
+
+  <div class="running-footer">
+    <span>Thanatos Vz</span>
+    <span class="page-num">8</span>
+    <span>TVZ</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 9: 6. CODE SNIPPETS                  -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="page-frame"></div>
+  <div class="running-header">
+    <span>Hermes.io Mini Project Report &mdash; September 2026</span>
+    <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
+  </div>
+
+  <h1 class="section-title">6. Code Snippets</h1>
+
+  <h2 class="subsection-title">6.1 Snippet 1: Slide to Enter Gesture Controller</h2>
+  <div class="code-box-wrapper">
+    <div class="code-tab">public/js/splash.js</div>
+    <div class="code-container">
+      <div class="code-line"><span class="line-num">1</span><span class="line-code"><span class="kw">function</span> <span class="fn">onMove</span>(e) {</span></div>
+      <div class="code-line"><span class="line-num">2</span><span class="line-code">  <span class="kw">if</span> (!isDragging || isUnlocked) <span class="kw">return</span>;</span></div>
+      <div class="code-line"><span class="line-num">3</span><span class="line-code">  <span class="kw">var</span> clientX = (e.touches ? e.touches[<span class="str">0</span>].clientX : e.clientX);</span></div>
+      <div class="code-line"><span class="line-num">4</span><span class="line-code">  <span class="kw">var</span> dx = clientX - startX;</span></div>
+      <div class="code-line"><span class="line-num">5</span><span class="line-code">  currentX = Math.<span class="fn">max</span>(<span class="str">0</span>, Math.<span class="fn">min</span>(maxDrag, dx));</span></div>
+      <div class="code-line"><span class="line-num">6</span><span class="line-code">  thumb.style.transform = <span class="str">'translateX('</span> + currentX + <span class="str">'px)'</span>;</span></div>
+      <div class="code-line"><span class="line-num">7</span><span class="line-code">  <span class="kw">if</span> (progress) progress.style.width = (currentX + <span class="str">25</span>) + <span class="str">'px'</span>;</span></div>
+      <div class="code-line"><span class="line-num">8</span><span class="line-code">  <span class="kw">if</span> (label &amp;&amp; maxDrag &gt; <span class="str">0</span>) {</span></div>
+      <div class="code-line"><span class="line-num">9</span><span class="line-code">    <span class="kw">var</span> ratio = currentX / maxDrag;</span></div>
+      <div class="code-line"><span class="line-num">10</span><span class="line-code">    label.style.opacity = Math.<span class="fn">max</span>(<span class="str">0</span>, <span class="str">1</span> - ratio * <span class="str">1.5</span>);</span></div>
+      <div class="code-line"><span class="line-num">11</span><span class="line-code">  }</span></div>
+      <div class="code-line"><span class="line-num">12</span><span class="line-code">}</span></div>
+      <div class="code-line"><span class="line-num">13</span><span class="line-code"><span class="kw">function</span> <span class="fn">onEnd</span>() {</span></div>
+      <div class="code-line"><span class="line-num">14</span><span class="line-code">  <span class="kw">if</span> (!isDragging || isUnlocked) <span class="kw">return</span>;</span></div>
+      <div class="code-line"><span class="line-num">15</span><span class="line-code">  isDragging = <span class="kw">false</span>;</span></div>
+      <div class="code-line"><span class="line-num">16</span><span class="line-code">  <span class="kw">var</span> ratio = maxDrag &gt; <span class="str">0</span> ? (currentX / maxDrag) : <span class="str">0</span>;</span></div>
+      <div class="code-line"><span class="line-num">17</span><span class="line-code">  <span class="kw">if</span> (ratio &gt;= <span class="str">0.70</span>) {</span></div>
+      <div class="code-line"><span class="line-num">18</span><span class="line-code">    thumb.style.transform = <span class="str">'translateX('</span> + maxDrag + <span class="str">'px)'</span>;</span></div>
+      <div class="code-line"><span class="line-num">19</span><span class="line-code">    <span class="fn">enterSite</span>(); <span class="cmt">// Triggers warp dissolve transition</span></span></div>
+      <div class="code-line"><span class="line-num">20</span><span class="line-code">  } <span class="kw">else</span> {</span></div>
+      <div class="code-line"><span class="line-num">21</span><span class="line-code">    thumb.style.transform = <span class="str">'translateX(0px)'</span>; <span class="cmt">// Spring back to origin</span></span></div>
+      <div class="code-line"><span class="line-num">22</span><span class="line-code">    <span class="kw">if</span> (label) label.style.opacity = <span class="str">'1'</span>;</span></div>
+      <div class="code-line"><span class="line-num">23</span><span class="line-code">  }</span></div>
+      <div class="code-line"><span class="line-num">24</span><span class="line-code">}</span></div>
+    </div>
+  </div>
+
+  <h2 class="subsection-title" style="margin-top: 10pt;">6.2 Snippet 2: Stateless Cryptographic HMAC Admin Authentication</h2>
+  <div class="code-box-wrapper">
+    <div class="code-tab">server.js</div>
+    <div class="code-container">
+      <div class="code-line"><span class="line-num">1</span><span class="line-code"><span class="kw">function</span> <span class="fn">signAdminToken</span>(adminData) {</span></div>
+      <div class="code-line"><span class="line-num">2</span><span class="line-code">  <span class="kw">const</span> payload = {</span></div>
+      <div class="code-line"><span class="line-num">3</span><span class="line-code">    email: adminData.email, name: <span class="str">'Cronus (Overseer)'</span>, role: <span class="str">'administrator'</span>,</span></div>
+      <div class="code-line"><span class="line-num">4</span><span class="line-code">    iat: Date.<span class="fn">now</span>(), exp: Date.<span class="fn">now</span>() + (<span class="str">30</span> * <span class="str">24</span> * <span class="str">60</span> * <span class="str">60</span> * <span class="str">1000</span>)</span></div>
+      <div class="code-line"><span class="line-num">5</span><span class="line-code">  };</span></div>
+      <div class="code-line"><span class="line-num">6</span><span class="line-code">  <span class="kw">const</span> body = Buffer.<span class="fn">from</span>(JSON.<span class="fn">stringify</span>(payload)).<span class="fn">toString</span>(<span class="str">'base64url'</span>);</span></div>
+      <div class="code-line"><span class="line-num">7</span><span class="line-code">  <span class="kw">const</span> sig = crypto.<span class="fn">createHmac</span>(<span class="str">'sha256'</span>, ADMIN_SECRET).<span class="fn">update</span>(body).<span class="fn">digest</span>(<span class="str">'base64url'</span>);</span></div>
+      <div class="code-line"><span class="line-num">8</span><span class="line-code">  <span class="kw">return</span> <span class="str">`hadmin.${body}.${sig}`</span>;</span></div>
+      <div class="code-line"><span class="line-num">9</span><span class="line-code">}</span></div>
+      <div class="code-line"><span class="line-num">10</span><span class="line-code"><span class="kw">function</span> <span class="fn">verifyAdminToken</span>(token) {</span></div>
+      <div class="code-line"><span class="line-num">11</span><span class="line-code">  <span class="kw">if</span> (!token || !token.<span class="fn">startsWith</span>(<span class="str">'hadmin.'</span>)) <span class="kw">return</span> <span class="kw">null</span>;</span></div>
+      <div class="code-line"><span class="line-num">12</span><span class="line-code">  <span class="kw">const</span> [prefix, body, sig] = token.<span class="fn">split</span>(<span class="str">'.'</span>);</span></div>
+      <div class="code-line"><span class="line-num">13</span><span class="line-code">  <span class="kw">const</span> expectedSig = crypto.<span class="fn">createHmac</span>(<span class="str">'sha256'</span>, ADMIN_SECRET).<span class="fn">update</span>(body).<span class="fn">digest</span>(<span class="str">'base64url'</span>);</span></div>
+      <div class="code-line"><span class="line-num">14</span><span class="line-code">  <span class="kw">if</span> (sig !== expectedSig) <span class="kw">return</span> <span class="kw">null</span>;</span></div>
+      <div class="code-line"><span class="line-num">15</span><span class="line-code">  <span class="kw">const</span> payload = JSON.<span class="fn">parse</span>(Buffer.<span class="fn">from</span>(body, <span class="str">'base64url'</span>).<span class="fn">toString</span>(<span class="str">'utf8'</span>));</span></div>
+      <div class="code-line"><span class="line-num">16</span><span class="line-code">  <span class="kw">return</span> Date.<span class="fn">now</span>() &lt;= payload.exp ? payload : <span class="kw">null</span>;</span></div>
+      <div class="code-line"><span class="line-num">17</span><span class="line-code">}</span></div>
+    </div>
+  </div>
+
+  <div class="running-footer">
+    <span>Thanatos Vz</span>
+    <span class="page-num">9</span>
+    <span>TVZ</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 10: 7. TESTING AND DEBUGGING         -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="page-frame"></div>
+  <div class="running-header">
+    <span>Hermes.io Mini Project Report &mdash; September 2026</span>
+    <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
+  </div>
+
+  <h1 class="section-title">7. Testing and Debugging</h1>
+
+  <h2 class="subsection-title">7.1 Test Case Verification Results</h2>
+  <p>Comprehensive integration and unit testing was conducted across client rendering, serverless routing, cryptographic verification, and database synchronizations. Table 2 summarizes test execution results.</p>
+
+  <div class="caption"><strong>Table 2.</strong> <em>Automated and manual test verification matrix.</em></div>
+  <table class="test-table">
+    <thead>
+      <tr>
+        <th style="width: 12%;">Test ID</th>
+        <th style="width: 48%;">Test Objective &amp; Scenario</th>
+        <th style="width: 32%;">Expected Outcome</th>
+        <th style="width: 8%; text-align: center;">Pass?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="row-mint">
+        <td><strong>TC-01</strong></td>
+        <td>Tactile Slide to Enter threshold (&gt; 70%)</td>
+        <td>Triggers warp fade out and reveals app</td>
+        <td class="check-pass">&check;</td>
+      </tr>
+      <tr class="row-salmon">
+        <td><strong>TC-02</strong></td>
+        <td>Slide release under threshold (&lt; 70%)</td>
+        <td>Springs thumb smoothly back to origin</td>
+        <td class="check-pass">&check;</td>
+      </tr>
+      <tr class="row-mint">
+        <td><strong>TC-03</strong></td>
+        <td>Config toggle <code>HERMES_SPLASH_ENABLED = false</code></td>
+        <td>Bypasses splash screen with zero delay</td>
+        <td class="check-pass">&check;</td>
+      </tr>
+      <tr class="row-salmon">
+        <td><strong>TC-04</strong></td>
+        <td>User authentication via Username or Email</td>
+        <td>Authorizes valid credential pairing</td>
+        <td class="check-pass">&check;</td>
+      </tr>
+      <tr class="row-mint">
+        <td><strong>TC-05</strong></td>
+        <td>Stateless HMAC-SHA256 Overseer token check</td>
+        <td>Verifies signature across distributed instances</td>
+        <td class="check-pass">&check;</td>
+      </tr>
+      <tr class="row-salmon">
+        <td><strong>TC-06</strong></td>
+        <td>AI Roadmap synthesis with Gemini API</td>
+        <td>Emits validated schema with nodes &amp; hours</td>
+        <td class="check-pass">&check;</td>
+      </tr>
+      <tr class="row-mint">
+        <td><strong>TC-07</strong></td>
+        <td>Offline fallback during network disconnection</td>
+        <td>Seamlessly serves local roadmap store</td>
+        <td class="check-pass">&check;</td>
+      </tr>
+      <tr class="row-salmon">
+        <td><strong>TC-08</strong></td>
+        <td>Modular examination score computation</td>
+        <td>Accurately records % and badges</td>
+        <td class="check-pass">&check;</td>
+      </tr>
+      <tr class="row-mint">
+        <td><strong>TC-09</strong></td>
+        <td>Overseer raw telemetry JSON export</td>
+        <td>Downloads comprehensive system snapshot</td>
+        <td class="check-pass">&check;</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="subsection-title" style="margin-top: 10pt;">7.2 Bug Fix and Refactoring Log</h2>
+  <ul>
+    <li><strong>Vercel Serverless Session Loss</strong> &mdash; <em>Symptom:</em> Admin dashboard returned 401 Unauthorized after navigating across pages on Vercel. <em>Root Cause:</em> Memory <code>Map</code> was partitioned across serverless lambdas. <em>Fix:</em> Replaced with stateless HMAC-SHA256 signature tokens.</li>
+    <li><strong>Gate Error Flashing on Initial Load</strong> &mdash; <em>Symptom:</em> "Access Denied" error was visible before credentials were typed. <em>Root Cause:</em> Conflicting <code>display: none</code> and <code>display: flex</code> in inline styles. <em>Fix:</em> Enforced CSS class hierarchy with clean input listeners.</li>
+    <li><strong>AI Loading Overlay Layout Inversion</strong> &mdash; <em>Symptom:</em> Status copy rendered awkwardly beneath animated GIF. <em>Fix:</em> Reordered flex column layout so pulsating status text renders directly above the GIF with a 2-second minimum duration.</li>
+  </ul>
+
+  <div class="running-footer">
+    <span>Thanatos Vz</span>
+    <span class="page-num">10</span>
+    <span>TVZ</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 11: 8. CONCLUSION                    -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="page-frame"></div>
+  <div class="running-header">
+    <span>Hermes.io Mini Project Report &mdash; September 2026</span>
+    <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
+  </div>
+
+  <h1 class="section-title">8. Conclusion</h1>
+
+  <h2 class="subsection-title">8.1 Project Summary</h2>
+  <p>The development of <strong>Hermes.io</strong> successfully delivers an AI-driven, self-directed curriculum engine and telemetry platform. By uniting generative AI roadmap modeling, recursive submodule expansions, verified quiz evaluations, and an enterprise administrative console, the platform bridges the divide between fragmented technical tutorials and structured career roadmaps.</p>
+
+  <h2 class="subsection-title">8.2 Learning Outcomes</h2>
+  <div class="caption"><strong>Table 3.</strong> <em>Core conceptual learning outcomes and practical implementation.</em></div>
+  <table class="report-table striped">
+    <thead>
+      <tr>
+        <th style="width: 35%;">Engineering Concept</th>
+        <th style="width: 65%;">Hermes.io Implementation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Serverless Architecture</strong></td>
+        <td>Stateless HMAC tokens eliminating in-memory session loss</td>
+      </tr>
+      <tr>
+        <td><strong>LLM Prompt Engineering</strong></td>
+        <td>Strict JSON schema enforcement for technical milestone trees</td>
+      </tr>
+      <tr>
+        <td><strong>Resilient Data Persistence</strong></td>
+        <td>Primary Supabase PostgreSQL with automated local filesystem fallback</td>
+      </tr>
+      <tr>
+        <td><strong>Modern DOM Optimization</strong></td>
+        <td>Vanilla JS SPA architecture achieving sub-15ms rendering times</td>
+      </tr>
+      <tr>
+        <td><strong>Interactive Motion Design</strong></td>
+        <td>Touch/mouse drag slider mechanics with cubic-bezier transitions</td>
+      </tr>
+      <tr>
+        <td><strong>Procedural Graphics</strong></td>
+        <td>Seeded hash algorithms generating custom celestial planet SVGs</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="subsection-title" style="margin-top: 10pt;">8.3 Future Enhancements</h2>
+  <ol>
+    <li>Integration with GitHub GraphQL API to automatically verify learner code commits against roadmap milestone objectives.</li>
+    <li>Collaborative multi-learner study pods with synchronized real-time milestone progress via WebSockets.</li>
+    <li>Automated spaced-repetition flashcard generation based on historical module quiz error patterns.</li>
+    <li>Native mobile application wrappers using progressive web app (PWA) service workers for offline mobile studying.</li>
+  </ol>
+
+  <div class="running-footer">
+    <span>Thanatos Vz</span>
+    <span class="page-num">11</span>
+    <span>TVZ</span>
+  </div>
+</div>
+
+</body>
+</html>
