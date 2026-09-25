@@ -25,6 +25,13 @@ const DATA_DIR = IS_SERVERLESS ? '/tmp/hermes_data' : path.join(__dirname, 'data
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const SESSIONS_FILE = path.join(DATA_DIR, 'sessions.json');
 const ROADMAPS_FILE = path.join(DATA_DIR, 'roadmaps.json');
+const QUIZ_RESULTS_FILE = path.join(DATA_DIR, 'quiz_results.json');
+
+// Import Celestial Avatars Generator for profile pics
+let CelestialAvatars = null;
+try {
+  CelestialAvatars = require('./public/js/celestial-avatars.js');
+} catch (_e) {}
 const CONFIG_FILE = IS_SERVERLESS ? null : path.join(DATA_DIR, 'config.json');
 const PUBLIC_DIR = path.join(__dirname, 'public');
 
@@ -317,6 +324,42 @@ async function dbDeleteRoadmap(id) {
   await supabaseRequest('roadmaps', `id=eq.${encodeURIComponent(id)}`, 'DELETE');
   const roadmaps = readJSON(ROADMAPS_FILE, []);
   writeJSON(ROADMAPS_FILE, roadmaps.filter(r => r.id !== id));
+}
+
+// --- QUIZ & EXAM RESULTS ---
+async function dbGetQuizResults(userId = null) {
+  let query = 'select=*&order=created_at.desc';
+  if (userId) {
+    query += `&user_id=eq.${encodeURIComponent(userId)}`;
+  }
+  const rows = await supabaseRequest('quiz_results', query);
+  if (rows && Array.isArray(rows)) {
+    return rows;
+  }
+  const local = readJSON(QUIZ_RESULTS_FILE, []);
+  if (userId) {
+    return local.filter(q => q.user_id === userId || q.userId === userId);
+  }
+  return local;
+}
+
+async function dbSaveQuizResult(result) {
+  const payload = {
+    id: result.id || ('qz_' + crypto.randomBytes(8).toString('hex')),
+    user_id: result.userId || 'usr_guest',
+    roadmap_id: result.roadmapId || null,
+    module_title: result.moduleTitle || 'Module Quiz',
+    score: Number(result.score) || 0,
+    total_questions: Number(result.totalQuestions) || 5,
+    percentage: Number(result.percentage) || 0,
+    passed: Boolean(result.passed),
+    created_at: new Date().toISOString()
+  };
+  await supabaseRequest('quiz_results', '', 'POST', payload, 'return=minimal,resolution=merge-duplicates');
+  const local = readJSON(QUIZ_RESULTS_FILE, []);
+  local.unshift(payload);
+  writeJSON(QUIZ_RESULTS_FILE, local);
+  return payload;
 }
 
 async function dbClaimGuestRoadmaps(roadmapIds, userId) {
@@ -3354,6 +3397,259 @@ const server = http.createServer(async (req, res) => {
       }
 
       return sendJSON(res, 200, { milestone: revised });
+    }
+
+    // ==========================================
+    // QUIZ RESULTS PERSISTENCE ROUTE
+    // ==========================================
+    if (pathname === '/api/quiz/results' && method === 'POST') {
+      const body = await parseBody(req);
+      const userId = authUser ? authUser.id : (body.userId || 'usr_guest');
+      const saved = await dbSaveQuizResult({ ...body, userId });
+      return sendJSON(res, 201, { success: true, quizResult: saved });
+    }
+
+    if (pathname === '/api/quiz/results' && method === 'GET') {
+      const targetUserId = parsedUrl.query?.userId || (authUser ? authUser.id : null);
+      const results = await dbGetQuizResults(targetUserId);
+      return sendJSON(res, 200, results);
+    }
+
+    // ==========================================
+    // SECRET OVERSEER ADMIN TERMINAL & API
+    // Authorized: cronus.xz@void.vz / Thanatos.Vz
+    // ==========================================
+    const ADMIN_CREDENTIALS = {
+      email: 'cronus.xz@void.vz',
+      pass: 'Thanatos.Vz'
+    };
+
+    // Helper: verify admin token
+    function getAuthAdmin(r) {
+      const auth = r.headers['authorization'] || '';
+      let token = '';
+      if (auth.startsWith('Bearer ')) token = auth.substring(7).trim();
+      if (!token) token = r.headers['x-admin-token'] || parsedUrl.query?.adminToken || '';
+      if (!token) return null;
+
+      const session = global.HERMES_ADMIN_SESSIONS?.get(token);
+      if (!session) return null;
+      if (Date.now() > session.expiresAt) {
+        global.HERMES_ADMIN_SESSIONS.delete(token);
+        return null;
+      }
+      return session;
+    }
+
+    if (!global.HERMES_ADMIN_SESSIONS) {
+      global.HERMES_ADMIN_SESSIONS = new Map();
+    }
+
+    // POST /api/admin/login
+    if (pathname === '/api/admin/login' && method === 'POST') {
+      const { email, password } = await parseBody(req);
+      const cleanEmail = (email || '').trim().toLowerCase();
+      const cleanPass = (password || '').trim();
+
+      if (cleanEmail === ADMIN_CREDENTIALS.email.toLowerCase() && cleanPass === ADMIN_CREDENTIALS.pass) {
+        const token = 'hermes_admin_' + crypto.randomBytes(32).toString('hex');
+        const sessionData = {
+          email: ADMIN_CREDENTIALS.email,
+          name: 'Cronus (Overseer)',
+          role: 'administrator',
+          loginTime: new Date().toISOString(),
+          expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+        };
+        global.HERMES_ADMIN_SESSIONS.set(token, sessionData);
+
+        return sendJSON(res, 200, {
+          success: true,
+          token,
+          admin: { email: sessionData.email, name: sessionData.name }
+        });
+      }
+
+      return sendJSON(res, 401, { error: 'Access Denied: Invalid overseer credentials.' });
+    }
+
+    // GET /api/admin/me - Verify admin session
+    if (pathname === '/api/admin/me' && method === 'GET') {
+      const admin = getAuthAdmin(req);
+      if (!admin) {
+        return sendJSON(res, 401, { authenticated: false, error: 'Unauthorized admin session' });
+      }
+      return sendJSON(res, 200, { authenticated: true, admin });
+    }
+
+    // POST /api/admin/logout
+    if (pathname === '/api/admin/logout' && method === 'POST') {
+      const admin = getAuthAdmin(req);
+      const auth = req.headers['authorization'] || '';
+      let token = auth.startsWith('Bearer ') ? auth.substring(7).trim() : (req.headers['x-admin-token'] || '');
+      if (token) global.HERMES_ADMIN_SESSIONS.delete(token);
+      return sendJSON(res, 200, { success: true, message: 'Overseer session terminated' });
+    }
+
+    // GET /api/admin/users - List all users with aggregated telemetry
+    if (pathname === '/api/admin/users' && method === 'GET') {
+      const admin = getAuthAdmin(req);
+      if (!admin) {
+        return sendJSON(res, 401, { error: 'Access Denied: Restricted to Overseer terminal.' });
+      }
+
+      const allUsers = await dbGetUsers();
+      const allRoadmaps = await dbGetRoadmaps();
+      const allQuizzes = await dbGetQuizResults();
+
+      // Aggregate telemetry per user
+      const usersData = allUsers.map(u => {
+        const userRoadmaps = allRoadmaps.filter(r => r.userId === u.id);
+        const userQuizzes = allQuizzes.filter(q => q.user_id === u.id || q.userId === u.id);
+
+        let totalProgress = 0;
+        let totalHours = 0;
+        let totalCompletedHours = 0;
+
+        userRoadmaps.forEach(r => {
+          totalProgress += (r.overallProgress || 0);
+          totalHours += (r.totalHours || 0);
+          totalCompletedHours += (r.completedHours || 0);
+        });
+
+        const avgProgress = userRoadmaps.length > 0 ? Math.round(totalProgress / userRoadmaps.length) : 0;
+        
+        let quizScoreSum = 0;
+        userQuizzes.forEach(q => { quizScoreSum += (q.percentage || 0); });
+        const avgQuizScore = userQuizzes.length > 0 ? Math.round(quizScoreSum / userQuizzes.length) : 0;
+
+        // Generate celestial avatar URL
+        const celestialAvatarUrl = CelestialAvatars ? CelestialAvatars.getUrl(u.email || u.id) : (u.avatar || '');
+        let avatarUrl = u.avatar;
+        if (!avatarUrl || avatarUrl.includes('dicebear') || !avatarUrl.startsWith('data:')) {
+          avatarUrl = celestialAvatarUrl;
+        }
+
+        return {
+          id: u.id,
+          name: u.name,
+          email: u.email,
+          avatar: avatarUrl,
+          celestialAvatar: celestialAvatarUrl,
+          createdAt: u.createdAt,
+          updatedAt: u.updatedAt,
+          roadmapsCount: userRoadmaps.length,
+          avgProgress,
+          totalHours,
+          totalCompletedHours,
+          quizzesCount: userQuizzes.length,
+          avgQuizScore
+        };
+      });
+
+      // Global platform telemetry stats
+      let globalProgressSum = 0;
+      let totalRoadmapsCount = allRoadmaps.length;
+      allRoadmaps.forEach(r => { globalProgressSum += (r.overallProgress || 0); });
+      const avgPlatformProgress = totalRoadmapsCount > 0 ? Math.round(globalProgressSum / totalRoadmapsCount) : 0;
+
+      let globalQuizScoreSum = 0;
+      allQuizzes.forEach(q => { globalQuizScoreSum += (q.percentage || 0); });
+      const avgQuizScore = allQuizzes.length > 0 ? Math.round(globalQuizScoreSum / allQuizzes.length) : 0;
+
+      const stats = {
+        totalUsers: allUsers.length,
+        totalRoadmaps: totalRoadmapsCount,
+        avgPlatformProgress,
+        totalQuizzesCompleted: allQuizzes.length,
+        avgQuizScore
+      };
+
+      return sendJSON(res, 200, { users: usersData, stats });
+    }
+
+    // GET /api/admin/users/:id - Specific user dossier
+    const matchAdminUserId = pathname.match(/^\/api\/admin\/users\/([^\/]+)$/);
+    if (matchAdminUserId && method === 'GET') {
+      const admin = getAuthAdmin(req);
+      if (!admin) {
+        return sendJSON(res, 401, { error: 'Access Denied: Restricted to Overseer terminal.' });
+      }
+
+      const targetId = matchAdminUserId[1];
+      const user = await dbGetUserById(targetId);
+      if (!user) {
+        return sendJSON(res, 404, { error: 'User not found in registry.' });
+      }
+
+      const roadmaps = await dbGetRoadmaps(targetId);
+      const quizzes = await dbGetQuizResults(targetId);
+
+      // Attach roadmap title to quizzes for clarity
+      const roadmapMap = new Map();
+      roadmaps.forEach(r => roadmapMap.set(r.id, r.title));
+
+      const enrichedQuizzes = quizzes.map(q => ({
+        ...q,
+        roadmap_title: roadmapMap.get(q.roadmap_id || q.roadmapId) || 'General Module'
+      }));
+
+      let totalProgress = 0;
+      let totalHours = 0;
+      let totalCompletedHours = 0;
+
+      roadmaps.forEach(r => {
+        totalProgress += (r.overallProgress || 0);
+        totalHours += (r.totalHours || 0);
+        totalCompletedHours += (r.completedHours || 0);
+      });
+
+      const avgProgress = roadmaps.length > 0 ? Math.round(totalProgress / roadmaps.length) : 0;
+
+      let avatarUrl = user.avatar;
+      if (!avatarUrl || avatarUrl.includes('dicebear')) {
+        if (CelestialAvatars) {
+          avatarUrl = CelestialAvatars.getUrl(user.email || user.id);
+        }
+      }
+
+      return sendJSON(res, 200, {
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          avatar: avatarUrl,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+          avgProgress,
+          totalHours,
+          totalCompletedHours
+        },
+        roadmaps,
+        quizzes: enrichedQuizzes
+      });
+    }
+
+    // GET /api/admin/roadmaps/:id - Full roadmap inspector
+    const matchAdminRoadmapId = pathname.match(/^\/api\/admin\/roadmaps\/([^\/]+)$/);
+    if (matchAdminRoadmapId && method === 'GET') {
+      const admin = getAuthAdmin(req);
+      if (!admin) {
+        return sendJSON(res, 401, { error: 'Access Denied' });
+      }
+      const roadmap = await dbGetRoadmapById(matchAdminRoadmapId[1]);
+      if (!roadmap) return sendJSON(res, 404, { error: 'Roadmap not found' });
+      return sendJSON(res, 200, roadmap);
+    }
+
+    // ROUTE /admin and /admin/ - Serve the Secret Admin Terminal HTML
+    // ROUTE /admin, /admin/dashboard - Serve the Secret Admin Terminal HTML
+    if ((pathname === '/admin' || pathname === '/admin/' || pathname === '/admin.html' || pathname === '/admin/dashboard' || pathname === '/admin-dashboard') && method === 'GET') {
+      const adminFile = path.join(PUBLIC_DIR, 'admin.html');
+      if (fs.existsSync(adminFile)) {
+        const content = fs.readFileSync(adminFile);
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        return res.end(content);
+      }
     }
 
     // Static File Serving

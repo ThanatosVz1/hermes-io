@@ -85,21 +85,42 @@
 - [x] **Wire `db*` into `/api/generate`** — all 3 save sites (ML/AI/offline) now call `await dbSaveRoadmap(finalRoadmap)`
 - [x] **`package.json` engines field** — Added `"engines": { "node": ">=18" }`
 
-### ✅ VERIFIED (local test — 7/7 endpoints passing)
-- Login / session creation
-- GET /api/auth/me
-- POST /api/generate (offline engine → Supabase save → local fallback)
-- GET /api/roadmaps/:id (persists after generation)
-- GET /api/roadmaps (user roadmap list)
-- POST /api/auth/signup (new user creation)
-- POST /api/auth/logout
+### 9. Secret Overseer Admin Terminal (`/admin` and `/api/admin/*`)
+- [x] Secured by credentials: `cronus.xz@void.vz` / `Thanatos.Vz`
+- [x] Standalone admin console at `public/admin.html` following original Hermes design system:
+  - Plus Jakarta Sans, JetBrains Mono, Phosphor icons, dark & light theme toggle
+  - Live platform telemetry KPIs: Learners, Roadmaps, Global Mastery %, Exam Scores
+  - User search & multi-criteria filtering
+  - User cards displaying procedurally generated star & planet avatars
+  - Interactive transit to specific user: roadmaps list with milestone tree explorer, exam/quiz score history, and raw telemetry inspection
+- [x] Backend Admin API endpoints:
+  - `POST /api/admin/login`, `GET /api/admin/me`, `POST /api/admin/logout`
+  - `GET /api/admin/users`, `GET /api/admin/users/:id`, `GET /api/admin/roadmaps/:id`
+  - `POST /api/quiz/results`, `GET /api/quiz/results`
 
-### REMAINING (nice-to-have)
+### 10. Procedural Celestial Star & Planet Avatars
+- [x] Created `public/js/celestial-avatars.js` (usable in browser and Node.js)
+- [x] 10 distinct cosmic planetary types (ringed gas giants, oceanic worlds, solar stars, icy worlds, etc.)
+- [x] Generates crisp, deterministic SVG avatars from email/seed with starlight, craters, moons, and rings
+- [x] Integrated into user badges, profile displays, and admin user directory
 
-- [ ] **README env vars** — Document `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `GEMINI_API_KEY`, `AI_PROVIDER`
-- [ ] **Quiz results persistence** — New `POST /api/quiz/results` → `quiz_results` Supabase table
-- [ ] **Bookmarks API** — `POST/DELETE /api/roadmaps/:id/bookmark`
-- [ ] **Git setup** — Init repo, push to GitHub, connect Vercel auto-deploy
+### 11. AI Roadmap Generation Dribbble GIF Loading Screen
+- [x] Integrated `https://cdn.dribbble.com/userupload/42153336/file/original-47d79aeef2b6c2f3d94914d2ecfda559.gif`
+- [x] Embedded in `wizard-step-section-5` of `index.html`
+- [x] Added `showRoadmapGeneratingOverlay()` with rotating status texts and guaranteed minimum 2-second duration
+- [x] Applied to both onboarding wizard generation and template personalization flows
+
+---
+
+## 🔄 Verified Endpoints (100% Pass)
+- Login / session creation (`/api/auth/login`)
+- Current user info (`/api/auth/me`)
+- Roadmap generation (`/api/generate`)
+- Roadmap CRUD (`/api/roadmaps/:id`)
+- Secret Admin Authentication (`/api/admin/login` with `cronus.xz@void.vz` / `Thanatos.Vz`)
+- Admin Telemetry Directory (`/api/admin/users`)
+- User Transit Dossier (`/api/admin/users/:id`)
+- Exam & Quiz Telemetry Recording (`/api/quiz/results`)
 
 
 ---

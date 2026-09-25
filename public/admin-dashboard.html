@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hermes.io — Admin Dashboard</title>
+  <meta name="robots" content="noindex,nofollow">
+
+  <!-- Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Phosphor Icons -->
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
+
+  <!-- Hermes CSS -->
+  <link rel="stylesheet" href="css/styles.css?v=8">
+
+  <style>
+    /* ======================================
+       Admin Dashboard — Dark Theme Overrides
+       ====================================== */
+    :root {
+      --bg-body: #0A0A0F;
+      --bg-surface: #111118;
+      --bg-surface-elevated: #16161F;
+      --bg-surface-hover: #1E1E2A;
+      --text-primary: #EAEAEA;
+      --text-secondary: #A3A3A3;
+      --text-muted: #737373;
+      --border-subtle: #232333;
+      --border-strong: #2E2E40;
+      --accent-primary: #4F46E5;
+      --accent-primary-hover: #4338CA;
+      --accent-primary-fade: rgba(79,70,229,0.15);
+      --accent-primary-text: #A5B4FC;
+      --accent-success: #6EE7B7;
+      --accent-success-fade: rgba(110,231,183,0.15);
+      --accent-danger: #F87171;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.5);
+      --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+      --radius-sm: 6px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      font-family: var(--font-sans);
+      background: var(--bg-body);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ---- Navbar ---- */
+    .admin-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: 60px;
+      background: rgba(17,17,24,0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      gap: 16px;
+    }
+
+    .nav-brand-admin {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-brand-logo {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #4F46E5, #7C3AED);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-brand-logo i { color: #fff; font-size: 16px; }
+
+    .nav-brand-text {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .nav-brand-text span { color: var(--accent-primary-text); }
+
+    .nav-badge {
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--accent-primary-fade);
+      color: var(--accent-primary-text);
+      border: 1px solid rgba(79,70,229,0.3);
+      border-radius: 20px;
+      padding: 3px 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .nav-right-admin { display: flex; align-items: center; gap: 12px; }
+
+    .nav-stat {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .btn-logout {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: rgba(248,113,113,0.1);
+      border: 1px solid rgba(248,113,113,0.25);
+      border-radius: var(--radius-md);
+      color: #FCA5A5;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .btn-logout:hover {
+      background: rgba(248,113,113,0.18);
+      border-color: rgba(248,113,113,0.4);
+    }
+
+    /* ---- Main Layout ---- */
+    .admin-main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 28px;
+    }
+
+    /* ---- Page Header ---- */
+    .page-header {
+      margin-bottom: 28px;
+    }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.4px;
+      margin-bottom: 4px;
+    }
+
+    .page-title .accent { color: var(--accent-primary-text); }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ---- Search & Controls ---- */
+    .controls-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .search-wrap {
+      flex: 1;
+      min-width: 200px;
+      max-width: 360px;
+      position: relative;
+    }
+
+    .search-wrap i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 9px 12px 9px 38px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-input::placeholder { color: var(--text-muted); }
+    .search-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
+    }
+
+    .stats-pills { display: flex; gap: 10px; margin-left: auto; flex-wrap: wrap; }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .stat-pill i { font-size: 14px; }
+    .stat-pill .val { color: var(--text-primary); font-size: 14px; font-weight: 700; }
+
+    /* ---- Card Grid ---- */
+    .users-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .user-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      cursor: default;
+    }
+
+    .user-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(79,70,229,0.3);
+      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(79,70,229,0.1);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .planet-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .planet-avatar svg, .planet-avatar img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .card-user-info { flex: 1; min-width: 0; }
+
+    .card-user-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+
+    .card-user-email {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ---- Card Stats ---- */
+    .card-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-box {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+    }
+
+    .stat-box-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .stat-box-value {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+    }
+
+    /* ---- Progress bar ---- */
+    .progress-wrap { margin-bottom: 16px; }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .progress-bar-bg {
+      height: 6px;
+      background: var(--bg-surface-elevated);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-primary), #7C3AED);
+      border-radius: 3px;
+      transition: width 0.5s ease;
+    }
+
+    /* ---- Last active ---- */
+    .card-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 14px;
+    }
+
+    /* ---- View button ---- */
+    .btn-view {
+      width: 100%;
+      padding: 9px;
+      background: var(--accent-primary-fade);
+      border: 1px solid rgba(79,70,229,0.25);
+      border-radius: var(--radius-md);
+      color: var(--accent-primary-text);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-view:hover {
+      background: rgba(79,70,229,0.25);
+      border-color: rgba(79,70,229,0.4);
+    }
+
+    /* ---- Detail Panel ---- */
+    .detail-panel {
+      display: none;
+    }
+
+    .detail-panel.active { display: block; }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      margin-bottom: 24px;
+    }
+
+    .back-btn:hover { background: var(--bg-surface-hover); color: var(--text-primary); }
+
+    .detail-profile {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .detail-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+
+    .detail-avatar svg, .detail-avatar img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .detail-user-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .detail-user-email {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .detail-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface-elevated);
+      color: var(--text-secondary);
+    }
+
+    /* ---- Section heading ---- */
+    .section-heading {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-heading i { color: var(--accent-primary-text); font-size: 16px; }
+
+    /* ---- Tables ---- */
+    .data-table-wrap {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 28px;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      background: var(--bg-surface-elevated);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .data-table td {
+      padding: 13px 16px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .data-table tr:last-child td { border-bottom: none; }
+
+    .data-table tr:hover td { background: var(--bg-surface-hover); }
+
+    .data-table td strong { color: var(--text-primary); font-weight: 600; }
+
+    .progress-mini-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .progress-mini-bg {
+      flex: 1;
+      height: 5px;
+      background: var(--bg-surface-elevated);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-mini-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-primary), #7C3AED);
+      border-radius: 3px;
+    }
+
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .score-badge.good { background: var(--accent-success-fade); color: var(--accent-success); }
+    .score-badge.mid  { background: rgba(251,191,36,0.12); color: #FCD34D; }
+    .score-badge.low  { background: rgba(248,113,113,0.12); color: #FCA5A5; }
+
+    /* ---- Loading & Empty States ---- */
+    .state-loading, .state-empty {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--text-muted);
+    }
+
+    .state-loading .spinner-ring {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border-subtle);
+      border-top-color: var(--accent-primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    .state-empty i { font-size: 40px; margin-bottom: 12px; display: block; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---- Toast ---- */
+    .admin-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .admin-toast.show { transform: translateY(0); opacity: 1; }
+    .admin-toast.error { border-color: rgba(248,113,113,0.3); color: #FCA5A5; }
+
+    @media (max-width: 640px) {
+      .admin-main { padding: 20px 16px; }
+      .admin-navbar { padding: 0 16px; }
+      .detail-profile { flex-direction: column; text-align: center; }
+      .detail-chips { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="admin-navbar">
+    <a class="nav-brand-admin" href="/admin/dashboard">
+      <div class="nav-brand-logo"><i class="ph ph-planet"></i></div>
+      <div class="nav-brand-text">Hermes<span>.io</span></div>
+      <div class="nav-badge">Admin Panel</div>
+    </a>
+    <div class="nav-right-admin">
+      <span class="nav-stat" id="nav-stat-users">—</span>
+      <button class="btn-logout" id="btn-logout">
+        <i class="ph ph-sign-out"></i> Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+
+    <!-- Users List View -->
+    <div id="view-users">
+      <div class="page-header">
+        <h1 class="page-title">User <span class="accent">Overview</span></h1>
+        <p class="page-subtitle">All registered Hermes.io users and their learning progress</p>
+      </div>
+
+      <div class="controls-row">
+        <div class="search-wrap">
+          <i class="ph ph-magnifying-glass"></i>
+          <input class="search-input" id="search-input" type="text" placeholder="Search users by name or email…" />
+        </div>
+        <div class="stats-pills">
+          <div class="stat-pill"><i class="ph ph-users"></i> Total <span class="val" id="stat-total">—</span></div>
+          <div class="stat-pill"><i class="ph ph-chart-bar"></i> Avg Progress <span class="val" id="stat-avg-progress">—</span></div>
+        </div>
+      </div>
+
+      <div id="users-container">
+        <div class="state-loading">
+          <div class="spinner-ring"></div>
+          <p>Loading users…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Detail View -->
+    <div id="view-detail" class="detail-panel">
+      <button class="back-btn" id="btn-back">
+        <i class="ph ph-arrow-left"></i> Back to Users
+      </button>
+
+      <div id="detail-profile-section"></div>
+      <div id="detail-roadmaps-section"></div>
+      <div id="detail-quizzes-section"></div>
+    </div>
+
+  </main>
+
+  <!-- Toast -->
+  <div class="admin-toast" id="admin-toast"></div>
+
+  <script>
+    // ========================================
+    // Planet Avatar Generator
+    // ========================================
+    function hashSeed(str) {
+      let h = 5381;
+      for (let i = 0; i < str.length; i++) {
+        h = ((h << 5) + h) + str.charCodeAt(i);
+        h = h & 0x7FFFFFFF;
+      }
+      return h;
+    }
+
+    const PALETTES = [
+      { planet: '#E8724A', ring: '#F0A07A', glow: 'rgba(232,114,74,0.4)'  }, // Rusty Orange
+      { planet: '#5EC9E8', ring: '#A0DCF0', glow: 'rgba(94,201,232,0.4)'  }, // Icy Blue
+      { planet: '#4AE88B', ring: '#7AF0B5', glow: 'rgba(74,232,139,0.4)'  }, // Emerald
+      { planet: '#B07FE8', ring: '#D0AAFF', glow: 'rgba(176,127,232,0.4)' }, // Lavender
+      { planet: '#E8774A', ring: '#FFAA80', glow: 'rgba(232,119,74,0.4)'  }, // Coral
+      { planet: '#E8C840', ring: '#F0E080', glow: 'rgba(232,200,64,0.4)'  }, // Golden
+      { planet: '#E84A6C', ring: '#FF80A0', glow: 'rgba(232,74,108,0.4)'  }, // Crimson
+      { planet: '#40C8B0', ring: '#80E8D8', glow: 'rgba(64,200,176,0.4)'  }, // Teal
+    ];
+
+    function generatePlanetAvatarSVG(seed, size = 100) {
+      const h = hashSeed(seed || 'default');
+      const palette = PALETTES[h % PALETTES.length];
+      const hasRing   = (h >> 3) % 3 !== 0;
+      const hasMoon   = (h >> 6) % 2 === 0;
+      const starCount = 6 + (h % 7);
+      const ringAngle = 15 + (h % 20);
+      const planetX   = size / 2;
+      const planetY   = size / 2;
+      const planetR   = size * 0.28;
+
+      let stars = '';
+      for (let i = 0; i < starCount; i++) {
+        const sx = ((hashSeed(seed + i) * 13) % (size - 8)) + 4;
+        const sy = ((hashSeed(seed + i + 99) * 17) % (size - 8)) + 4;
+        const sr = 0.5 + ((hashSeed(seed + i + 33)) % 10) * 0.1;
+        stars += `<circle cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${sr.toFixed(1)}" fill="rgba(255,255,255,${0.4 + ((hashSeed(seed+i+7)) % 6) * 0.1})" />`;
+      }
+
+      // Surface detail spots
+      const s1x = planetX - planetR * 0.3;
+      const s1y = planetY - planetR * 0.2;
+      const s2x = planetX + planetR * 0.25;
+      const s2y = planetY + planetR * 0.15;
+
+      let ring = '';
+      if (hasRing) {
+        const rx = planetR * 1.55;
+        const ry = planetR * 0.28;
+        ring = `
+          <ellipse cx="${planetX}" cy="${planetY}" rx="${rx}" ry="${ry}"
+            fill="none" stroke="${palette.ring}" stroke-width="3" opacity="0.55"
+            transform="rotate(${ringAngle}, ${planetX}, ${planetY})" />
+          <ellipse cx="${planetX}" cy="${planetY}" rx="${rx * 0.85}" ry="${ry * 0.85}"
+            fill="none" stroke="${palette.ring}" stroke-width="1.5" opacity="0.3"
+            transform="rotate(${ringAngle}, ${planetX}, ${planetY})" />
+        `;
+      }
+
+      let moon = '';
+      if (hasMoon) {
+        const mx = planetX + planetR * 1.5;
+        const my = planetY - planetR * 1.0;
+        moon = `<circle cx="${mx}" cy="${my}" r="${planetR * 0.22}" fill="#888" opacity="0.7" />`;
+      }
+
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">
+        <!-- Background -->
+        <circle cx="${size/2}" cy="${size/2}" r="${size/2}" fill="#0A0A18" />
+        <!-- Stars -->
+        ${stars}
+        <!-- Ring behind planet -->
+        ${hasRing ? `<ellipse cx="${planetX}" cy="${planetY}" rx="${planetR * 1.55}" ry="${planetR * 0.28}"
+          fill="none" stroke="${palette.ring}" stroke-width="5" opacity="0.25"
+          transform="rotate(${ringAngle}, ${planetX}, ${planetY})" clip-path="url(#planet-clip-${h})" />` : ''}
+        <!-- Planet glow -->
+        <circle cx="${planetX}" cy="${planetY}" r="${planetR + 4}" fill="${palette.glow}" />
+        <!-- Planet -->
+        <circle cx="${planetX}" cy="${planetY}" r="${planetR}" fill="${palette.planet}" />
+        <!-- Surface shading -->
+        <circle cx="${planetX - planetR * 0.25}" cy="${planetY - planetR * 0.25}" r="${planetR * 0.7}"
+          fill="rgba(255,255,255,0.07)" />
+        <!-- Surface spots -->
+        <circle cx="${s1x}" cy="${s1y}" r="${planetR * 0.14}" fill="rgba(0,0,0,0.18)" />
+        <circle cx="${s2x}" cy="${s2y}" r="${planetR * 0.09}" fill="rgba(0,0,0,0.14)" />
+        <!-- Ring front -->
+        ${ring}
+        <!-- Moon -->
+        ${moon}
+      </svg>`;
+    }
+
+    // ========================================
+    // Admin Token
+    // ========================================
+    function getAdminToken() {
+      return sessionStorage.getItem('hermes_admin_token') || '';
+    }
+
+    function requireAuth() {
+      const token = getAdminToken();
+      if (!token) {
+        window.location.href = '/admin';
+        return false;
+      }
+      return true;
+    }
+
+    // ========================================
+    // Toast
+    // ========================================
+    let toastTimer;
+    function showToast(msg, type = 'info') {
+      const el = document.getElementById('admin-toast');
+      el.className = 'admin-toast' + (type === 'error' ? ' error' : '');
+      el.innerHTML = `<i class="ph ${type === 'error' ? 'ph-warning-circle' : 'ph-check-circle'}"></i> ${msg}`;
+      clearTimeout(toastTimer);
+      requestAnimationFrame(() => {
+        el.classList.add('show');
+        toastTimer = setTimeout(() => el.classList.remove('show'), 3500);
+      });
+    }
+
+    // ========================================
+    // Date helpers
+    // ========================================
+    function fmtDate(iso) {
+      if (!iso) return 'N/A';
+      try {
+        return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      } catch { return iso; }
+    }
+
+    function timeAgo(iso) {
+      if (!iso) return 'N/A';
+      const diff = Date.now() - new Date(iso).getTime();
+      const d = Math.floor(diff / 86400000);
+      if (d === 0) return 'Today';
+      if (d === 1) return 'Yesterday';
+      if (d < 30) return `${d} days ago`;
+      const m = Math.floor(d / 30);
+      if (m < 12) return `${m}mo ago`;
+      return `${Math.floor(m / 12)}yr ago`;
+    }
+
+    // ========================================
+    // Render Users Grid
+    // ========================================
+    let allUsers = [];
+
+    function renderUsers(users) {
+      const container = document.getElementById('users-container');
+      if (!users || users.length === 0) {
+        container.innerHTML = `<div class="state-empty">
+          <i class="ph ph-users-three"></i>
+          <p>No users found</p>
+        </div>`;
+        return;
+      }
+
+      const totalProgress = users.reduce((s, u) => s + (u.avgProgress || 0), 0);
+      const avgProgress = users.length ? Math.round(totalProgress / users.length) : 0;
+
+      document.getElementById('stat-total').textContent = users.length;
+      document.getElementById('stat-avg-progress').textContent = avgProgress + '%';
+      document.getElementById('nav-stat-users').textContent = `${users.length} users`;
+
+      const grid = document.createElement('div');
+      grid.className = 'users-grid';
+
+      users.forEach(user => {
+        const avatarSVG = generatePlanetAvatarSVG(user.email || user.id, 52);
+        const progress = Math.min(100, Math.round(user.avgProgress || 0));
+        const card = document.createElement('div');
+        card.className = 'user-card';
+        card.innerHTML = `
+          <div class="card-top">
+            <div class="planet-avatar">${avatarSVG}</div>
+            <div class="card-user-info">
+              <div class="card-user-name">${escapeHTML(user.name || 'Unknown')}</div>
+              <div class="card-user-email">${escapeHTML(user.email || '')}</div>
+            </div>
+          </div>
+          <div class="card-stats">
+            <div class="stat-box">
+              <div class="stat-box-label">Roadmaps</div>
+              <div class="stat-box-value">${user.roadmapCount || 0}</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-box-label">Avg Progress</div>
+              <div class="stat-box-value">${progress}%</div>
+            </div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-label">
+              <span>Overall Progress</span>
+              <span>${progress}%</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" style="width:${progress}%"></div>
+            </div>
+          </div>
+          <div class="card-meta">
+            <i class="ph ph-clock"></i>
+            Last active ${timeAgo(user.updatedAt || user.createdAt)}
+          </div>
+          <button class="btn-view" data-uid="${escapeHTML(user.id)}">
+            <i class="ph ph-arrow-square-out"></i> View Details →
+          </button>
+        `;
+        card.querySelector('.btn-view').addEventListener('click', () => openDetail(user));
+        grid.appendChild(card);
+      });
+
+      container.innerHTML = '';
+      container.appendChild(grid);
+    }
+
+    // ========================================
+    // Open Detail View
+    // ========================================
+    async function openDetail(user) {
+      if (!requireAuth()) return;
+
+      document.getElementById('view-users').style.display = 'none';
+      const detail = document.getElementById('view-detail');
+      detail.classList.add('active');
+
+      // Profile header
+      const avatarSVG = generatePlanetAvatarSVG(user.email || user.id, 72);
+      document.getElementById('detail-profile-section').innerHTML = `
+        <div class="detail-profile">
+          <div class="detail-avatar">${avatarSVG}</div>
+          <div>
+            <div class="detail-user-name">${escapeHTML(user.name || 'Unknown')}</div>
+            <div class="detail-user-email">${escapeHTML(user.email || '')}</div>
+            <div class="detail-chips">
+              <div class="chip"><i class="ph ph-tree-structure"></i> ${user.roadmapCount || 0} roadmaps</div>
+              <div class="chip"><i class="ph ph-chart-bar"></i> ${Math.round(user.avgProgress || 0)}% avg progress</div>
+              <div class="chip"><i class="ph ph-calendar"></i> Joined ${fmtDate(user.createdAt)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Load roadmaps
+      document.getElementById('detail-roadmaps-section').innerHTML = `
+        <div class="section-heading"><i class="ph ph-tree-structure"></i> Learning Roadmaps</div>
+        <div class="data-table-wrap"><div class="state-loading"><div class="spinner-ring"></div><p>Loading…</p></div></div>
+      `;
+
+      document.getElementById('detail-quizzes-section').innerHTML = `
+        <div class="section-heading"><i class="ph ph-exam"></i> Quiz Results</div>
+        <div class="data-table-wrap"><div class="state-loading"><div class="spinner-ring"></div><p>Loading…</p></div></div>
+      `;
+
+      // Fetch roadmaps
+      try {
+        const rmRes = await fetch(`/api/admin/users/${user.id}/roadmaps`, {
+          headers: { 'x-admin-token': getAdminToken() }
+        });
+        const roadmaps = rmRes.ok ? await rmRes.json() : [];
+        renderRoadmapsTable(roadmaps);
+      } catch {
+        document.getElementById('detail-roadmaps-section').innerHTML += `<p style="color:var(--accent-danger);font-size:13px">Failed to load roadmaps</p>`;
+      }
+
+      // Fetch quizzes
+      try {
+        const qzRes = await fetch(`/api/admin/users/${user.id}/quizzes`, {
+          headers: { 'x-admin-token': getAdminToken() }
+        });
+        const quizzes = qzRes.ok ? await qzRes.json() : [];
+        renderQuizzesTable(quizzes);
+      } catch {
+        document.getElementById('detail-quizzes-section').innerHTML += `<p style="color:var(--accent-danger);font-size:13px">Failed to load quizzes</p>`;
+      }
+    }
+
+    function renderRoadmapsTable(roadmaps) {
+      const section = document.getElementById('detail-roadmaps-section');
+      if (!roadmaps || roadmaps.length === 0) {
+        section.innerHTML = `<div class="section-heading"><i class="ph ph-tree-structure"></i> Learning Roadmaps</div>
+          <div class="data-table-wrap"><div class="state-empty"><i class="ph ph-tree-structure"></i><p>No roadmaps yet</p></div></div>`;
+        return;
+      }
+
+      const rows = roadmaps.map(r => {
+        const pct = Math.min(100, Math.round(r.overallProgress || 0));
+        return `<tr>
+          <td><strong>${escapeHTML(r.title || 'Untitled')}</strong><br><span style="font-size:11px;color:var(--text-muted)">${escapeHTML(r.goal || '')}</span></td>
+          <td>
+            <div class="progress-mini-bar">
+              <div class="progress-mini-bg"><div class="progress-mini-fill" style="width:${pct}%"></div></div>
+              <span>${pct}%</span>
+            </div>
+          </td>
+          <td>${r.totalHours || 0}h</td>
+          <td>${r.completedHours || 0}h</td>
+          <td>${fmtDate(r.createdAt)}</td>
+        </tr>`;
+      }).join('');
+
+      section.innerHTML = `
+        <div class="section-heading"><i class="ph ph-tree-structure"></i> Learning Roadmaps</div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Roadmap</th>
+                <th style="min-width:140px">Progress</th>
+                <th>Total Hours</th>
+                <th>Completed</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderQuizzesTable(quizzes) {
+      const section = document.getElementById('detail-quizzes-section');
+      if (!quizzes || quizzes.length === 0) {
+        section.innerHTML = `<div class="section-heading"><i class="ph ph-exam"></i> Quiz Results</div>
+          <div class="data-table-wrap"><div class="state-empty"><i class="ph ph-exam"></i><p>No quiz results yet</p></div></div>`;
+        return;
+      }
+
+      const rows = quizzes.map(q => {
+        const score = Math.round(q.score || 0);
+        const cls = score >= 80 ? 'good' : score >= 50 ? 'mid' : 'low';
+        return `<tr>
+          <td><strong>${escapeHTML(q.roadmapTitle || q.moduleTitle || 'Unknown')}</strong></td>
+          <td><span class="score-badge ${cls}">${score}%</span></td>
+          <td>${fmtDate(q.createdAt || q.created_at)}</td>
+        </tr>`;
+      }).join('');
+
+      section.innerHTML = `
+        <div class="section-heading"><i class="ph ph-exam"></i> Quiz Results</div>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Module / Roadmap</th>
+                <th>Score</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    // ========================================
+    // Back button
+    // ========================================
+    document.getElementById('btn-back').addEventListener('click', () => {
+      document.getElementById('view-detail').classList.remove('active');
+      document.getElementById('view-users').style.display = '';
+    });
+
+    // ========================================
+    // Search
+    // ========================================
+    document.getElementById('search-input').addEventListener('input', function () {
+      const q = this.value.toLowerCase();
+      const filtered = allUsers.filter(u =>
+        (u.name || '').toLowerCase().includes(q) ||
+        (u.email || '').toLowerCase().includes(q)
+      );
+      renderUsers(filtered);
+    });
+
+    // ========================================
+    // Logout
+    // ========================================
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      try {
+        await fetch('/api/admin/logout', {
+          method: 'POST',
+          headers: { 'x-admin-token': getAdminToken() }
+        });
+      } catch {}
+      sessionStorage.removeItem('hermes_admin_token');
+      window.location.href = '/admin';
+    });
+
+    // ========================================
+    // HTML Escape
+    // ========================================
+    function escapeHTML(str) {
+      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ========================================
+    // Load Users
+    // ========================================
+    async function loadUsers() {
+      if (!requireAuth()) return;
+
+      try {
+        const res = await fetch('/api/admin/users', {
+          headers: { 'x-admin-token': getAdminToken() }
+        });
+
+        if (res.status === 401 || res.status === 403) {
+          sessionStorage.removeItem('hermes_admin_token');
+          window.location.href = '/admin';
+          return;
+        }
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        allUsers = await res.json();
+        renderUsers(allUsers);
+      } catch (err) {
+        document.getElementById('users-container').innerHTML = `
+          <div class="state-empty">
+            <i class="ph ph-warning-circle" style="color:var(--accent-danger)"></i>
+            <p>Failed to load users: ${escapeHTML(err.message)}</p>
+          </div>
+        `;
+        showToast('Failed to load users', 'error');
+      }
+    }
+
+    // ========================================
+    // Boot
+    // ========================================
+    loadUsers();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hermes.io — Secret Admin Terminal & User Telemetry</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Phosphor Icons -->
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css" />
+
+  <!-- Hermes Design System Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css?v=8">
+
+  <!-- Celestial Avatars Library -->
+  <script src="js/celestial-avatars.js"></script>
+
+  <style>
+    /* Specific Admin Console Enhancements (Adhering to Hermes Design Language) */
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: rgba(79, 70, 229, 0.18);
+      color: #A5B4FC;
+      border: 1px solid rgba(79, 70, 229, 0.35);
+    }
+
+    .admin-restricted-tag {
+      background: rgba(244, 63, 94, 0.15);
+      color: #FDA4AF;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .stats-pills-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-left: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .stats-pills-row { display: none; }
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .stat-pill strong {
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+    }
+
+    /* Secret Login Overlay */
+    .admin-gate-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: var(--bg-body);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .admin-gate-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      animation: gateCardPop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes gateCardPop {
+      0% { opacity: 0; transform: scale(0.94) translateY(12px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .cosmic-banner {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 35% 35%, #818CF8, #4F46E5, #1E1B4B);
+      box-shadow: 0 0 32px rgba(79, 70, 229, 0.45);
+      font-size: 32px;
+      color: white;
+    }
+
+    /* Admin Content Layout */
+    .admin-container {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    .telemetry-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .telemetry-metric-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .telemetry-metric-card:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+    }
+
+    .tm-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .tm-value {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      letter-spacing: -0.02em;
+    }
+    .tm-subtext {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Controls Bar */
+    .admin-controls-bar {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding: 16px 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+    }
+
+    .admin-search-wrap {
+      flex: 1;
+      min-width: 260px;
+      position: relative;
+    }
+    .admin-search-wrap i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 17px;
+    }
+    .admin-search-input {
+      width: 100%;
+      padding: 10px 14px 10px 42px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-strong);
+      background: var(--bg-surface-elevated);
+      color: var(--text-primary);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .admin-search-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px var(--accent-primary-fade);
+    }
+
+    /* User Grid */
+    .user-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .user-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .user-card:hover {
+      border-color: var(--accent-primary);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+    .user-card:active {
+      transform: translateY(0);
+    }
+
+    .uc-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .celestial-avatar-frame {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      background: #060913;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .celestial-avatar-frame svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .uc-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .uc-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .uc-email {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+    .uc-id-tag {
+      display: inline-block;
+      font-size: 11px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      margin-top: 4px;
+    }
+
+    .uc-metrics-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      padding: 12px 14px;
+      background: var(--bg-surface-elevated);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      text-align: center;
+    }
+    .uc-metric-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .uc-metric-val {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+    }
+    .uc-metric-lbl {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .uc-progress-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .uc-progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .uc-progress-bar {
+      height: 7px;
+      background: var(--border-subtle);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+    .uc-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4F46E5, #34D399);
+      border-radius: var(--radius-pill);
+      transition: width 0.4s ease;
+    }
+
+    .uc-action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-primary-text);
+    }
+
+    /* Detail / Transit View */
+    .transit-view-wrapper {
+      animation: transitSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes transitSlideIn {
+      0% { opacity: 0; transform: translateY(16px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .transit-nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .transit-nav-back:hover {
+      background: var(--accent-primary-fade);
+      border-color: var(--accent-primary);
+      color: var(--accent-primary-text);
+    }
+
+    .user-hero-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .uh-identity {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .uh-avatar-huge {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      background: #060913;
+    }
+    .uh-avatar-huge svg { width: 100%; height: 100%; }
+
+    .uh-details h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .uh-details p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+
+    .uh-stats-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .uh-stat-box {
+      text-align: right;
+    }
+    @media (max-width: 600px) {
+      .uh-stat-box { text-align: left; }
+    }
+    .uh-stat-num {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+    }
+    .uh-stat-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Detail Tabs */
+    .transit-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 24px;
+    }
+    .transit-tab-btn {
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .transit-tab-btn.active {
+      color: var(--accent-primary-text);
+      border-bottom-color: var(--accent-primary);
+    }
+    .transit-tab-btn:hover:not(.active) {
+      color: var(--text-primary);
+    }
+
+    /* Roadmaps List in Detail View */
+    .roadmaps-detail-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .admin-roadmap-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: border-color 0.2s;
+    }
+    .admin-roadmap-item:hover {
+      border-color: var(--border-strong);
+    }
+
+    .ari-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .ari-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .ari-goal {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .ari-meta-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 500;
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    /* Milestone Explorer Box */
+    .milestone-tree-box {
+      margin-top: 14px;
+      padding: 16px 18px;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-subtle);
+    }
+    .mtb-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .milestone-node-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      font-size: 13.5px;
+    }
+    .mn-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .mn-status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-completed { background: #34D399; box-shadow: 0 0 8px rgba(52, 211, 153, 0.6); }
+    .status-in_progress { background: #FBBF24; box-shadow: 0 0 8px rgba(251, 191, 36, 0.6); }
+    .status-not_started { background: #64748B; }
+
+    /* Quiz Table */
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .admin-table th {
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: left;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .admin-table td {
+      padding: 14px 18px;
+      font-size: 13.5px;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: var(--bg-surface-elevated); }
+
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      font-weight: 700;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+    .score-pass { background: rgba(52, 211, 153, 0.15); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.3); }
+    .score-warn { background: rgba(251, 191, 36, 0.15); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.3); }
+    .score-fail { background: rgba(248, 113, 113, 0.15); color: #F87171; border: 1px solid rgba(248, 113, 113, 0.3); }
+
+    .empty-state-box {
+      text-align: center;
+      padding: 56px 24px;
+      color: var(--text-muted);
+      background: var(--bg-surface);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-lg);
+    }
+    .empty-state-box i { font-size: 48px; margin-bottom: 12px; opacity: 0.6; }
+    .empty-state-box h3 { font-size: 17px; color: var(--text-primary); margin-bottom: 6px; }
+
+    /* Toast */
+    #admin-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 10001;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      background: #1E1B4B;
+      color: #E0E7FF;
+      border: 1px solid #4F46E5;
+      box-shadow: var(--shadow-lg);
+      font-size: 13.5px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    #admin-toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       TOP NAVIGATION BAR
+       ========================================== -->
+  <header class="app-navbar">
+    <div class="nav-left">
+      <div class="nav-brand" style="cursor: pointer;" onclick="adminApp.navigateHome()">
+        <span>Hermes<span class="brand-dot">.io</span></span>
+      </div>
+      <span class="admin-badge admin-restricted-tag">
+        <i class="ph ph-shield-check"></i>
+        <span>Overseer Console</span>
+      </span>
+
+      <!-- Live Global Platform Statistics Pills -->
+      <div class="stats-pills-row" id="navbar-stats-pills">
+        <div class="stat-pill">
+          <i class="ph ph-users"></i>
+          <span>Learners: <strong id="pill-user-count">—</strong></span>
+        </div>
+        <div class="stat-pill">
+          <i class="ph ph-tree-structure"></i>
+          <span>Roadmaps: <strong id="pill-roadmap-count">—</strong></span>
+        </div>
+        <div class="stat-pill">
+          <i class="ph ph-chart-line-up"></i>
+          <span>Avg Mastery: <strong id="pill-mastery-rate">—%</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <!-- Theme Switcher -->
+      <button class="btn-icon" id="admin-theme-btn" title="Toggle Theme" aria-label="Toggle Theme">
+        <i class="ph ph-sun"></i>
+      </button>
+
+      <!-- Admin Identity Pill -->
+      <div class="stat-pill" style="padding: 4px 10px;" id="admin-identity-pill">
+        <div id="admin-avatar-small" style="width: 22px; height: 22px; border-radius: 50%; overflow: hidden;"></div>
+        <span style="font-weight: 600;">cronus.xz@void.vz</span>
+      </div>
+
+      <!-- Sign Out Button -->
+      <button class="btn btn-secondary btn-sm" id="btn-admin-logout" title="Sign out of Overseer Terminal">
+        <i class="ph ph-sign-out"></i>
+        <span>Exit Terminal</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       SECRET AUTHENTICATION GATE MODAL
+       ========================================== -->
+  <div class="admin-gate-overlay" id="admin-gate-overlay">
+    <div class="admin-gate-card">
+      <div class="cosmic-banner">
+        <i class="ph ph-lock-key"></i>
+      </div>
+
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h2 style="font-size: 22px; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">
+          Hermes Overseer Terminal
+        </h2>
+        <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5;">
+          Restricted access console. Enter authorized administrator credentials to audit learners, curricula, and exam metrics.
+        </p>
+      </div>
+
+      <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 16px;">
+        <div>
+          <label style="display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); margin-bottom: 6px;">
+            Overseer Email
+          </label>
+          <input type="email" id="admin-email-input" required class="admin-search-input" style="padding-left: 16px; border-radius: var(--radius-sm);" placeholder="cronus.xz@void.vz" autocomplete="username">
+        </div>
+
+        <div>
+          <label style="display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); margin-bottom: 6px;">
+            Access Key / Password
+          </label>
+          <input type="password" id="admin-password-input" required class="admin-search-input" style="padding-left: 16px; border-radius: var(--radius-sm);" placeholder="••••••••••••" autocomplete="current-password">
+        </div>
+
+        <div id="gate-error-message" style="display: none; padding: 10px 14px; border-radius: var(--radius-sm); background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.3); color: #FDA4AF; font-size: 13px; display: flex; align-items: center; gap: 8px;">
+          <i class="ph ph-warning-circle"></i>
+          <span id="gate-error-text">Invalid admin credentials.</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="btn-admin-submit" style="width: 100%; padding: 12px; font-size: 14px; margin-top: 4px;">
+          <i class="ph ph-key"></i>
+          <span>Authenticate Session</span>
+        </button>
+
+        <p style="text-align: center; font-size: 12px; color: var(--text-muted); margin-top: 6px;">
+          Return to <a href="/" style="color: var(--accent-primary-text);">Public Learning Dashboard</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MAIN ADMIN CONSOLE BODY
+       ========================================== -->
+  <main class="admin-container" id="admin-main-container">
+
+    <!-- VIEW 1: GLOBAL DIRECTORY VIEW -->
+    <div id="view-user-directory">
+
+      <!-- Telemetry Hero KPI Grid -->
+      <section class="telemetry-metrics-grid">
+        <div class="telemetry-metric-card">
+          <div class="tm-header">
+            <span>REGISTERED LEARNERS</span>
+            <i class="ph ph-users-three" style="font-size: 20px; color: #818CF8;"></i>
+          </div>
+          <div class="tm-value" id="kpi-total-users">—</div>
+          <div class="tm-subtext">
+            <i class="ph ph-database"></i>
+            <span>Active database accounts</span>
+          </div>
+        </div>
+
+        <div class="telemetry-metric-card">
+          <div class="tm-header">
+            <span>GENERATED ROADMAPS</span>
+            <i class="ph ph-git-fork" style="font-size: 20px; color: #34D399;"></i>
+          </div>
+          <div class="tm-value" id="kpi-total-roadmaps">—</div>
+          <div class="tm-subtext">
+            <i class="ph ph-sparkle"></i>
+            <span>AI + Smart offline trees</span>
+          </div>
+        </div>
+
+        <div class="telemetry-metric-card">
+          <div class="tm-header">
+            <span>GLOBAL MASTERY AVG</span>
+            <i class="ph ph-trend-up" style="font-size: 20px; color: #FBBF24;"></i>
+          </div>
+          <div class="tm-value" id="kpi-global-progress">—%</div>
+          <div class="tm-subtext">
+            <i class="ph ph-check-circle"></i>
+            <span>Milestone completion rate</span>
+          </div>
+        </div>
+
+        <div class="telemetry-metric-card">
+          <div class="tm-header">
+            <span>EXAMS ATTEMPTED</span>
+            <i class="ph ph-exam" style="font-size: 20px; color: #F43F5E;"></i>
+          </div>
+          <div class="tm-value" id="kpi-quizzes-taken">—</div>
+          <div class="tm-subtext">
+            <i class="ph ph-trophy"></i>
+            <span id="kpi-quiz-avg-score">—% average score</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search & Controls Bar -->
+      <section class="admin-controls-bar">
+        <div class="admin-search-wrap">
+          <i class="ph ph-magnifying-glass"></i>
+          <input type="text" id="admin-user-search" class="admin-search-input" placeholder="Search learner by name, email, or user ID...">
+        </div>
+
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <select id="admin-user-filter" class="admin-search-input" style="padding: 10px 14px; width: auto;">
+            <option value="all">All Learners</option>
+            <option value="has_roadmaps">With Roadmaps</option>
+            <option value="high_progress">Progress &gt; 50%</option>
+            <option value="has_quizzes">Taken Exams</option>
+          </select>
+
+          <select id="admin-user-sort" class="admin-search-input" style="padding: 10px 14px; width: auto;">
+            <option value="recent">Newest Joined</option>
+            <option value="roadmaps">Most Roadmaps</option>
+            <option value="progress">Highest Progress</option>
+            <option value="name">Alphabetical (A-Z)</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Users Grid -->
+      <section class="user-cards-grid" id="user-cards-container">
+        <!-- Dynamically populated via JS -->
+      </section>
+
+      <!-- Empty State -->
+      <div id="users-empty-state" class="empty-state-box" style="display: none;">
+        <i class="ph ph-user-circle-dashed"></i>
+        <h3>No learners match your query</h3>
+        <p>Try clearing filters or search term.</p>
+      </div>
+
+    </div>
+
+    <!-- VIEW 2: TRANSIT / SPECIFIC USER DETAIL VIEW -->
+    <div id="view-user-detail" class="transit-view-wrapper" style="display: none;">
+      
+      <button class="transit-nav-back" onclick="adminApp.navigateBackToDirectory()">
+        <i class="ph ph-arrow-left"></i>
+        <span>Back to Learner Directory</span>
+      </button>
+
+      <!-- User Hero Header -->
+      <div class="user-hero-card" id="user-hero-container">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="transit-tabs">
+        <button class="transit-tab-btn active" id="tab-btn-roadmaps" onclick="adminApp.switchTab('roadmaps')">
+          <i class="ph ph-tree-structure"></i>
+          <span>Generated Curricula (<span id="user-roadmaps-count">0</span>)</span>
+        </button>
+        <button class="transit-tab-btn" id="tab-btn-quizzes" onclick="adminApp.switchTab('quizzes')">
+          <i class="ph ph-exam"></i>
+          <span>Exams & Quizzes (<span id="user-quizzes-count">0</span>)</span>
+        </button>
+        <button class="transit-tab-btn" id="tab-btn-telemetry" onclick="adminApp.switchTab('telemetry')">
+          <i class="ph ph-code"></i>
+          <span>Raw Telemetry JSON</span>
+        </button>
+      </div>
+
+      <!-- Tab Content 1: User's Roadmaps & Milestones -->
+      <div id="tab-content-roadmaps">
+        <div class="roadmaps-detail-grid" id="user-roadmaps-list">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Tab Content 2: Exam & Quiz Performance -->
+      <div id="tab-content-quizzes" style="display: none;">
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Module / Topic</th>
+                <th>Target Roadmap</th>
+                <th>Score</th>
+                <th>Performance</th>
+                <th>Mastery Status</th>
+                <th>Attempted Date</th>
+              </tr>
+            </thead>
+            <tbody id="user-quizzes-tbody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+        <div id="quizzes-empty-state" class="empty-state-box" style="display: none; margin-top: 16px;">
+          <i class="ph ph-clipboard-text"></i>
+          <h3>No Exam Attempts Recorded</h3>
+          <p>This learner has not yet completed any module mastery quizzes.</p>
+        </div>
+      </div>
+
+      <!-- Tab Content 3: Raw Telemetry -->
+      <div id="tab-content-telemetry" style="display: none;">
+        <pre id="raw-telemetry-pre" style="background: var(--bg-surface); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); color: #A5B4FC; font-family: var(--font-mono); font-size: 13px; overflow-x: auto; max-height: 500px;"></pre>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Admin Notification Toast -->
+  <div id="admin-toast">
+    <i class="ph ph-info" id="toast-icon"></i>
+    <span id="toast-text">Message</span>
+  </div>
+
+  <!-- Admin Application Logic -->
+  <script>
+    class HermesAdminApp {
+      constructor() {
+        this.token = sessionStorage.getItem('hermes_admin_token') || localStorage.getItem('hermes_admin_token') || '';
+        this.users = [];
+        this.selectedUser = null;
+        this.selectedUserRoadmaps = [];
+        this.selectedUserQuizzes = [];
+        this.activeTab = 'roadmaps';
+
+        this.initTheme();
+        this.bindEvents();
+        this.checkAuth();
+      }
+
+      initTheme() {
+        const saved = localStorage.getItem('hermes_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', saved);
+        const icon = document.querySelector('#admin-theme-btn i');
+        if (icon) {
+          icon.className = saved === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
+        }
+      }
+
+      toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('hermes_theme', next);
+        const icon = document.querySelector('#admin-theme-btn i');
+        if (icon) {
+          icon.className = next === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
+        }
+      }
+
+      showToast(text, isError = false) {
+        const toast = document.getElementById('admin-toast');
+        const icon = document.getElementById('toast-icon');
+        const span = document.getElementById('toast-text');
+        if (!toast) return;
+
+        icon.className = isError ? 'ph ph-x-circle' : 'ph ph-check-circle';
+        span.textContent = text;
+        toast.style.borderColor = isError ? '#F43F5E' : '#4F46E5';
+        toast.classList.add('visible');
+
+        setTimeout(() => {
+          toast.classList.remove('visible');
+        }, 3000);
+      }
+
+      bindEvents() {
+        // Theme toggle
+        document.getElementById('admin-theme-btn')?.addEventListener('click', () => this.toggleTheme());
+
+        // Login form
+        document.getElementById('admin-login-form')?.addEventListener('submit', (e) => this.handleLogin(e));
+
+        // Logout button
+        document.getElementById('btn-admin-logout')?.addEventListener('click', () => this.logout());
+
+        // Search & Filters
+        document.getElementById('admin-user-search')?.addEventListener('input', () => this.renderUsersGrid());
+        document.getElementById('admin-user-filter')?.addEventListener('change', () => this.renderUsersGrid());
+        document.getElementById('admin-user-sort')?.addEventListener('change', () => this.renderUsersGrid());
+      }
+
+      async checkAuth() {
+        if (!this.token) {
+          this.showGate(true);
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/admin/me', {
+            headers: { 'Authorization': `Bearer ${this.token}`, 'x-admin-token': this.token }
+          });
+          const data = await res.json();
+          if (data && data.authenticated) {
+            this.showGate(false);
+            this.renderAdminProfilePill(data.admin);
+            this.loadDashboardData();
+          } else {
+            this.showGate(true);
+          }
+        } catch (err) {
+          this.showGate(true);
+        }
+      }
+
+      showGate(visible) {
+        const gate = document.getElementById('admin-gate-overlay');
+        if (gate) {
+          gate.style.display = visible ? 'flex' : 'none';
+        }
+      }
+
+      async handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('admin-email-input').value.trim();
+        const password = document.getElementById('admin-password-input').value.trim();
+        const errBox = document.getElementById('gate-error-message');
+        const errText = document.getElementById('gate-error-text');
+        const submitBtn = document.getElementById('btn-admin-submit');
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<i class="ph ph-spinner ph-spin"></i> Authenticating...`;
+
+        try {
+          const res = await fetch('/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            this.token = data.token;
+            sessionStorage.setItem('hermes_admin_token', data.token);
+            localStorage.setItem('hermes_admin_token', data.token);
+            errBox.style.display = 'none';
+            this.showGate(false);
+            this.renderAdminProfilePill(data.admin);
+            this.showToast('Overseer terminal unlocked.', false);
+            this.loadDashboardData();
+          } else {
+            errBox.style.display = 'flex';
+            errText.textContent = data.error || 'Access Denied: Invalid credentials.';
+            this.showToast('Authentication failed.', true);
+          }
+        } catch (err) {
+          errBox.style.display = 'flex';
+          errText.textContent = 'Server connection error.';
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `<i class="ph ph-key"></i> <span>Authenticate Session</span>`;
+        }
+      }
+
+      logout() {
+        fetch('/api/admin/logout', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${this.token}`, 'x-admin-token': this.token }
+        }).catch(() => {});
+
+        this.token = '';
+        sessionStorage.removeItem('hermes_admin_token');
+        localStorage.removeItem('hermes_admin_token');
+        this.showGate(true);
+        this.showToast('Session terminated.', false);
+      }
+
+      renderAdminProfilePill(admin) {
+        const container = document.getElementById('admin-avatar-small');
+        if (container && window.CelestialAvatars) {
+          container.innerHTML = window.CelestialAvatars.generate('cronus.xz@void.vz', 24);
+        }
+      }
+
+      async loadDashboardData() {
+        try {
+          const res = await fetch('/api/admin/users', {
+            headers: { 'Authorization': `Bearer ${this.token}`, 'x-admin-token': this.token }
+          });
+          if (!res.ok) {
+            if (res.status === 401 || res.status === 403) this.logout();
+            return;
+          }
+
+          const data = await res.json();
+          this.users = data.users || [];
+          this.renderKPIs(data.stats || {});
+          this.renderUsersGrid();
+        } catch (err) {
+          console.error(err);
+          this.showToast('Failed to load telemetry data.', true);
+        }
+      }
+
+      renderKPIs(stats) {
+        document.getElementById('kpi-total-users').textContent = stats.totalUsers ?? this.users.length;
+        document.getElementById('kpi-total-roadmaps').textContent = stats.totalRoadmaps ?? 0;
+        document.getElementById('kpi-global-progress').textContent = `${stats.avgPlatformProgress ?? 0}%`;
+        document.getElementById('kpi-quizzes-taken').textContent = stats.totalQuizzesCompleted ?? 0;
+        document.getElementById('kpi-quiz-avg-score').textContent = `${stats.avgQuizScore ?? 0}% average score`;
+
+        // Navbar Pills
+        document.getElementById('pill-user-count').textContent = stats.totalUsers ?? this.users.length;
+        document.getElementById('pill-roadmap-count').textContent = stats.totalRoadmaps ?? 0;
+        document.getElementById('pill-mastery-rate').textContent = `${stats.avgPlatformProgress ?? 0}%`;
+      }
+
+      renderUsersGrid() {
+        const container = document.getElementById('user-cards-container');
+        const emptyState = document.getElementById('users-empty-state');
+        if (!container) return;
+
+        const searchTerm = (document.getElementById('admin-user-search')?.value || '').toLowerCase().trim();
+        const filterVal = document.getElementById('admin-user-filter')?.value || 'all';
+        const sortVal = document.getElementById('admin-user-sort')?.value || 'recent';
+
+        let list = [...this.users];
+
+        // Filter
+        if (searchTerm) {
+          list = list.filter(u => 
+            (u.name || '').toLowerCase().includes(searchTerm) ||
+            (u.email || '').toLowerCase().includes(searchTerm) ||
+            (u.id || '').toLowerCase().includes(searchTerm)
+          );
+        }
+
+        if (filterVal === 'has_roadmaps') {
+          list = list.filter(u => (u.roadmapsCount || 0) > 0);
+        } else if (filterVal === 'high_progress') {
+          list = list.filter(u => (u.avgProgress || 0) >= 50);
+        } else if (filterVal === 'has_quizzes') {
+          list = list.filter(u => (u.quizzesCount || 0) > 0);
+        }
+
+        // Sort
+        list.sort((a, b) => {
+          if (sortVal === 'roadmaps') return (b.roadmapsCount || 0) - (a.roadmapsCount || 0);
+          if (sortVal === 'progress') return (b.avgProgress || 0) - (a.avgProgress || 0);
+          if (sortVal === 'name') return (a.name || '').localeCompare(b.name || '');
+          // recent default
+          return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+        });
+
+        if (list.length === 0) {
+          container.innerHTML = '';
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        container.innerHTML = list.map(u => {
+          const progress = Math.min(100, Math.max(0, Math.round(u.avgProgress || 0)));
+          const avatarSvg = window.CelestialAvatars 
+            ? window.CelestialAvatars.generate(u.email || u.id, 64) 
+            : `<div style="background:#4F46E5;width:100%;height:100%"></div>`;
+
+          return `
+            <div class="user-card" onclick="adminApp.inspectUser('${u.id}')">
+              <div class="uc-top">
+                <div class="celestial-avatar-frame">
+                  ${avatarSvg}
+                </div>
+                <div class="uc-info">
+                  <div class="uc-name">${this.escapeHTML(u.name || 'Anonymous Learner')}</div>
+                  <div class="uc-email">${this.escapeHTML(u.email || 'guest@hermes.io')}</div>
+                  <div class="uc-id-tag">ID: ${this.escapeHTML(u.id)}</div>
+                </div>
+              </div>
+
+              <div class="uc-metrics-row">
+                <div class="uc-metric-item">
+                  <span class="uc-metric-val">${u.roadmapsCount || 0}</span>
+                  <span class="uc-metric-lbl">Trees</span>
+                </div>
+                <div class="uc-metric-item">
+                  <span class="uc-metric-val">${u.totalCompletedHours || 0}h</span>
+                  <span class="uc-metric-lbl">Learned</span>
+                </div>
+                <div class="uc-metric-item">
+                  <span class="uc-metric-val">${u.quizzesCount || 0}</span>
+                  <span class="uc-metric-lbl">Exams</span>
+                </div>
+              </div>
+
+              <div class="uc-progress-wrap">
+                <div class="uc-progress-header">
+                  <span>Overall Mastery</span>
+                  <span style="font-weight: 700; color: var(--text-primary); font-family: var(--font-mono);">${progress}%</span>
+                </div>
+                <div class="uc-progress-bar">
+                  <div class="uc-progress-fill" style="width: ${progress}%;"></div>
+                </div>
+              </div>
+
+              <div class="uc-action-btn">
+                <span>Audit Roadmaps & Telemetry</span>
+                <i class="ph ph-arrow-right"></i>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      async inspectUser(userId) {
+        try {
+          const res = await fetch(`/api/admin/users/${encodeURIComponent(userId)}`, {
+            headers: { 'Authorization': `Bearer ${this.token}`, 'x-admin-token': this.token }
+          });
+          if (!res.ok) {
+            this.showToast('Failed to retrieve user telemetry.', true);
+            return;
+          }
+
+          const data = await res.json();
+          this.selectedUser = data.user;
+          this.selectedUserRoadmaps = data.roadmaps || [];
+          this.selectedUserQuizzes = data.quizzes || [];
+
+          this.renderUserHero(data.user);
+          this.renderUserRoadmaps();
+          this.renderUserQuizzes();
+          document.getElementById('raw-telemetry-pre').textContent = JSON.stringify(data, null, 2);
+
+          // Transition to detail view
+          document.getElementById('view-user-directory').style.display = 'none';
+          document.getElementById('view-user-detail').style.display = 'block';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (err) {
+          console.error(err);
+          this.showToast('Error opening user dossier.', true);
+        }
+      }
+
+      renderUserHero(user) {
+        const container = document.getElementById('user-hero-container');
+        if (!container) return;
+
+        const avatarSvg = window.CelestialAvatars 
+          ? window.CelestialAvatars.generate(user.email || user.id, 90)
+          : '';
+
+        const joinedStr = user.createdAt ? new Date(user.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'Unknown';
+
+        container.innerHTML = `
+          <div class="uh-identity">
+            <div class="uh-avatar-huge">
+              ${avatarSvg}
+            </div>
+            <div class="uh-details">
+              <h2>${this.escapeHTML(user.name || 'Anonymous')}</h2>
+              <p>${this.escapeHTML(user.email)}</p>
+              <div style="display:flex;gap:8px;margin-top:8px;align-items:center;">
+                <span class="admin-badge">${user.id}</span>
+                <span style="font-size:12px;color:var(--text-muted);"><i class="ph ph-calendar-blank"></i> Joined ${joinedStr}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="uh-stats-row">
+            <div class="uh-stat-box">
+              <div class="uh-stat-num">${this.selectedUserRoadmaps.length}</div>
+              <div class="uh-stat-desc">Roadmaps</div>
+            </div>
+            <div class="uh-stat-box">
+              <div class="uh-stat-num">${user.totalCompletedHours || 0} / ${user.totalHours || 0}h</div>
+              <div class="uh-stat-desc">Hours Progress</div>
+            </div>
+            <div class="uh-stat-box">
+              <div class="uh-stat-num">${user.avgProgress || 0}%</div>
+              <div class="uh-stat-desc">Mastery Ratio</div>
+            </div>
+            <div class="uh-stat-box">
+              <div class="uh-stat-num">${this.selectedUserQuizzes.length}</div>
+              <div class="uh-stat-desc">Exams Taken</div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('user-roadmaps-count').textContent = this.selectedUserRoadmaps.length;
+        document.getElementById('user-quizzes-count').textContent = this.selectedUserQuizzes.length;
+      }
+
+      renderUserRoadmaps() {
+        const container = document.getElementById('user-roadmaps-list');
+        if (!container) return;
+
+        if (this.selectedUserRoadmaps.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state-box">
+              <i class="ph ph-tree-structure"></i>
+              <h3>No Roadmaps Created Yet</h3>
+              <p>This learner has not generated or personalized any curricula.</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = this.selectedUserRoadmaps.map((r, idx) => {
+          const nodes = r.nodes || [];
+          const progress = Math.min(100, Math.max(0, Math.round(r.overallProgress || 0)));
+
+          // Render top 5 milestones
+          const milestoneNodesHtml = nodes.slice(0, 6).map(n => {
+            const statusClass = n.status === 'completed' ? 'status-completed' : (n.status === 'in_progress' ? 'status-in_progress' : 'status-not_started');
+            return `
+              <div class="milestone-node-row">
+                <div class="mn-left">
+                  <div class="mn-status-dot ${statusClass}"></div>
+                  <strong style="color:var(--text-primary);">${this.escapeHTML(n.title)}</strong>
+                </div>
+                <div style="display:flex;gap:12px;align-items:center;color:var(--text-muted);font-size:12px;">
+                  <span>${n.estimatedHours || 0} hrs</span>
+                  <span class="chip" style="padding:1px 6px;text-transform:capitalize;">${n.status || 'not_started'}</span>
+                </div>
+              </div>
+            `;
+          }).join('');
+
+          return `
+            <div class="admin-roadmap-item">
+              <div class="ari-top">
+                <div style="flex:1;">
+                  <div class="ari-title">${this.escapeHTML(r.title)}</div>
+                  <div class="ari-goal">${this.escapeHTML(r.goal || 'No goal description provided.')}</div>
+                  
+                  <div class="ari-meta-chips">
+                    <span class="chip"><i class="ph ph-briefcase"></i> ${this.escapeHTML(r.targetRole || 'General')}</span>
+                    <span class="chip"><i class="ph ph-gauge"></i> ${this.escapeHTML(r.skillLevel || 'Beginner')}</span>
+                    <span class="chip"><i class="ph ph-cpu"></i> Engine: ${this.escapeHTML(r.engine || 'hermes-ai')}</span>
+                    <span class="chip"><i class="ph ph-clock"></i> ${r.completedHours || 0}h / ${r.totalHours || 0}h</span>
+                  </div>
+                </div>
+
+                <div style="min-width: 140px; text-align: right;">
+                  <div style="font-size: 20px; font-weight: 800; font-family: var(--font-mono); color: var(--accent-primary-text);">${progress}%</div>
+                  <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Curriculum Progress</div>
+                </div>
+              </div>
+
+              <!-- Progress bar -->
+              <div class="uc-progress-bar" style="height: 6px;">
+                <div class="uc-progress-fill" style="width: ${progress}%;"></div>
+              </div>
+
+              <!-- Milestone Tree Explorer -->
+              <div class="milestone-tree-box">
+                <div class="mtb-title">
+                  <i class="ph ph-list-numbers"></i>
+                  <span>Milestone Architecture (${nodes.length} nodes)</span>
+                </div>
+                ${milestoneNodesHtml}
+                ${nodes.length > 6 ? `<div style="text-align:center;padding-top:8px;font-size:12px;color:var(--text-muted);">+ ${nodes.length - 6} additional sub-units not shown</div>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      renderUserQuizzes() {
+        const tbody = document.getElementById('user-quizzes-tbody');
+        const emptyState = document.getElementById('quizzes-empty-state');
+        if (!tbody) return;
+
+        if (this.selectedUserQuizzes.length === 0) {
+          tbody.innerHTML = '';
+          emptyState.style.display = 'block';
+          return;
+        }
+
+        emptyState.style.display = 'none';
+
+        tbody.innerHTML = this.selectedUserQuizzes.map(q => {
+          const pct = Math.round(q.percentage || 0);
+          const scoreClass = pct >= 80 ? 'score-pass' : (pct >= 60 ? 'score-warn' : 'score-fail');
+          const statusText = pct >= 80 ? '🏆 Mastered' : (pct >= 60 ? '⚡ Passed' : '🔄 Review Required');
+          const dateStr = q.created_at || q.createdAt 
+            ? new Date(q.created_at || q.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+            : 'Recent';
+
+          return `
+            <tr>
+              <td>
+                <strong style="color:var(--text-primary);">${this.escapeHTML(q.module_title || q.moduleTitle || 'Curriculum Milestone')}</strong>
+              </td>
+              <td style="color:var(--text-secondary);font-size:13px;">
+                ${this.escapeHTML(q.roadmap_title || q.roadmapTitle || 'General Tree')}
+              </td>
+              <td>
+                <span class="score-badge ${scoreClass}">
+                  ${q.score || 0} / ${q.total_questions || q.totalQuestions || 5}
+                </span>
+              </td>
+              <td>
+                <strong style="font-family:var(--font-mono);">${pct}%</strong>
+              </td>
+              <td>
+                <span class="chip" style="font-size:11.5px;">${statusText}</span>
+              </td>
+              <td style="color:var(--text-muted);font-size:12px;font-family:var(--font-mono);">
+                ${dateStr}
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      switchTab(tab) {
+        this.activeTab = tab;
+        const tabs = ['roadmaps', 'quizzes', 'telemetry'];
+        tabs.forEach(t => {
+          const btn = document.getElementById(`tab-btn-${t}`);
+          const content = document.getElementById(`tab-content-${t}`);
+          if (btn) btn.classList.toggle('active', t === tab);
+          if (content) content.style.display = t === tab ? 'block' : 'none';
+        });
+      }
+
+      navigateBackToDirectory() {
+        document.getElementById('view-user-detail').style.display = 'none';
+        document.getElementById('view-user-directory').style.display = 'block';
+        this.selectedUser = null;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      navigateHome() {
+        this.navigateBackToDirectory();
+      }
+
+      escapeHTML(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>'"]/g, 
+          tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+      }
+    }
+
+    // Initialize application when DOM is ready
+    let adminApp;
+    document.addEventListener('DOMContentLoaded', () => {
+      adminApp = new HermesAdminApp();
+      window.adminApp = adminApp;
+    });
+  </script>
+</body>
+</html>

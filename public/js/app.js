@@ -1,6 +1,93 @@
 // Hermes.io — Main Application Controller & View Orchestrator
 // Coordinates Auth, Onboarding Wizard, Template Gallery, Roadmap Explorer & State
 
+
+// ============================================================
+// PLANET AVATAR GENERATOR
+// Generates unique deterministic SVG space avatars from email seed
+// ============================================================
+function generatePlanetAvatar(seed) {
+  // Simple hash from seed string
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) {
+    h = ((h << 5) - h) + seed.charCodeAt(i);
+    h |= 0;
+  }
+  const abs = Math.abs(h);
+
+  const palettes = [
+    { planet: '#E8845A', ring: '#C4623A', glow: '#FF9966', bg: '#0D0812' }, // Rusty Mars
+    { planet: '#6AB8E8', ring: '#3A8AC4', glow: '#88CCFF', bg: '#080D14' }, // Icy Neptune
+    { planet: '#5ECC8A', ring: '#3AAA66', glow: '#77EEA8', bg: '#080F0C' }, // Emerald
+    { planet: '#B48EE8', ring: '#8A5EC4', glow: '#CC99FF', bg: '#0C080F' }, // Lavender
+    { planet: '#E88A6A', ring: '#C45A3A', glow: '#FFAA88', bg: '#0F0A08' }, // Coral
+    { planet: '#E8C84A', ring: '#C4A020', glow: '#FFE066', bg: '#0F0E08' }, // Golden Saturn
+    { planet: '#E85A6A', ring: '#C43A4A', glow: '#FF7788', bg: '#0F080A' }, // Crimson
+    { planet: '#4AE8CC', ring: '#20C4A0', glow: '#66FFEE', bg: '#080F0E' }, // Teal
+  ];
+
+  const pal = palettes[abs % palettes.length];
+  const hasRing = (abs >> 3) % 2 === 0;
+  const hasMoon = (abs >> 5) % 2 === 0;
+  const starCount = 12 + (abs % 8);
+  const planetX = 50, planetY = 52, planetR = 22;
+  const moonAngle = ((abs >> 7) % 360) * (Math.PI / 180);
+  const moonDist = 34;
+  const moonX = planetX + Math.cos(moonAngle) * moonDist;
+  const moonY = planetY + Math.sin(moonAngle) * moonDist;
+
+  // Generate star positions deterministically
+  let stars = '';
+  for (let i = 0; i < starCount; i++) {
+    const sx = ((abs * (i + 3) * 7919) % 90) + 5;
+    const sy = ((abs * (i + 7) * 6271) % 90) + 5;
+    const sr = 0.4 + ((abs * (i + 11)) % 10) / 10;
+    const opacity = 0.4 + ((abs * (i + 2)) % 6) / 10;
+    stars += `<circle cx="${sx}" cy="${sy}" r="${sr}" fill="white" opacity="${opacity.toFixed(1)}"/>`;
+  }
+
+  // Planet gradient spots
+  const glowId = 'g' + (abs % 99999);
+  const ringPath = hasRing
+    ? `<ellipse cx="${planetX}" cy="${planetY}" rx="${planetR + 12}" ry="5"
+         fill="none" stroke="${pal.ring}" stroke-width="3.5" opacity="0.75"
+         transform="rotate(-15 ${planetX} ${planetY})"/>`
+    : '';
+  const moonEl = hasMoon
+    ? `<circle cx="${moonX.toFixed(1)}" cy="${moonY.toFixed(1)}" r="4" fill="#CCCCCC" opacity="0.85"/>`
+    : '';
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <radialGradient id="${glowId}" cx="38%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="${pal.glow}" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="${pal.planet}"/>
+      <stop offset="100%" stop-color="${pal.ring}" stop-opacity="0.8"/>
+    </radialGradient>
+    <filter id="f${glowId}">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="c${glowId}">
+      <circle cx="${planetX}" cy="${planetY}" r="${planetR}"/>
+    </clipPath>
+  </defs>
+  <circle cx="50" cy="50" r="50" fill="${pal.bg}"/>
+  ${stars}
+  ${ringPath}
+  <circle cx="${planetX}" cy="${planetY}" r="${planetR}"
+    fill="url(#${glowId})" filter="url(#f${glowId})"/>
+  <ellipse cx="${planetX - 5}" cy="${planetY - 8}" rx="8" ry="5"
+    fill="white" opacity="0.12" clip-path="url(#c${glowId})"/>
+  ${moonEl}
+</svg>`;
+}
+
+function getPlanetAvatarUrl(seed) {
+  const svg = generatePlanetAvatar(seed || 'default');
+  return 'data:image/svg+xml;base64,' + btoa(svg);
+}
+
 class HermesApp {
   constructor() {
     this.currentUser = null;
@@ -70,7 +157,7 @@ class HermesApp {
         userBadge.classList.remove('hidden');
         userBadge.innerHTML = `
           <div class="user-avatar-wrap">
-            <img src="${this.currentUser.avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(this.currentUser.email)}`}" alt="User Avatar" class="user-avatar-img">
+            <img src="${(this.currentUser.avatar && !this.currentUser.avatar.includes('dicebear')) ? this.currentUser.avatar : (window.getCelestialAvatarUrl ? window.getCelestialAvatarUrl(this.currentUser.email) : getPlanetAvatarUrl(this.currentUser.email))}" alt="User Avatar" class="user-avatar-img">
             <span class="user-name-text">${this.escapeHTML(this.currentUser.name)}</span>
             <i class="ph ph-caret-down"></i>
           </div>
@@ -753,6 +840,87 @@ class HermesApp {
     }
   }
 
+  showRoadmapGeneratingOverlay(initialText = 'Crafting your personalized learning universe...') {
+    const _genOverlayTexts = [
+      'Crafting your personalized learning universe...',
+      'Mapping skill constellations...',
+      'Calibrating milestone trajectories...',
+      'Assembling your cosmic roadmap...',
+      'Weaving knowledge pathways...',
+    ];
+    if (!document.getElementById('hermes-gen-overlay-style')) {
+      const _s = document.createElement('style');
+      _s.id = 'hermes-gen-overlay-style';
+      _s.textContent = `
+        #hermes-gen-overlay {
+          position:fixed;inset:0;z-index:9999;
+          background:rgba(10,10,15,0.93);
+          backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+          display:flex;flex-direction:column;align-items:center;
+          justify-content:center;gap:20px;
+          animation:_gFadeIn 0.35s ease;
+        }
+        @keyframes _gFadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes _gFadeOut{from{opacity:1}to{opacity:0}}
+        #hermes-gen-overlay.fading{animation:_gFadeOut 0.4s ease forwards;}
+        #hermes-gen-overlay img{border-radius:16px;box-shadow:0 0 60px rgba(79,70,229,0.45);width:320px;max-width:88vw;}
+        #hermes-gen-ol-text{
+          color:#E8E8E8;font-family:'Plus Jakarta Sans',sans-serif;
+          font-size:16px;font-weight:500;text-align:center;
+          max-width:340px;letter-spacing:0.01em;
+          transition:opacity 0.25s ease;
+        }
+        .hg-dots{display:flex;gap:8px;}
+        .hg-dots span{
+          width:8px;height:8px;border-radius:50%;
+          background:#4F46E5;animation:_gDot 1.2s infinite ease-in-out;
+        }
+        .hg-dots span:nth-child(2){animation-delay:0.2s;background:#7C73F5;}
+        .hg-dots span:nth-child(3){animation-delay:0.4s;background:#A5A0FF;}
+        @keyframes _gDot{
+          0%,80%,100%{transform:scale(0.7);opacity:0.5;}
+          40%{transform:scale(1.2);opacity:1;}
+        }
+      `;
+      document.head.appendChild(_s);
+    }
+    let _overlay = document.getElementById('hermes-gen-overlay');
+    if (!_overlay) {
+      _overlay = document.createElement('div');
+      _overlay.id = 'hermes-gen-overlay';
+      _overlay.innerHTML = `
+        <img src="https://cdn.dribbble.com/userupload/42153336/file/original-47d79aeef2b6c2f3d94914d2ecfda559.gif"
+             alt="Generating roadmap..." />
+        <p id="hermes-gen-ol-text">${initialText}</p>
+        <div class="hg-dots"><span></span><span></span><span></span></div>
+      `;
+      document.body.appendChild(_overlay);
+    }
+
+    let _gti = 0;
+    const _gtEl = document.getElementById('hermes-gen-ol-text');
+    const _gtInt = setInterval(() => {
+      _gti = (_gti + 1) % _genOverlayTexts.length;
+      if (_gtEl) { 
+        _gtEl.style.opacity='0'; 
+        setTimeout(() => { if(_gtEl){_gtEl.textContent=_genOverlayTexts[_gti];_gtEl.style.opacity='1';} }, 150); 
+      }
+    }, 650);
+
+    const _genT0 = Date.now();
+    return () => {
+      clearInterval(_gtInt);
+      const elapsed = Date.now() - _genT0;
+      const wait = Math.max(0, 2000 - elapsed);
+      setTimeout(() => { 
+        if (_overlay && _overlay.parentNode) { 
+          _overlay.classList.add('fading'); 
+          setTimeout(() => { if(_overlay && _overlay.parentNode) _overlay.remove(); }, 420); 
+        } 
+      }, wait);
+    };
+  }
+
   async executeAIOnboardingGeneration() {
     this.updateWizardStepUI(5); // Generation animation state
 
@@ -766,6 +934,76 @@ class HermesApp {
 
     updateStatus('Synthesizing career objectives and skill profile...', 25);
 
+    // ── AI GENERATION LOADING OVERLAY (minimum 2 seconds) ──────────────────
+    const _genOverlayTexts = [
+      'Crafting your personalized learning universe...',
+      'Mapping skill constellations...',
+      'Calibrating milestone trajectories...',
+      'Assembling your cosmic roadmap...',
+      'Weaving knowledge pathways...',
+    ];
+    if (!document.getElementById('hermes-gen-overlay-style')) {
+      const _s = document.createElement('style');
+      _s.id = 'hermes-gen-overlay-style';
+      _s.textContent = `
+        #hermes-gen-overlay {
+          position:fixed;inset:0;z-index:9999;
+          background:rgba(10,10,15,0.93);
+          backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+          display:flex;flex-direction:column;align-items:center;
+          justify-content:center;gap:24px;
+          animation:_gFadeIn 0.35s ease;
+        }
+        @keyframes _gFadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes _gFadeOut{from{opacity:1}to{opacity:0}}
+        #hermes-gen-overlay.fading{animation:_gFadeOut 0.4s ease forwards;}
+        #hermes-gen-overlay img{border-radius:16px;box-shadow:0 0 60px rgba(79,70,229,0.45);}
+        #hermes-gen-ol-text{
+          color:#E8E8E8;font-family:'Plus Jakarta Sans',sans-serif;
+          font-size:16px;font-weight:500;text-align:center;
+          max-width:340px;letter-spacing:0.01em;
+          transition:opacity 0.25s ease;
+        }
+        .hg-dots{display:flex;gap:8px;}
+        .hg-dots span{
+          width:8px;height:8px;border-radius:50%;
+          background:#4F46E5;animation:_gDot 1.2s infinite ease-in-out;
+        }
+        .hg-dots span:nth-child(2){animation-delay:0.2s;background:#7C73F5;}
+        .hg-dots span:nth-child(3){animation-delay:0.4s;background:#A5A0FF;}
+        @keyframes _gDot{
+          0%,80%,100%{transform:scale(0.7);opacity:0.5;}
+          40%{transform:scale(1.2);opacity:1;}
+        }
+      `;
+      document.head.appendChild(_s);
+    }
+    const _overlay = document.createElement('div');
+    _overlay.id = 'hermes-gen-overlay';
+    _overlay.innerHTML = `
+      <img src="https://cdn.dribbble.com/userupload/42153336/file/original-47d79aeef2b6c2f3d94914d2ecfda559.gif"
+           width="300" style="max-width:88vw" alt="Generating roadmap..." />
+      <p id="hermes-gen-ol-text">${_genOverlayTexts[0]}</p>
+      <div class="hg-dots"><span></span><span></span><span></span></div>
+    `;
+    document.body.appendChild(_overlay);
+
+    let _gti = 0;
+    const _gtEl = document.getElementById('hermes-gen-ol-text');
+    const _gtInt = setInterval(() => {
+      _gti = (_gti + 1) % _genOverlayTexts.length;
+      if (_gtEl) { _gtEl.style.opacity='0'; setTimeout(() => { if(_gtEl){_gtEl.textContent=_genOverlayTexts[_gti];_gtEl.style.opacity='1';} }, 150); }
+    }, 650);
+
+    const _genT0 = Date.now();
+    const _removeOverlay = () => {
+      clearInterval(_gtInt);
+      const elapsed = Date.now() - _genT0;
+      const wait = Math.max(0, 2000 - elapsed);
+      setTimeout(() => { if (_overlay.parentNode) { _overlay.classList.add('fading'); setTimeout(() => { if(_overlay.parentNode) _overlay.remove(); }, 420); } }, wait);
+    };
+    // ── END OVERLAY ──────────────────────────────────────────────────────────
+
     try {
       setTimeout(() => updateStatus('Formulating milestone progression and time budgets...', 55), 700);
       setTimeout(() => updateStatus('Curating verified documentation, videos, and exercises...', 80), 1400);
@@ -773,6 +1011,7 @@ class HermesApp {
       const generated = await window.hermesAI.generateRoadmap(this.wizardData);
 
       updateStatus('Finalizing recursive learning tree...', 100);
+      _removeOverlay();
 
       // Pre-set in-memory roadmap for instant, flicker-free navigation
       this.currentRoadmap = generated;
@@ -792,6 +1031,7 @@ class HermesApp {
       }, 500);
 
     } catch (err) {
+      _removeOverlay();
       console.error('Generation failed:', err);
       this.showToast(`Generation failed: ${err.message}`, 'error');
       this.updateWizardStepUI(4);
@@ -957,7 +1197,13 @@ class HermesApp {
           targetRole: template.targetRole
         };
 
-        const personalized = await window.hermesAI.generateRoadmap(profile);
+        const _hideOverlay = this.showRoadmapGeneratingOverlay('Personalizing tailored curriculum with AI...');
+        let personalized;
+        try {
+          personalized = await window.hermesAI.generateRoadmap(profile);
+        } finally {
+          _hideOverlay();
+        }
         this.currentRoadmap = personalized;
         modal.classList.add('hidden');
         this.showToast('Personalized roadmap created!', 'success');
@@ -1373,6 +1619,26 @@ class HermesApp {
 
     if (percentEl) percentEl.textContent = `${percent}%`;
     if (fractionEl) fractionEl.textContent = `${this.quizScore} / ${total} Correct`;
+
+    // Persist quiz performance for overseer telemetry
+    try {
+      fetch('/api/quiz/results', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(this.authToken ? { 'Authorization': `Bearer ${this.authToken}` } : {})
+        },
+        body: JSON.stringify({
+          userId: this.currentUser?.id || 'usr_guest',
+          roadmapId: this.currentRoadmap?.id,
+          moduleTitle: this.activeQuizNode?.title || 'Curriculum Milestone',
+          score: this.quizScore,
+          totalQuestions: total,
+          percentage: percent,
+          passed: percent >= 80
+        })
+      }).catch(() => {});
+    } catch (_e) {}
 
     if (percent >= 80) {
       if (headlineEl) headlineEl.textContent = `🏆 Module Mastery Achieved!`;
