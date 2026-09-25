@@ -708,7 +708,7 @@
       <!-- Admin Identity Pill -->
       <div class="stat-pill" style="padding: 4px 10px;" id="admin-identity-pill">
         <div id="admin-avatar-small" style="width: 22px; height: 22px; border-radius: 50%; overflow: hidden;"></div>
-        <span style="font-weight: 600;">cronus.xz@void.vz</span>
+        <span style="font-weight: 600;" id="admin-email-display">Overseer</span>
       </div>
 
       <!-- Sign Out Button -->
@@ -742,14 +742,14 @@
           <label style="display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); margin-bottom: 6px;">
             Overseer Username or Email
           </label>
-          <input type="text" id="admin-email-input" required class="admin-search-input" style="padding-left: 16px; border-radius: var(--radius-sm);" placeholder="cronus or cronus.xz@void.vz" autocomplete="username">
+          <input type="text" id="admin-email-input" required class="admin-search-input" style="padding-left: 16px; border-radius: var(--radius-sm);" placeholder="" autocomplete="off">
         </div>
 
         <div>
           <label style="display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); margin-bottom: 6px;">
             Access Key / Password
           </label>
-          <input type="password" id="admin-password-input" required class="admin-search-input" style="padding-left: 16px; border-radius: var(--radius-sm);" placeholder="••••••••••••" autocomplete="current-password">
+          <input type="password" id="admin-password-input" required class="admin-search-input" style="padding-left: 16px; border-radius: var(--radius-sm);" placeholder="" autocomplete="off">
         </div>
 
         <div id="gate-error-message" style="display: none; padding: 10px 14px; border-radius: var(--radius-sm); background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.3); color: #FDA4AF; font-size: 13px; display: flex; align-items: center; gap: 8px;">
@@ -1099,7 +1099,11 @@
       renderAdminProfilePill(admin) {
         const container = document.getElementById('admin-avatar-small');
         if (container && window.CelestialAvatars) {
-          container.innerHTML = window.CelestialAvatars.generate('cronus.xz@void.vz', 24);
+          container.innerHTML = window.CelestialAvatars.generate(admin?.email || 'cronus.xz@void.vz', 24);
+        }
+        const display = document.getElementById('admin-email-display');
+        if (display && admin?.email) {
+          display.textContent = admin.email;
         }
       }
 
