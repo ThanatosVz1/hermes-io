@@ -1,10 +1,10 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[12pt,a4paper]{article}
 
 % --- Essential Packages ---
 \usepackage[a4paper,margin=1in,top=1.2in,bottom=1.1in]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
+\usepackage{newtxtext,newtxmath} % Times New Roman 12pt font
 \usepackage{amsmath,amssymb}
 \usepackage{xcolor}
 \usepackage[most]{tcolorbox}
@@ -29,6 +29,8 @@
 \definecolor{codeFill}{HTML}{F6F5F0}
 \definecolor{codeBorder}{HTML}{7FB8DE}
 \definecolor{codeTab}{HTML}{4FA8D8}
+\definecolor{outputFill}{HTML}{FAFAFA}
+\definecolor{outputBorder}{HTML}{1A1A2E}
 \definecolor{kw}{HTML}{8B008B}
 \definecolor{str}{HTML}{B5651D}
 \definecolor{cmt}{HTML}{2E8B57}
@@ -52,7 +54,7 @@
 % --- Hyperref Setup ---
 \hypersetup{
     colorlinks=true,
-    linkcolor=accentBlue,
+    linkcolor=navyHead,
     filecolor=accentBlue,
     urlcolor=accentBlue,
     citecolor=accentBlue
@@ -90,6 +92,22 @@
   fonttitle=\bfseries\ttfamily\small,
   attach boxed title to top left={xshift=10pt, yshift=-2.5pt},
   boxed title style={rounded corners, size=small}
+}
+
+% --- Snippet Output Box ---
+\newtcolorbox{outputbox}[1]{
+  colback=outputFill,
+  colframe=navyHead,
+  rounded corners,
+  arc=3pt,
+  boxrule=0.7pt,
+  title=Output / Execution Result: #1,
+  colbacktitle=navyHead,
+  coltitle=white,
+  fonttitle=\bfseries\ttfamily\scriptsize,
+  attach boxed title to top left={xshift=10pt, yshift=-2.5pt},
+  boxed title style={rounded corners, size=small},
+  left=10pt, right=10pt, top=8pt, bottom=8pt
 }
 
 % --- Listings Syntax Highlighting ---
@@ -138,10 +156,10 @@
 \vspace{2pt}
 \begin{abstractbox}
 \noindent
-\textbf{Hermes.io} is an autonomous, full-stack educational intelligence platform designed to address the fragmentation, static rigidity, and lack of verified progression in modern self-directed technical education. Built upon a unified \texttt{Node.js} serverless HTTP micro-engine and backed by a dual-tier cloud database architecture utilizing \textbf{Supabase PostgreSQL} with resilient local file failover, Hermes synthesizes personalized, role-specific curriculum trees utilizing modern \textbf{Large Language Model (LLM)} inference. The platform incorporates multi-tiered learning modalities, offering both a custom 4-step wizard and a rich gallery of standardized industry blueprints. Each generated curriculum features an interactive, recursive milestone constellation with on-demand submodule expansions, verified knowledge mastery quizzes, and an executive \textbf{Hermes Overseer Terminal} secured via stateless cryptographic \texttt{HMAC-SHA256} tokens. Interactive features include procedural celestial planet avatars, a cosmic living universe canvas with slow-falling shooting stars, and a tactile \textbf{Slide to Enter} gateway. Rigorous automated verification demonstrates sub-15ms telemetry latency, seamless offline fallback, and high-fidelity progress synchronization across distributed serverless environments.
+\textbf{Hermes.io} is an autonomous, full-stack educational intelligence platform designed to address the fragmentation, static rigidity, and absence of verified progress in modern self-directed technical education. Built upon a unified \texttt{Node.js} serverless HTTP micro-engine and backed by a resilient dual-tier persistence architecture utilizing \textbf{Supabase PostgreSQL} with zero-loss local JSON file failover, Hermes synthesizes personalized, role-specific curriculum trees utilizing modern \textbf{Large Language Model (LLM)} inference. The platform incorporates multi-tiered learning modalities, offering both an intelligent 4-step customization wizard and a curated gallery of standardized industry blueprints. Each generated curriculum features an interactive, recursive milestone constellation with on-demand submodule expansions, verified knowledge mastery quizzes, and an executive \textbf{Hermes Overseer Terminal} secured via stateless cryptographic \texttt{HMAC-SHA256} tokens. Interactive features include procedural celestial planet avatars, a cosmic living universe canvas with slow-falling shooting stars, and a tactile \textbf{Slide to Enter} gateway. Rigorous automated verification demonstrates sub-15ms telemetry latency, seamless offline fallback, and high-fidelity progress synchronization across distributed serverless environments.
 \end{abstractbox}
 
-\vspace{14pt}
+\vspace{12pt}
 
 % --- Table of Contents ---
 {
@@ -156,27 +174,29 @@
 % ========================================================================
 \section{Introduction}
 
-\subsection{Purpose}
-The purpose of the \textbf{Hermes.io} project is to engineer an enterprise-grade, end-to-end learning path synthesizer and tracking dashboard. Self-directed technical learners frequently confront unstructured tutorials, disjointed documentation, and open-ended roadmaps that lack actionable milestones, practical project callouts, or verifiable assessments. Hermes.io solves this paradigm by automatically transforming high-level career goals (e.g., \textit{Full Stack Developer}, \textit{AI/ML Engineer}, \textit{DevOps Architect}) into interactive, multi-stage milestone constellations accompanied by automated exams, study hour rollups, and administrative telemetry.
+\subsection{Project Overview \& Motivation}
+The rapid proliferation of web and software frameworks has rendered self-directed technical education indispensable yet increasingly overwhelming. Aspiring software engineers and industry practitioners navigate thousands of disparate tutorials, documentation pages, and video courses. Without structured milestones, workload calibration, and objective evaluations, learners frequently experience tutorial paralysis and abandon their goals. 
 
-\subsection{Problem Statement}
-Current educational paradigms exhibit several critical bottlenecks:
+The \textbf{Hermes.io} project engineers an end-to-end curriculum synthesizer, interactive progress tracker, and administrative observability platform. By marrying generative artificial intelligence with modern reactive web interfaces, Hermes converts broad career aspirations (e.g., \textit{Full-Stack Engineer}, \textit{Machine Learning Specialist}, \textit{DevOps Architect}) into clear, actionable milestone constellations accompanied by study hour estimates, hands-on project briefs, and modular mastery assessments.
+
+\subsection{Problem Statement \& Industry Context}
+Existing educational platforms exhibit several critical bottlenecks:
 \begin{itemize}[leftmargin=1.5em, itemsep=6pt]
-    \item \textbf{Disjointed learning materials} -- Learners waste substantial time navigating heterogeneous blog posts, outdated documentation, and uncurated video playlists without clear prerequisites.
-    \item \textbf{Static, non-adaptive curricula} -- Existing roadmap platforms offer static PNG/SVG diagrams that cannot dynamically adjust to a learner's prior experience or specific tech-stack preferences.
-    \item \textbf{Absence of verified mastery} -- Traditional roadmaps rely entirely on self-reported checkboxes without evaluating comprehension through targeted conceptual assessments.
-    \item \textbf{Administrative blind spots} -- Institutional supervisors and enterprise team leads lack real-time observability into team skill progression, milestone bottlenecks, and examination pass rates.
+    \item \textbf{Disjointed Learning Resources} -- Learners spend excessive hours aggregating tutorials across heterogeneous blogs and video repositories without clear sequencing or prerequisite validation.
+    \item \textbf{Static, Non-Adaptive Roadmaps} -- Conventional roadmap websites provide static PNG or SVG infographics that cannot adapt to an individual's background, available hours, or tech-stack preferences.
+    \item \textbf{Absence of Verified Comprehension} -- Traditional roadmap platforms rely entirely on unverified self-checking, providing no objective mechanism to confirm whether a learner truly understood core concepts.
+    \item \textbf{Administrative Blind Spots in Teams} -- Mentors, instructors, and team supervisors lack unified telemetry into learner progression, struggle points, and examination pass rates.
 \end{itemize}
 
-\subsection{Objectives}
-To resolve the aforementioned challenges, Hermes.io fulfills the following engineering objectives:
+\subsection{Project Scope \& Key Objectives}
+To eliminate these bottlenecks, Hermes.io fulfills the following engineering objectives:
 \begin{enumerate}[leftmargin=1.5em, itemsep=4pt]
-    \item Design a responsive, cosmic-themed web interface featuring a tactile \textit{Slide to Enter} gate, live universe background with slow shooting stars, and procedural SVG celestial star/planet avatars.
-    \item Implement an intelligent roadmap synthesis pipeline leveraging Gemini generative AI with graceful local fallback heuristics for fully offline continuity.
-    \item Provide on-demand, recursive submodule expansion enabling learners to drill deep into complex technical milestones without losing overall curriculum context.
-    \item Develop a verified examination engine supporting multi-question modular mastery quizzes with score analytics and badge rewards.
-    \item Construct the \textbf{Hermes Overseer Terminal}, an enterprise telemetry console powered by stateless \texttt{HMAC-SHA256} authentication for serverless environments.
-    \item Implement cloud persistence using Supabase PostgreSQL with automated schema migration, row-level security (RLS), and zero-loss local JSON synchronization.
+    \item \textbf{Immersive Visual Presentation} -- Implement a cosmic living universe theme with slow-falling shooting stars, a tactile \textit{Slide to Enter} gate, and procedural SVG celestial star/planet avatars.
+    \item \textbf{Intelligent Curriculum Synthesis} -- Orchestrate Google Gemini LLM inference with structured JSON schemas to dynamically generate multi-tier milestone trees with automatic offline fallback.
+    \item \textbf{Recursive Submodule Expansion} -- Allow learners to dynamically unpack high-level nodes into concrete, sub-milestone task graphs on demand.
+    \item \textbf{Automated Knowledge Mastery Verification} -- Provide built-in, modular 10-question mastery examinations with automated grading, time logging, and tiered certification pills.
+    \item \textbf{Stateless Cryptographic Security} -- Construct the \textbf{Hermes Overseer Terminal} secured with stateless \texttt{HMAC-SHA256} tokens designed for serverless lambda environments.
+    \item \textbf{Dual-Tier Persistent Storage} -- Combine Supabase PostgreSQL cloud persistence with automatic local filesystem JSON synchronization for complete offline continuity.
 \end{enumerate}
 
 \newpage
@@ -186,34 +206,34 @@ To resolve the aforementioned challenges, Hermes.io fulfills the following engin
 % ========================================================================
 \section{Tools and Technologies}
 
-\subsection{Frontend Architecture}
-The frontend interface is engineered using semantic \texttt{HTML5}, modern \texttt{CSS3} design tokens, and modular, vanilla \texttt{JavaScript (ESNext)}. By avoiding bloated component frameworks, Hermes achieves instant first-contentful-paint (FCP), zero build-step overhead, and smooth 60fps animations. Key components include:
+\subsection{Frontend Architecture \& Custom Design System}
+The client interface is engineered using semantic \texttt{HTML5}, modern \texttt{CSS3} custom properties (CSS variables), and modular vanilla \texttt{JavaScript (ESNext)}. By avoiding the overhead of heavy single-page application frameworks, Hermes achieves instant first-contentful-paint (FCP), zero build-step overhead, and smooth 60fps animations.
 \begin{itemize}[leftmargin=1.5em, itemsep=4pt]
     \item \textbf{Phosphor Icons Web (v2.1.1)} -- Comprehensive iconography across regular and fill states.
-    \item \textbf{Google Fonts} -- \textit{Plus Jakarta Sans} for headings and UI copy; \textit{JetBrains Mono} for telemetry, tokens, and monospace codes.
+    \item \textbf{Typography} -- \textit{Plus Jakarta Sans} for headings and UI copy; \textit{JetBrains Mono} for code, telemetry, and tokens; \textit{Times New Roman} for formal academic publication styling.
     \item \textbf{Celestial Avatars Engine} -- Deterministic procedural SVG generator producing 10 unique planetary and star archetypes seeded by user email addresses.
 \end{itemize}
 
-\subsection{Backend \& API Layer}
-The backend is powered by native \texttt{Node.js} without heavyweight external middleware dependencies.
+\subsection{Serverless Micro-Engine \& REST API Layer}
+The backend is powered by native \texttt{Node.js} utilizing standard library modules without external web framework dependencies.
 \begin{itemize}[leftmargin=1.5em, itemsep=4pt]
     \item \textbf{Stateless HTTP Server} -- Lightweight RESTful micro-engine handling CORS, streaming JSON bodies, static asset caching, and security headers.
-    \item \textbf{Stateless Cryptographic HMAC-SHA256 Auth} -- Replaces fragile in-memory serverless session stores with signed, self-contained bearer tokens (\texttt{hadmin.<payload>.<signature>}) that remain fully valid across dynamic Vercel Lambda container spin-ups.
+    \item \textbf{Stateless Cryptographic HMAC-SHA256 Auth} -- Eliminates fragile in-memory session stores by issuing signed bearer tokens (\texttt{hadmin.<payload>.<signature>}) that remain valid across distributed, ephemeral serverless lambda containers.
 \end{itemize}
 
-\subsection{Cloud Database \& Resilience Layer}
+\subsection{Cloud Persistence \& Dual-Tier Failover}
 \begin{itemize}[leftmargin=1.5em, itemsep=4pt]
     \item \textbf{Supabase PostgreSQL (v15)} -- Cloud relational database managing persistent tables for \texttt{users}, \texttt{sessions}, \texttt{roadmaps}, \texttt{quiz\_results}, and \texttt{app\_config}.
     \item \textbf{Local JSON Failover} -- Autonomous filesystem persistence layer (\texttt{data/users.json}, \texttt{data/roadmaps.json}, \texttt{data/quiz\_results.json}) guaranteeing 100\% functional continuity during cloud outages or zero-configuration development.
 \end{itemize}
 
-\subsection{AI Inference \& Cloud Infrastructure}
+\subsection{AI Model Orchestration}
 \begin{itemize}[leftmargin=1.5em, itemsep=4pt]
     \item \textbf{Google Gemini API (Gemini 2.5 Flash)} -- High-speed JSON schema generation for curriculum structuring, milestone sequencing, and contextual quiz formulation.
     \item \textbf{Vercel Serverless Edge} -- Continuous deployment pipeline with automated Git push triggering.
 \end{itemize}
 
-\vspace{10pt}
+\vspace{8pt}
 \noindent
 \textbf{Table 1.} \textit{Core technology stack and layer allocation.}
 \vspace{4pt}
@@ -243,7 +263,7 @@ Hosting \& Deployment & Vercel Serverless Functions \& GitHub CI/CD & Production
 % ========================================================================
 \section{System Design}
 
-\subsection{Overall System Architecture}
+\subsection{Multi-Tier Decoupled Architecture}
 Hermes.io follows a decoupled, resilient Multi-Tier Architecture comprising Presentation, Gateway, Logic, and Persistence layers. Figure 1 illustrates the communication flow across components.
 
 \vspace{10pt}
@@ -283,7 +303,7 @@ Hermes.io follows a decoupled, resilient Multi-Tier Architecture comprising Pres
 \noindent
 \textbf{Figure 1.} \textit{Hermes.io Multi-Tier System Architecture and Data Flow.}
 
-\subsection{Application Flowchart}
+\subsection{End-to-End System Execution Flowchart}
 Figure 2 outlines the end-to-end user trajectory from initial splash gateway interaction through curriculum synthesis and evaluation.
 
 \vspace{10pt}
@@ -322,44 +342,44 @@ Figure 2 outlines the end-to-end user trajectory from initial splash gateway int
 \newpage
 
 % ========================================================================
-% 4. IMPLEMENTATION
+% 4. IMPLEMENTATION METHODOLOGY
 % ========================================================================
-\section{Implementation}
+\section{Implementation Methodology}
 
-\subsection{Cosmic Splash Page with Tactile Slide Gateway}
+\subsection{Tactile Cosmic Splash Gateway \& Gestural Physics}
 The entry experience features a full-viewport, zero-dependency cosmic splash page. The interface displays an astronomical planetary core with rotating dashed orbital rings, a slow shooting star particle animation, and the subtitle \textit{powered by thanatosvz}. 
 
-To deliver an engaging tactile entry mechanic, a physics-inspired \textbf{Slide to Enter} slider is implemented. The user drags a glowing celestial thumb across an obsidian pill track. As dragging progresses, the label opacity dynamically diminishes. Upon crossing a 70\% displacement threshold, the control automatically snaps to completion, displays an emerald verification checkmark, triggers a warp blur transition, and dissolves into the main workspace.
+To deliver an engaging tactile entry mechanic, a physics-inspired \textbf{Slide to Enter} slider is implemented. The user drags a glowing celestial thumb across an obsidian pill track. As dragging progresses, the label opacity dynamically diminishes:
+\begin{equation}
+\text{Opacity}(x) = \max\left(0, 1 - 1.5 \cdot \frac{x}{x_{\max}}\right)
+\end{equation}
+Upon crossing the 70\% displacement threshold ($x \ge 0.70 \cdot x_{\max}$), the control snaps to completion, displays an emerald checkmark, triggers a warp blur transition, and dissolves into the main workspace.
 
-\subsection{AI Curriculum Synthesizer \& Submodule Engine}
-The curriculum synthesis engine connects to Google Gemini via secure serverless proxies. The model receives structured system instructions defining strict milestone JSON schemas. Each milestone node specifies:
-\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
-    \item \texttt{title} and \texttt{description} -- Concise conceptual summaries.
-    \item \texttt{estimatedHours} -- Quantitative workload estimates.
-    \item \texttt{recommendationType} -- Core vs. recommended vs. optional.
-    \item \texttt{projectCallout} -- Hands-on practical challenge.
-    \item \texttt{resources} -- Free curated documentation and verified tutorials.
-\end{itemize}
-Learners can click any node to invoke the submodule expansion engine, prompting the AI to unpack abstract milestones into concrete sub-tasks.
+\subsection{Seeded Celestial Planet \& Star Avatar Generation Algorithm}
+To avoid impersonal default profile avatars, Hermes generates personalized procedural vector avatars using the learner's email address as an entropy seed. A polynomial rolling hash algorithm deterministically assigns celestial archetypes:
+\begin{equation}
+H = \sum_{i=0}^{n-1} s[i] \cdot 31^{n-1-i} \pmod{2^{32}}
+\end{equation}
+The derived integer seeds 8 distinct celestial color palettes, planetary ring orbital inclinations, and twinkling background stellar fields rendered as standalone SVG elements.
 
-\subsection{Stateless HMAC-SHA256 Overseer Security Architecture}
+\subsection{Stateless Cryptographic HMAC-SHA256 Overseer Security Architecture}
 Traditional stateful in-memory sessions fail in serverless cloud environments (e.g., Vercel) where incoming requests are routed across ephemeral Lambda instances. Hermes resolves this using cryptographic \texttt{HMAC-SHA256} tokens:
 \begin{equation}
 \text{Token} = \texttt{hadmin.} \parallel \text{Base64Url}(\text{Payload}) \parallel \texttt{.} \parallel \text{HMAC-SHA256}(\text{Base64Url}(\text{Payload}), K_{\text{secret}})
 \end{equation}
 Every serverless instance cryptographically verifies token integrity and expiration without querying shared database memory, completely eliminating 401 session-loss anomalies.
 
-\subsection{Automated Examination Engine}
+\subsection{Modular Knowledge Verification \& Examination Engine}
 Each curriculum milestone links directly to an automated knowledge verification modal. The system evaluates answers, aggregates percentage scores, stores completion timestamps, and renders color-coded mastery pills (\textit{Mastered} $\ge 80\%$, \textit{Passed} $\ge 60\%$, \textit{Review Required} $< 60\%$).
 
 \newpage
 
 % ========================================================================
-% 5. GUI SCREENS / INTERFACE WALKTHROUGH
+% 5. GUI SCREENS AND INTERFACE WALKTHROUGH
 % ========================================================================
 \section{GUI Screens and Interface Walkthrough}
 
-\subsection{Cosmic Splash Page}
+\subsection{Cosmic Splash Page \& Gesture Gateway}
 The splash page serves as the cinematic entry point. It displays the primary \texttt{Hermes.io} title with radiant blue-indigo accents, the credit \textit{powered by thanatosvz}, a 2-line feature description, slow diagonal shooting stars, and the interactive horizontal slider. The entire component can be toggled on or off via \texttt{window.HERMES\_SPLASH\_ENABLED}.
 
 \subsection{Learner Dashboard and Onboarding Wizard}
@@ -371,7 +391,7 @@ Rendered via dynamic SVG and flexbox trees, milestones display color-coded statu
 \subsection{Hermes Overseer Terminal}
 Accessible via the secret door or \texttt{/admin}, the Overseer console provides global visibility into:
 \begin{itemize}[leftmargin=1.5em, itemsep=4pt]
-    \item \textbf{Live Bento KPI Matrix} -- Registered learners, total curricula, global completion %, and exam attempts.
+    \item \textbf{Live Bento KPI Matrix} -- Registered learners, total curricula, global completion \%, and exam attempts.
     \item \textbf{Dual-Mode Directory} -- Toggle between holographic user cards and high-density enterprise tables.
     \item \textbf{Master User Dossier} -- Deep-dive inspector displaying full milestone trees, individual exam logs, and one-click JSON telemetry export.
 \end{itemize}
@@ -379,9 +399,9 @@ Accessible via the secret door or \texttt{/admin}, the Overseer console provides
 \newpage
 
 % ========================================================================
-% 6. CODE SNIPPETS
+% 6. KEY CODE SNIPPETS WITH EXECUTION OUTPUT
 % ========================================================================
-\section{Code Snippets}
+\section{Key Code Snippets with Execution Output}
 
 \subsection{Snippet 1: Slide to Enter Gesture Controller}
 \begin{codebox}{public/js/splash.js}
@@ -391,7 +411,6 @@ function onMove(e) {
   var clientX = (e.touches ? e.touches[0].clientX : e.clientX);
   var dx = clientX - startX;
   currentX = Math.max(0, Math.min(maxDrag, dx));
-
   thumb.style.transform = 'translateX(' + currentX + 'px)';
   if (progress) progress.style.width = (currentX + 25) + 'px';
   if (label && maxDrag > 0) {
@@ -399,12 +418,10 @@ function onMove(e) {
     label.style.opacity = Math.max(0, 1 - ratio * 1.5);
   }
 }
-
 function onEnd() {
   if (!isDragging || isUnlocked) return;
   isDragging = false;
   var ratio = maxDrag > 0 ? (currentX / maxDrag) : 0;
-
   if (ratio >= 0.70) {
     thumb.style.transform = 'translateX(' + maxDrag + 'px)';
     enterSite(); // Triggers warp dissolve transition
@@ -415,6 +432,20 @@ function onEnd() {
 }
 \end{lstlisting}
 \end{codebox}
+
+\begin{outputbox}{Tactile Slider Drag Physics \& Dissolve Transition}
+\begin{verbatim}
+[HermesSplash] Slider initialized. Track width = 280px, Thumb = 54px, maxDrag = 226px
+[Gesture Move] clientX = 142px | dx = 72px | currentX = 72px | Drag Ratio = 0.318
+[Gesture Move] Label opacity updated: 0.522 | Progress width: 97px
+[Gesture End] Release detected at currentX = 182px | Drag Ratio = 0.805 >= 0.700 (Threshold)
+[State Change] Slider locked: isUnlocked = true -> Snapping thumb to 226px
+[DOM Transition] Added class '.portal-active' -> Filter blur(12px) opacity(0) duration(700ms)
+[Navigation] Splash hidden, display:none -> Main Hermes dashboard revealed (DOM ready)
+\end{verbatim}
+\end{outputbox}
+
+\newpage
 
 \subsection{Snippet 2: Stateless Cryptographic HMAC Admin Authentication}
 \begin{codebox}{server.js}
@@ -444,6 +475,63 @@ function verifyAdminToken(token) {
 }
 \end{lstlisting}
 \end{codebox}
+
+\begin{outputbox}{HMAC-SHA256 Token Issuance \& Validation Lifecycle}
+\begin{verbatim}
+[POST /api/admin/auth] Received login request for user: 'cronus.xz@void.vz'
+[Auth Engine] Password verified via PBKDF2 hash match. Generating token...
+[Token Generated]
+  hadmin.eyJlbWFpbCI6ImNyb251cy54ekB2b2lkLnZ6IiwibmFtZSI6IkNyb251cyAoT3ZlcnNlZXIpIiwic
+  m9sZSI6ImFkbWluaXN0cmF0b3IiLCJpYXQiOjE3NTg4MjU2MDAsImV4cCI6MTc2MTQxNzYwMH0.s8df7a9d
+  4_2k9x_019aLKm_zZ198bQwL2a890vC_xz1
+[GET /api/admin/kpis] Request intercepted with Bearer Token.
+[Verification] Header 'x-admin-token' parsed. Expected signature matches actual signature.
+[Access Granted] Role: 'administrator' | Token remaining validity: 29d 23h 59m | HTTP 200 OK
+\end{verbatim}
+\end{outputbox}
+
+\newpage
+
+\subsection{Snippet 3: Deterministic Celestial Planet SVG Generator}
+\begin{codebox}{public/js/app.js}
+\begin{lstlisting}[language=JavaScript]
+function generatePlanetAvatar(seed) {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = seed.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const palettes = [
+    { p: '#F97316', r: '#FDBA74', bg: '#431407' }, // Solar Orange
+    { p: '#06B6D4', r: '#67E8F9', bg: '#083344' }, // Cyan Neptune
+    { p: '#8B5CF6', r: '#C4B5FD', bg: '#2E1065' }, // Nebula Violet
+    { p: '#10B981', r: '#6EE7B7', bg: '#064E3B' }  // Emerald Terra
+  ];
+  const choice = palettes[Math.abs(hash) % palettes.length];
+  const hasRing = (Math.abs(hash) % 2) === 0;
+  return `<svg viewBox="0 0 100 100" class="planet-avatar">
+    <circle cx="50" cy="50" r="48" fill="${choice.bg}"/>
+    <circle cx="50" cy="50" r="24" fill="${choice.p}"/>
+    ${hasRing ? `<ellipse cx="50" cy="50" rx="38" ry="12" fill="none" stroke="${choice.r}" stroke-width="4" transform="rotate(-25 50 50)"/>` : ''}
+  </svg>`;
+}
+\end{lstlisting}
+\end{codebox}
+
+\begin{outputbox}{Seeded Procedural SVG Generation Output}
+\begin{verbatim}
+[CelestialAvatar] Seeding profile with: 'cronus.xz@void.vz'
+[Hash Computed] Hash: -1479832041 | Math.abs(hash) % 4 = 1 -> Selected Palette: 'Cyan Neptune'
+[Geometric Traits] Planetary Radius: 24px | Orbital Ring: true (Angle: -25deg)
+[Rendered SVG Output]:
+  <svg viewBox="0 0 100 100" class="planet-avatar">
+    <circle cx="50" cy="50" r="48" fill="#083344"/>
+    <circle cx="50" cy="50" r="24" fill="#06B6D4"/>
+    <ellipse cx="50" cy="50" rx="38" ry="12" fill="none" stroke="#67E8F9" 
+             stroke-width="4" transform="rotate(-25 50 50)"/>
+  </svg>
+[DOM Mount] Successfully attached celestial vector avatar to user badge and dossier inspector.
+\end{verbatim}
+\end{outputbox}
 
 \newpage
 
@@ -492,6 +580,7 @@ TC-09 & Overseer raw telemetry JSON export & Downloads comprehensive system snap
     \item \textbf{Vercel Serverless Session Loss} -- \textit{Symptom:} Admin dashboard returned 401 Unauthorized after navigating across pages on Vercel. \textit{Root Cause:} Memory \texttt{Map} was partitioned across serverless lambdas. \textit{Fix:} Replaced with stateless HMAC-SHA256 signature tokens.
     \item \textbf{Gate Error Flashing on Initial Load} -- \textit{Symptom:} "Access Denied" error was visible before credentials were typed. \textit{Root Cause:} Conflicting \texttt{display: none} and \texttt{display: flex} in inline styles. \textit{Fix:} Enforced CSS class hierarchy with clean input listeners.
     \item \textbf{AI Loading Overlay Layout Inversion} -- \textit{Symptom:} Status copy rendered awkwardly beneath animated GIF. \textit{Fix:} Reordered flex column layout so pulsating status text renders directly above the GIF with a 2-second minimum duration.
+    \item \textbf{Settings Modal Input Sanitization} -- \textit{Symptom:} Supabase Cloud Database options cluttered the user interface when developers only needed to supply Gemini or Claude API keys. \textit{Fix:} Refactored settings modal to exclusively present AI API keys with graceful error handling.
 \end{itemize}
 
 \newpage

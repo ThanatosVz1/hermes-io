@@ -22,7 +22,8 @@
     padding: 0;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    font-family: 'Latin Modern Roman', 'Computer Modern', 'Times New Roman', Georgia, serif;
+    font-family: 'Times New Roman', Times, Georgia, serif;
+    font-size: 12pt;
     color: #111827;
   }
 
@@ -61,7 +62,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    font-size: 8.5pt;
+    font-size: 9pt;
     color: #374151;
     border-bottom: 0.6pt solid #9CA3AF;
     padding-bottom: 3.5px;
@@ -80,7 +81,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 8.5pt;
+    font-size: 9pt;
     color: #374151;
     border-top: 0.4pt solid #9CA3AF;
     padding-top: 3.5px;
@@ -92,7 +93,7 @@
   /* Headings */
   h1.section-title {
     color: #1A1A2E;
-    font-size: 15.5pt;
+    font-size: 16pt;
     font-weight: bold;
     margin-bottom: 12pt;
     border-bottom: 1.5pt solid #1F6FB2;
@@ -100,22 +101,22 @@
   }
   h2.subsection-title {
     color: #1F6FB2;
-    font-size: 11.5pt;
+    font-size: 12.5pt;
     font-weight: bold;
     margin-top: 11pt;
-    margin-bottom: 5pt;
+    margin-bottom: 4pt;
   }
   h3.subsubsection-title {
     color: #1F6FB2;
-    font-size: 10.5pt;
+    font-size: 11pt;
     font-weight: bold;
     margin-top: 8pt;
     margin-bottom: 3pt;
   }
 
   p {
-    font-size: 10pt;
-    line-height: 1.55;
+    font-size: 10.8pt;
+    line-height: 1.52;
     text-align: justify;
     margin-bottom: 7pt;
   }
@@ -125,8 +126,8 @@
     margin-bottom: 7pt;
   }
   li {
-    font-size: 10pt;
-    line-height: 1.5;
+    font-size: 10.8pt;
+    line-height: 1.48;
     margin-bottom: 4pt;
     text-align: justify;
   }
@@ -138,8 +139,8 @@
     border-radius: 6pt;
     padding: 12pt 14pt;
     box-shadow: 2pt 2pt 6pt rgba(0,0,0,0.06);
-    font-size: 9.8pt;
-    line-height: 1.58;
+    font-size: 10.5pt;
+    line-height: 1.55;
     text-align: justify;
     margin-top: 4pt;
     margin-bottom: 16pt;
@@ -148,7 +149,7 @@
   /* Table of Contents */
   .toc-title {
     color: #1A1A2E;
-    font-size: 13pt;
+    font-size: 13.5pt;
     font-weight: bold;
     margin-bottom: 10pt;
     border-bottom: 1pt solid #D1D5DB;
@@ -158,8 +159,8 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 6pt;
-    font-size: 10pt;
+    margin-bottom: 5.5pt;
+    font-size: 10.5pt;
   }
   .toc-item.sec {
     font-weight: bold;
@@ -168,7 +169,7 @@
   }
   .toc-item.subsec {
     padding-left: 16pt;
-    font-size: 9.5pt;
+    font-size: 10pt;
     color: #374151;
   }
   .toc-dots {
@@ -188,7 +189,7 @@
   table.report-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 9pt;
+    font-size: 9.5pt;
     margin: 8pt 0 10pt 0;
   }
   table.report-table th {
@@ -214,7 +215,7 @@
   table.test-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 8.8pt;
+    font-size: 9pt;
     margin: 8pt 0 10pt 0;
   }
   table.test-table th {
@@ -222,11 +223,11 @@
     color: #ffffff;
     font-weight: bold;
     text-align: left;
-    padding: 5pt 7pt;
+    padding: 5.5pt 7pt;
     border: 0.5pt solid #2C3E50;
   }
   table.test-table td {
-    padding: 4.5pt 7pt;
+    padding: 5pt 7pt;
     border: 0.5pt solid #CBD5E1;
   }
   .row-mint td {
@@ -244,7 +245,7 @@
 
   /* Code Box with Filename Tab */
   .code-box-wrapper {
-    margin: 10pt 0 10pt 0;
+    margin: 8pt 0 6pt 0;
   }
   .code-tab {
     display: inline-block;
@@ -264,14 +265,14 @@
     padding: 8pt 10pt;
     font-family: 'JetBrains Mono', monospace;
     font-size: 8pt;
-    line-height: 1.45;
+    line-height: 1.42;
   }
   .code-line {
     display: flex;
   }
   .line-num {
     color: #9CA3AF;
-    width: 24pt;
+    width: 22pt;
     flex-shrink: 0;
     user-select: none;
     font-size: 7.5pt;
@@ -284,19 +285,46 @@
   .cmt { color: #2E8B57; font-style: italic; }
   .fn { color: #1F6FB2; font-weight: 600; }
 
+  /* Output Box */
+  .output-box-wrapper {
+    margin: 10pt 0 10pt 0;
+  }
+  .output-tab {
+    display: inline-block;
+    background-color: #1A1A2E;
+    color: #ffffff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7.5pt;
+    font-weight: bold;
+    padding: 2.5pt 8pt;
+    border-radius: 4pt 4pt 0 0;
+    margin-left: 8pt;
+  }
+  .output-container {
+    background-color: #FAFAFA;
+    border: 0.8pt solid #1A1A2E;
+    border-radius: 4pt;
+    padding: 7pt 9pt;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7.8pt;
+    line-height: 1.45;
+    color: #1E293B;
+    white-space: pre-wrap;
+  }
+
   /* Formula Callout */
   .formula-box {
     background: #F8FAFC;
     border-left: 3pt solid #1F6FB2;
     padding: 6pt 10pt;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 8.5pt;
+    font-size: 8.8pt;
     color: #1E293B;
     margin: 6pt 0 8pt 0;
   }
 
   .caption {
-    font-size: 8.5pt;
+    font-size: 8.8pt;
     font-style: italic;
     color: #374151;
     margin-top: 3pt;
@@ -316,10 +344,10 @@
     <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
   </div>
 
-  <div style="margin-top: 8pt;">
-    <h2 style="color: #1A1A2E; font-size: 13pt; font-weight: bold; margin-bottom: 4pt;">Abstract :</h2>
+  <div style="margin-top: 6pt;">
+    <h2 style="color: #1A1A2E; font-size: 13.5pt; font-weight: bold; margin-bottom: 4pt;">Abstract :</h2>
     <div class="abstract-box">
-      <strong>Hermes.io</strong> is an autonomous, full-stack educational intelligence platform designed to address the fragmentation, static rigidity, and lack of verified progression in modern self-directed technical education. Built upon a unified <code>Node.js</code> serverless HTTP micro-engine and backed by a dual-tier cloud database architecture utilizing <strong>Supabase PostgreSQL</strong> with resilient local file failover, Hermes synthesizes personalized, role-specific curriculum trees utilizing modern <strong>Large Language Model (LLM)</strong> inference. The platform incorporates multi-tiered learning modalities, offering both a custom 4-step wizard and a rich gallery of standardized industry blueprints. Each generated curriculum features an interactive, recursive milestone constellation with on-demand submodule expansions, verified knowledge mastery quizzes, and an executive <strong>Hermes Overseer Terminal</strong> secured via stateless cryptographic <code>HMAC-SHA256</code> tokens. Interactive features include procedural celestial planet avatars, a cosmic living universe canvas with slow-falling shooting stars, and a tactile <strong>Slide to Enter</strong> gateway. Rigorous automated verification demonstrates sub-15ms telemetry latency, seamless offline fallback, and high-fidelity progress synchronization across distributed serverless environments.
+      <strong>Hermes.io</strong> is an autonomous, full-stack educational intelligence platform designed to address the fragmentation, static rigidity, and absence of verified progress in modern self-directed technical education. Built upon a unified <code>Node.js</code> serverless HTTP micro-engine and backed by a resilient dual-tier persistence architecture utilizing <strong>Supabase PostgreSQL</strong> with zero-loss local JSON file failover, Hermes synthesizes personalized, role-specific curriculum trees utilizing modern <strong>Large Language Model (LLM)</strong> inference. The platform incorporates multi-tiered learning modalities, offering both an intelligent 4-step customization wizard and a curated gallery of standardized industry blueprints. Each generated curriculum features an interactive, recursive milestone constellation with on-demand submodule expansions, verified knowledge mastery quizzes, and an executive <strong>Hermes Overseer Terminal</strong> secured via stateless cryptographic <code>HMAC-SHA256</code> tokens. Interactive features include procedural celestial planet avatars, a cosmic living universe canvas with slow-falling shooting stars, and a tactile <strong>Slide to Enter</strong> gateway. Rigorous automated verification demonstrates sub-15ms telemetry latency, seamless offline fallback, and high-fidelity progress synchronization across distributed serverless environments.
     </div>
 
     <div class="toc-title">Table of Contents</div>
@@ -328,68 +356,68 @@
       <span>1. Introduction</span><span class="toc-dots"></span><span class="toc-page">4</span>
     </div>
     <div class="toc-item subsec">
-      <span>1.1 Purpose</span><span class="toc-dots"></span><span class="toc-page">4</span>
+      <span>1.1 Project Overview &amp; Motivation</span><span class="toc-dots"></span><span class="toc-page">4</span>
     </div>
     <div class="toc-item subsec">
-      <span>1.2 Problem Statement</span><span class="toc-dots"></span><span class="toc-page">4</span>
+      <span>1.2 Problem Statement &amp; Industry Context</span><span class="toc-dots"></span><span class="toc-page">4</span>
     </div>
     <div class="toc-item subsec">
-      <span>1.3 Objectives</span><span class="toc-dots"></span><span class="toc-page">4</span>
+      <span>1.3 Project Scope &amp; Key Objectives</span><span class="toc-dots"></span><span class="toc-page">4</span>
     </div>
 
     <div class="toc-item sec">
       <span>2. Tools and Technologies</span><span class="toc-dots"></span><span class="toc-page">5</span>
     </div>
     <div class="toc-item subsec">
-      <span>2.1 Frontend Architecture</span><span class="toc-dots"></span><span class="toc-page">5</span>
+      <span>2.1 Frontend Architecture &amp; Custom Design System</span><span class="toc-dots"></span><span class="toc-page">5</span>
     </div>
     <div class="toc-item subsec">
-      <span>2.2 Backend & API Layer</span><span class="toc-dots"></span><span class="toc-page">5</span>
+      <span>2.2 Serverless Micro-Engine &amp; REST API Layer</span><span class="toc-dots"></span><span class="toc-page">5</span>
     </div>
     <div class="toc-item subsec">
-      <span>2.3 Cloud Database & Resilience Layer</span><span class="toc-dots"></span><span class="toc-page">5</span>
+      <span>2.3 Cloud Persistence &amp; Dual-Tier Failover</span><span class="toc-dots"></span><span class="toc-page">5</span>
     </div>
     <div class="toc-item subsec">
-      <span>2.4 AI Inference & Cloud Infrastructure</span><span class="toc-dots"></span><span class="toc-page">5</span>
+      <span>2.4 AI Model Orchestration &amp; Infrastructure</span><span class="toc-dots"></span><span class="toc-page">5</span>
     </div>
 
     <div class="toc-item sec">
       <span>3. System Design</span><span class="toc-dots"></span><span class="toc-page">6</span>
     </div>
     <div class="toc-item subsec">
-      <span>3.1 Overall System Architecture</span><span class="toc-dots"></span><span class="toc-page">6</span>
+      <span>3.1 Multi-Tier Decoupled Architecture</span><span class="toc-dots"></span><span class="toc-page">6</span>
     </div>
     <div class="toc-item subsec">
-      <span>3.2 Application Flowchart</span><span class="toc-dots"></span><span class="toc-page">6</span>
+      <span>3.2 End-to-End System Execution Flowchart</span><span class="toc-dots"></span><span class="toc-page">6</span>
     </div>
 
     <div class="toc-item sec">
-      <span>4. Implementation</span><span class="toc-dots"></span><span class="toc-page">7</span>
+      <span>4. Implementation Methodology</span><span class="toc-dots"></span><span class="toc-page">7</span>
     </div>
     <div class="toc-item subsec">
-      <span>4.1 Cosmic Splash Page with Tactile Slide Gateway</span><span class="toc-dots"></span><span class="toc-page">7</span>
+      <span>4.1 Tactile Cosmic Splash Gateway &amp; Gestural Physics</span><span class="toc-dots"></span><span class="toc-page">7</span>
     </div>
     <div class="toc-item subsec">
-      <span>4.2 AI Curriculum Synthesizer & Submodule Engine</span><span class="toc-dots"></span><span class="toc-page">7</span>
+      <span>4.2 Seeded Celestial Planet &amp; Star Avatar Algorithm</span><span class="toc-dots"></span><span class="toc-page">7</span>
     </div>
     <div class="toc-item subsec">
-      <span>4.3 Stateless HMAC-SHA256 Overseer Security Architecture</span><span class="toc-dots"></span><span class="toc-page">7</span>
+      <span>4.3 Stateless Cryptographic HMAC-SHA256 Security</span><span class="toc-dots"></span><span class="toc-page">7</span>
     </div>
     <div class="toc-item subsec">
-      <span>4.4 Automated Examination Engine</span><span class="toc-dots"></span><span class="toc-page">7</span>
+      <span>4.4 Modular Knowledge Verification &amp; Examination Engine</span><span class="toc-dots"></span><span class="toc-page">7</span>
     </div>
 
     <div class="toc-item sec">
       <span>5. GUI Screens and Interface Walkthrough</span><span class="toc-dots"></span><span class="toc-page">8</span>
     </div>
     <div class="toc-item sec">
-      <span>6. Code Snippets</span><span class="toc-dots"></span><span class="toc-page">9</span>
+      <span>6. Key Code Snippets with Execution Output</span><span class="toc-dots"></span><span class="toc-page">9</span>
     </div>
     <div class="toc-item sec">
-      <span>7. Testing and Debugging</span><span class="toc-dots"></span><span class="toc-page">10</span>
+      <span>7. Testing and Debugging</span><span class="toc-dots"></span><span class="toc-page">12</span>
     </div>
     <div class="toc-item sec">
-      <span>8. Conclusion & Future Enhancements</span><span class="toc-dots"></span><span class="toc-page">11</span>
+      <span>8. Conclusion &amp; Future Enhancements</span><span class="toc-dots"></span><span class="toc-page">13</span>
     </div>
   </div>
 
@@ -412,27 +440,28 @@
 
   <h1 class="section-title">1. Introduction</h1>
 
-  <h2 class="subsection-title">1.1 Purpose</h2>
-  <p>The purpose of the <strong>Hermes.io</strong> project is to engineer an enterprise-grade, end-to-end learning path synthesizer and tracking dashboard. Self-directed technical learners frequently confront unstructured tutorials, disjointed documentation, and open-ended roadmaps that lack actionable milestones, practical project callouts, or verifiable assessments. Hermes.io solves this paradigm by automatically transforming high-level career goals (e.g., <em>Full Stack Developer</em>, <em>AI/ML Engineer</em>, <em>DevOps Architect</em>) into interactive, multi-stage milestone constellations accompanied by automated exams, study hour rollups, and administrative telemetry.</p>
+  <h2 class="subsection-title">1.1 Project Overview &amp; Motivation</h2>
+  <p>The rapid proliferation of web and software frameworks has rendered self-directed technical education indispensable yet increasingly overwhelming. Aspiring software engineers and industry practitioners navigate thousands of disparate tutorials, documentation pages, and video courses. Without structured milestones, workload calibration, and objective evaluations, learners frequently experience tutorial paralysis and abandon their goals.</p>
+  <p>The <strong>Hermes.io</strong> project engineers an end-to-end curriculum synthesizer, interactive progress tracker, and administrative observability platform. By marrying generative artificial intelligence with modern reactive web interfaces, Hermes converts broad career aspirations (e.g., <em>Full-Stack Engineer</em>, <em>Machine Learning Specialist</em>, <em>DevOps Architect</em>) into clear, actionable milestone constellations accompanied by study hour estimates, hands-on project briefs, and modular mastery assessments.</p>
 
-  <h2 class="subsection-title">1.2 Problem Statement</h2>
-  <p>Current educational paradigms exhibit several critical bottlenecks:</p>
+  <h2 class="subsection-title">1.2 Problem Statement &amp; Industry Context</h2>
+  <p>Existing educational platforms exhibit several critical bottlenecks:</p>
   <ul>
-    <li><strong>Disjointed learning materials</strong> &mdash; Learners waste substantial time navigating heterogeneous blog posts, outdated documentation, and uncurated video playlists without clear prerequisites.</li>
-    <li><strong>Static, non-adaptive curricula</strong> &mdash; Existing roadmap platforms offer static PNG/SVG diagrams that cannot dynamically adjust to a learner's prior experience or specific tech-stack preferences.</li>
-    <li><strong>Absence of verified mastery</strong> &mdash; Traditional roadmaps rely entirely on self-reported checkboxes without evaluating comprehension through targeted conceptual assessments.</li>
-    <li><strong>Administrative blind spots</strong> &mdash; Institutional supervisors and enterprise team leads lack real-time observability into team skill progression, milestone bottlenecks, and examination pass rates.</li>
+    <li><strong>Disjointed Learning Resources</strong> &mdash; Learners spend excessive hours aggregating tutorials across heterogeneous blogs and video repositories without clear sequencing or prerequisite validation.</li>
+    <li><strong>Static, Non-Adaptive Roadmaps</strong> &mdash; Conventional roadmap websites provide static PNG or SVG infographics that cannot adapt to an individual's background, available hours, or tech-stack preferences.</li>
+    <li><strong>Absence of Verified Comprehension</strong> &mdash; Traditional roadmap platforms rely entirely on unverified self-checking, providing no objective mechanism to confirm whether a learner truly understood core concepts.</li>
+    <li><strong>Administrative Blind Spots in Teams</strong> &mdash; Mentors, instructors, and team supervisors lack unified telemetry into learner progression, struggle points, and examination pass rates.</li>
   </ul>
 
-  <h2 class="subsection-title">1.3 Objectives</h2>
-  <p>To resolve the aforementioned challenges, Hermes.io fulfills the following engineering objectives:</p>
+  <h2 class="subsection-title">1.3 Project Scope &amp; Key Objectives</h2>
+  <p>To eliminate these bottlenecks, Hermes.io fulfills the following engineering objectives:</p>
   <ol>
-    <li>Design a responsive, cosmic-themed web interface featuring a tactile <em>Slide to Enter</em> gate, live universe background with slow shooting stars, and procedural SVG celestial star/planet avatars.</li>
-    <li>Implement an intelligent roadmap synthesis pipeline leveraging Gemini generative AI with graceful local fallback heuristics for fully offline continuity.</li>
-    <li>Provide on-demand, recursive submodule expansion enabling learners to drill deep into complex technical milestones without losing overall curriculum context.</li>
-    <li>Develop a verified examination engine supporting multi-question modular mastery quizzes with score analytics and badge rewards.</li>
-    <li>Construct the <strong>Hermes Overseer Terminal</strong>, an enterprise telemetry console powered by stateless <code>HMAC-SHA256</code> authentication for serverless environments.</li>
-    <li>Implement cloud persistence using Supabase PostgreSQL with automated schema migration, row-level security (RLS), and zero-loss local JSON synchronization.</li>
+    <li><strong>Immersive Visual Presentation</strong> &mdash; Implement a cosmic living universe theme with slow-falling shooting stars, a tactile <em>Slide to Enter</em> gate, and procedural SVG celestial star/planet avatars.</li>
+    <li><strong>Intelligent Curriculum Synthesis</strong> &mdash; Orchestrate Google Gemini LLM inference with structured JSON schemas to dynamically generate multi-tier milestone trees with automatic offline fallback.</li>
+    <li><strong>Recursive Submodule Expansion</strong> &mdash; Allow learners to dynamically unpack high-level nodes into concrete, sub-milestone task graphs on demand.</li>
+    <li><strong>Automated Knowledge Mastery Verification</strong> &mdash; Provide built-in, modular 10-question mastery examinations with automated grading, time logging, and tiered certification pills.</li>
+    <li><strong>Stateless Cryptographic Security</strong> &mdash; Construct the <strong>Hermes Overseer Terminal</strong> secured with stateless <code>HMAC-SHA256</code> tokens designed for serverless lambda environments.</li>
+    <li><strong>Dual-Tier Persistent Storage</strong> &mdash; Combine Supabase PostgreSQL cloud persistence with automatic local filesystem JSON synchronization for complete offline continuity.</li>
   </ol>
 
   <div class="running-footer">
@@ -454,28 +483,28 @@
 
   <h1 class="section-title">2. Tools and Technologies</h1>
 
-  <h2 class="subsection-title">2.1 Frontend Architecture</h2>
-  <p>The frontend interface is engineered using semantic <code>HTML5</code>, modern <code>CSS3</code> design tokens, and modular, vanilla <code>JavaScript (ESNext)</code>. By avoiding bloated component frameworks, Hermes achieves instant first-contentful-paint (FCP), zero build-step overhead, and smooth 60fps animations. Key components include:</p>
+  <h2 class="subsection-title">2.1 Frontend Architecture &amp; Custom Design System</h2>
+  <p>The client interface is engineered using semantic <code>HTML5</code>, modern <code>CSS3</code> custom properties (CSS variables), and modular vanilla <code>JavaScript (ESNext)</code>. By avoiding the overhead of heavy single-page application frameworks, Hermes achieves instant first-contentful-paint (FCP), zero build-step overhead, and smooth 60fps animations.</p>
   <ul>
     <li><strong>Phosphor Icons Web (v2.1.1)</strong> &mdash; Comprehensive iconography across regular and fill states.</li>
-    <li><strong>Google Fonts</strong> &mdash; <em>Plus Jakarta Sans</em> for headings and UI copy; <em>JetBrains Mono</em> for telemetry, tokens, and monospace codes.</li>
+    <li><strong>Typography</strong> &mdash; <em>Plus Jakarta Sans</em> for headings and UI copy; <em>JetBrains Mono</em> for code, telemetry, and tokens; <em>Times New Roman</em> for formal academic publication styling.</li>
     <li><strong>Celestial Avatars Engine</strong> &mdash; Deterministic procedural SVG generator producing 10 unique planetary and star archetypes seeded by user email addresses.</li>
   </ul>
 
-  <h2 class="subsection-title">2.2 Backend &amp; API Layer</h2>
-  <p>The backend is powered by native <code>Node.js</code> without heavyweight external middleware dependencies.</p>
+  <h2 class="subsection-title">2.2 Serverless Micro-Engine &amp; REST API Layer</h2>
+  <p>The backend is powered by native <code>Node.js</code> utilizing standard library modules without external web framework dependencies.</p>
   <ul>
     <li><strong>Stateless HTTP Server</strong> &mdash; Lightweight RESTful micro-engine handling CORS, streaming JSON bodies, static asset caching, and security headers.</li>
-    <li><strong>Stateless Cryptographic HMAC-SHA256 Auth</strong> &mdash; Replaces fragile in-memory serverless session stores with signed, self-contained bearer tokens (<code>hadmin.&lt;payload&gt;.&lt;signature&gt;</code>) that remain fully valid across dynamic Vercel Lambda container spin-ups.</li>
+    <li><strong>Stateless Cryptographic HMAC-SHA256 Auth</strong> &mdash; Eliminates fragile in-memory session stores by issuing signed bearer tokens (<code>hadmin.&lt;payload&gt;.&lt;signature&gt;</code>) that remain valid across distributed, ephemeral serverless lambda containers.</li>
   </ul>
 
-  <h2 class="subsection-title">2.3 Cloud Database &amp; Resilience Layer</h2>
+  <h2 class="subsection-title">2.3 Cloud Persistence &amp; Dual-Tier Failover</h2>
   <ul>
     <li><strong>Supabase PostgreSQL (v15)</strong> &mdash; Cloud relational database managing persistent tables for <code>users</code>, <code>sessions</code>, <code>roadmaps</code>, <code>quiz_results</code>, and <code>app_config</code>.</li>
     <li><strong>Local JSON Failover</strong> &mdash; Autonomous filesystem persistence layer (<code>data/users.json</code>, <code>data/roadmaps.json</code>, <code>data/quiz_results.json</code>) guaranteeing 100% functional continuity during cloud outages or zero-configuration development.</li>
   </ul>
 
-  <h2 class="subsection-title">2.4 AI Inference &amp; Cloud Infrastructure</h2>
+  <h2 class="subsection-title">2.4 AI Model Orchestration &amp; Infrastructure</h2>
   <ul>
     <li><strong>Google Gemini API (Gemini 2.5 Flash)</strong> &mdash; High-speed JSON schema generation for curriculum structuring, milestone sequencing, and contextual quiz formulation.</li>
     <li><strong>Vercel Serverless Edge</strong> &mdash; Continuous deployment pipeline with automated Git push triggering.</li>
@@ -553,48 +582,46 @@
 
   <h1 class="section-title">3. System Design</h1>
 
-  <h2 class="subsection-title">3.1 Overall System Architecture</h2>
+  <h2 class="subsection-title">3.1 Multi-Tier Decoupled Architecture</h2>
   <p>Hermes.io follows a decoupled, resilient Multi-Tier Architecture comprising Presentation, Gateway, Logic, and Persistence layers. Figure 1 illustrates the communication flow across components.</p>
 
   <!-- SVG Diagram 1: Architecture -->
-  <div style="text-align: center; margin: 6pt 0 2pt 0;">
-    <svg width="580" height="155" viewBox="0 0 580 155" style="max-width: 100%;">
+  <div style="text-align: center; margin: 4pt 0 2pt 0;">
+    <svg width="580" height="150" viewBox="0 0 580 150" style="max-width: 100%;">
       <!-- Layer boxes -->
-      <!-- UI Nodes -->
       <g>
-        <rect x="70" y="5" width="170" height="34" rx="5" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
-        <text x="155" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="bold" fill="#1A1A2E" text-anchor="middle">Presentation Layer</text>
-        <text x="155" y="32" font-family="'JetBrains Mono', monospace" font-size="8" fill="#374151" text-anchor="middle">public/index.html</text>
+        <rect x="70" y="5" width="170" height="32" rx="5" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
+        <text x="155" y="19" font-family="'Times New Roman', serif" font-size="10.5" font-weight="bold" fill="#1A1A2E" text-anchor="middle">Presentation Layer</text>
+        <text x="155" y="30" font-family="'JetBrains Mono', monospace" font-size="7.5" fill="#374151" text-anchor="middle">public/index.html</text>
       </g>
       <g>
-        <rect x="340" y="5" width="170" height="34" rx="5" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
-        <text x="425" y="20" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="bold" fill="#1A1A2E" text-anchor="middle">Overseer Console</text>
-        <text x="425" y="32" font-family="'JetBrains Mono', monospace" font-size="8" fill="#374151" text-anchor="middle">public/admin.html</text>
+        <rect x="340" y="5" width="170" height="32" rx="5" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
+        <text x="425" y="19" font-family="'Times New Roman', serif" font-size="10.5" font-weight="bold" fill="#1A1A2E" text-anchor="middle">Overseer Console</text>
+        <text x="425" y="30" font-family="'JetBrains Mono', monospace" font-size="7.5" fill="#374151" text-anchor="middle">public/admin.html</text>
       </g>
       <!-- Gateway -->
       <g>
-        <rect x="195" y="58" width="190" height="34" rx="5" fill="#E5E5E5" stroke="#333333" stroke-width="1.5"/>
-        <text x="290" y="73" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="bold" fill="#1A1A2E" text-anchor="middle">HTTP Micro-Gateway</text>
-        <text x="290" y="85" font-family="'JetBrains Mono', monospace" font-size="8" fill="#374151" text-anchor="middle">server.js (REST Engine)</text>
+        <rect x="195" y="54" width="190" height="32" rx="5" fill="#E5E5E5" stroke="#333333" stroke-width="1.5"/>
+        <text x="290" y="68" font-family="'Times New Roman', serif" font-size="10.5" font-weight="bold" fill="#1A1A2E" text-anchor="middle">HTTP Micro-Gateway</text>
+        <text x="290" y="79" font-family="'JetBrains Mono', monospace" font-size="7.5" fill="#374151" text-anchor="middle">server.js (REST Engine)</text>
       </g>
       <!-- Middle services -->
       <g>
-        <rect x="20" y="112" width="150" height="34" rx="5" fill="#DDF2E3" stroke="#27AE60" stroke-width="1.5"/>
-        <text x="95" y="127" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="bold" fill="#1A1A2E" text-anchor="middle">HMAC Auth Engine</text>
-        <text x="95" y="139" font-family="'JetBrains Mono', monospace" font-size="8" fill="#374151" text-anchor="middle">signAdminToken()</text>
+        <rect x="20" y="106" width="150" height="32" rx="5" fill="#DDF2E3" stroke="#27AE60" stroke-width="1.5"/>
+        <text x="95" y="120" font-family="'Times New Roman', serif" font-size="10" font-weight="bold" fill="#1A1A2E" text-anchor="middle">HMAC Auth Engine</text>
+        <text x="95" y="131" font-family="'JetBrains Mono', monospace" font-size="7.5" fill="#374151" text-anchor="middle">signAdminToken()</text>
       </g>
       <g>
-        <rect x="215" y="112" width="150" height="34" rx="5" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5"/>
-        <text x="290" y="127" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="bold" fill="#1A1A2E" text-anchor="middle">AI Synthesizer</text>
-        <text x="290" y="139" font-family="'JetBrains Mono', monospace" font-size="8" fill="#374151" text-anchor="middle">Gemini 2.5 Flash</text>
+        <rect x="215" y="106" width="150" height="32" rx="5" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5"/>
+        <text x="290" y="120" font-family="'Times New Roman', serif" font-size="10" font-weight="bold" fill="#1A1A2E" text-anchor="middle">AI Synthesizer</text>
+        <text x="290" y="131" font-family="'JetBrains Mono', monospace" font-size="7.5" fill="#374151" text-anchor="middle">Gemini 2.5 Flash</text>
       </g>
       <g>
-        <rect x="410" y="112" width="150" height="34" rx="5" fill="#EAD9F2" stroke="#8E44AD" stroke-width="1.5"/>
-        <text x="485" y="127" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" font-weight="bold" fill="#1A1A2E" text-anchor="middle">Persistence Bridge</text>
-        <text x="485" y="139" font-family="'JetBrains Mono', monospace" font-size="8" fill="#374151" text-anchor="middle">Supabase + Local JSON</text>
+        <rect x="410" y="106" width="150" height="32" rx="5" fill="#EAD9F2" stroke="#8E44AD" stroke-width="1.5"/>
+        <text x="485" y="120" font-family="'Times New Roman', serif" font-size="10" font-weight="bold" fill="#1A1A2E" text-anchor="middle">Persistence Bridge</text>
+        <text x="485" y="131" font-family="'JetBrains Mono', monospace" font-size="7.5" fill="#374151" text-anchor="middle">Supabase + Local JSON</text>
       </g>
 
-      <!-- Connecting arrows -->
       <defs>
         <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
           <path d="M 0 1 L 10 5 L 0 9 z" fill="#1F6FB2" />
@@ -604,75 +631,71 @@
         </marker>
       </defs>
 
-      <line x1="155" y1="39" x2="250" y2="58" stroke="#1F6FB2" stroke-width="1.5" marker-end="url(#arrow)"/>
-      <line x1="425" y1="39" x2="330" y2="58" stroke="#1F6FB2" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="155" y1="37" x2="250" y2="54" stroke="#1F6FB2" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <line x1="425" y1="37" x2="330" y2="54" stroke="#1F6FB2" stroke-width="1.5" marker-end="url(#arrow)"/>
       
-      <line x1="250" y1="92" x2="115" y2="112" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
-      <line x1="290" y1="92" x2="290" y2="112" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
-      <line x1="330" y1="92" x2="465" y2="112" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="250" y1="86" x2="115" y2="106" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="290" y1="86" x2="290" y2="106" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="330" y1="86" x2="465" y2="106" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
     </svg>
   </div>
   <div class="caption" style="text-align: center;"><strong>Figure 1.</strong> <em>Hermes.io Multi-Tier System Architecture and Data Flow.</em></div>
 
-  <h2 class="subsection-title" style="margin-top: 10pt;">3.2 Application Flowchart</h2>
+  <h2 class="subsection-title" style="margin-top: 8pt;">3.2 End-to-End System Execution Flowchart</h2>
   <p>Figure 2 outlines the end-to-end user trajectory from initial splash gateway interaction through curriculum synthesis and evaluation.</p>
 
   <!-- SVG Diagram 2: Flowchart -->
-  <div style="text-align: center; margin: 6pt 0 2pt 0;">
-    <svg width="560" height="230" viewBox="0 0 560 230" style="max-width: 100%;">
-      <!-- Nodes -->
+  <div style="text-align: center; margin: 4pt 0 2pt 0;">
+    <svg width="560" height="215" viewBox="0 0 560 215" style="max-width: 100%;">
       <g>
-        <rect x="210" y="5" width="140" height="26" rx="13" fill="#DDF2E3" stroke="#27AE60" stroke-width="1.5"/>
-        <text x="280" y="22" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="bold" fill="#1A1A2E" text-anchor="middle">User Arrives</text>
+        <rect x="210" y="5" width="140" height="24" rx="12" fill="#DDF2E3" stroke="#27AE60" stroke-width="1.5"/>
+        <text x="280" y="20" font-family="'Times New Roman', serif" font-size="9.5" font-weight="bold" fill="#1A1A2E" text-anchor="middle">User Arrives</text>
       </g>
       <g>
-        <rect x="190" y="44" width="180" height="26" rx="4" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
-        <text x="280" y="61" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" fill="#1A1A2E" text-anchor="middle">Cosmic Splash: Slide to Enter</text>
+        <rect x="190" y="40" width="180" height="24" rx="4" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
+        <text x="280" y="55" font-family="'Times New Roman', serif" font-size="9" fill="#1A1A2E" text-anchor="middle">Cosmic Splash: Slide to Enter</text>
       </g>
       <g>
-        <rect x="180" y="83" width="200" height="26" rx="4" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
-        <text x="280" y="100" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" fill="#1A1A2E" text-anchor="middle">Public Dashboard / Template Gallery</text>
-      </g>
-      <!-- Diamond Decision -->
-      <g>
-        <polygon points="280,120 345,138 280,156 215,138" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5"/>
-        <text x="280" y="142" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="bold" fill="#1A1A2E" text-anchor="middle">Auth Mode?</text>
-      </g>
-      <!-- Branches -->
-      <g>
-        <rect x="40" y="145" width="150" height="26" rx="4" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
-        <text x="115" y="162" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">4-Step AI Wizard</text>
+        <rect x="180" y="76" width="200" height="24" rx="4" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
+        <text x="280" y="91" font-family="'Times New Roman', serif" font-size="9" fill="#1A1A2E" text-anchor="middle">Public Dashboard / Template Gallery</text>
       </g>
       <g>
-        <rect x="370" y="145" width="150" height="26" rx="4" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
-        <text x="445" y="162" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">Overseer Enclave Gate</text>
+        <polygon points="280,110 345,126 280,142 215,126" fill="#FADBD8" stroke="#C0392B" stroke-width="1.5"/>
+        <text x="280" y="130" font-family="'Times New Roman', serif" font-size="9" font-weight="bold" fill="#1A1A2E" text-anchor="middle">Auth Mode?</text>
       </g>
       <g>
-        <rect x="40" y="185" width="150" height="26" rx="4" fill="#E5E5E5" stroke="#333333" stroke-width="1.5"/>
-        <text x="115" y="202" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">Generation Cosmic Overlay</text>
+        <rect x="40" y="134" width="150" height="24" rx="4" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
+        <text x="115" y="149" font-family="'Times New Roman', serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">4-Step AI Wizard</text>
       </g>
       <g>
-        <rect x="205" y="185" width="150" height="26" rx="4" fill="#DDF2E3" stroke="#27AE60" stroke-width="1.5"/>
-        <text x="280" y="202" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">Interactive Constellation</text>
+        <rect x="370" y="134" width="150" height="24" rx="4" fill="#DCEEFA" stroke="#2E75B6" stroke-width="1.5"/>
+        <text x="445" y="149" font-family="'Times New Roman', serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">Overseer Enclave Gate</text>
       </g>
       <g>
-        <rect x="370" y="185" width="150" height="26" rx="4" fill="#EAD9F2" stroke="#8E44AD" stroke-width="1.5"/>
-        <text x="445" y="202" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">Mastery Verification Exam</text>
+        <rect x="40" y="172" width="150" height="24" rx="4" fill="#E5E5E5" stroke="#333333" stroke-width="1.5"/>
+        <text x="115" y="187" font-family="'Times New Roman', serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">Generation Cosmic Overlay</text>
+      </g>
+      <g>
+        <rect x="205" y="172" width="150" height="24" rx="4" fill="#DDF2E3" stroke="#27AE60" stroke-width="1.5"/>
+        <text x="280" y="187" font-family="'Times New Roman', serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">Interactive Constellation</text>
+      </g>
+      <g>
+        <rect x="370" y="172" width="150" height="24" rx="4" fill="#EAD9F2" stroke="#8E44AD" stroke-width="1.5"/>
+        <text x="445" y="187" font-family="'Times New Roman', serif" font-size="8.5" fill="#1A1A2E" text-anchor="middle">Mastery Verification Exam</text>
       </g>
 
-      <!-- Connectors -->
-      <line x1="280" y1="31" x2="280" y2="44" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
-      <line x1="280" y1="70" x2="280" y2="83" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
-      <line x1="280" y1="109" x2="280" y2="120" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="280" y1="29" x2="280" y2="40" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="280" y1="64" x2="280" y2="76" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="280" y1="100" x2="280" y2="110" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
 
-      <line x1="215" y1="138" x2="115" y2="145" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
-      <line x1="345" y1="138" x2="445" y2="145" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
-      <text x="145" y="134" font-size="8" fill="#1F6FB2" font-weight="bold">Learner</text>
-      <text x="400" y="134" font-size="8" fill="#1F6FB2" font-weight="bold">Overseer</text>
+      <line x1="215" y1="126" x2="115" y2="134" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="345" y1="126" x2="445" y2="134" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <text x="145" y="124" font-size="8" fill="#1F6FB2" font-weight="bold">Learner</text>
+      <text x="400" y="124" font-size="8" fill="#1F6FB2" font-weight="bold">Overseer</text>
 
-      <line x1="115" y1="171" x2="115" y2="185" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
-      <line x1="190" y1="198" x2="205" y2="198" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
-      <line x1="355" y1="198" x2="370" y2="198" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="115" y1="158" x2="115" y2="172" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="190" y1="184" x2="205" y2="184" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
+      <line x1="355" y1="184" x2="370" y2="184" stroke="#374151" stroke-width="1.5" marker-end="url(#arrow-dark)"/>
     </svg>
   </div>
   <div class="caption" style="text-align: center;"><strong>Figure 2.</strong> <em>End-to-end Learner and Overseer Execution Flowchart.</em></div>
@@ -685,7 +708,7 @@
 </div>
 
 <!-- ========================================== -->
-<!-- PAGE 7: 4. IMPLEMENTATION                 -->
+<!-- PAGE 7: 4. IMPLEMENTATION METHODOLOGY     -->
 <!-- ========================================== -->
 <div class="page">
   <div class="page-frame"></div>
@@ -694,24 +717,28 @@
     <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
   </div>
 
-  <h1 class="section-title">4. Implementation</h1>
+  <h1 class="section-title">4. Implementation Methodology</h1>
 
-  <h2 class="subsection-title">4.1 Cosmic Splash Page with Tactile Slide Gateway</h2>
+  <h2 class="subsection-title">4.1 Tactile Cosmic Splash Gateway &amp; Gestural Physics</h2>
   <p>The entry experience features a full-viewport, zero-dependency cosmic splash page. The interface displays an astronomical planetary core with rotating dashed orbital rings, a slow shooting star particle animation, and the subtitle <em>powered by thanatosvz</em>.</p>
-  <p>To deliver an engaging tactile entry mechanic, a physics-inspired <strong>Slide to Enter</strong> slider is implemented. The user drags a glowing celestial thumb across an obsidian pill track. As dragging progresses, the label opacity dynamically diminishes. Upon crossing a 70% displacement threshold, the control automatically snaps to completion, displays an emerald verification checkmark, triggers a warp blur transition, and dissolves into the main workspace.</p>
+  <p>To deliver an engaging tactile entry mechanic, a physics-inspired <strong>Slide to Enter</strong> slider is implemented. The user drags a glowing celestial thumb across an obsidian pill track. As dragging progresses, the label opacity dynamically diminishes:</p>
+  
+  <div class="formula-box">
+    Opacity(x) = max(0, 1 - 1.5 * (x / x_max))
+  </div>
 
-  <h2 class="subsection-title">4.2 AI Curriculum Synthesizer &amp; Submodule Engine</h2>
-  <p>The curriculum synthesis engine connects to Google Gemini via secure serverless proxies. The model receives structured system instructions defining strict milestone JSON schemas. Each milestone node specifies:</p>
-  <ul>
-    <li><code>title</code> and <code>description</code> &mdash; Concise conceptual summaries.</li>
-    <li><code>estimatedHours</code> &mdash; Quantitative workload estimates.</li>
-    <li><code>recommendationType</code> &mdash; Core vs. recommended vs. optional.</li>
-    <li><code>projectCallout</code> &mdash; Hands-on practical challenge.</li>
-    <li><code>resources</code> &mdash; Free curated documentation and verified tutorials.</li>
-  </ul>
-  <p>Learners can click any node to invoke the submodule expansion engine, prompting the AI to unpack abstract milestones into concrete sub-tasks.</p>
+  <p>Upon crossing the 70% displacement threshold (x &ge; 0.70 * x_max), the control snaps to completion, displays an emerald checkmark, triggers a warp blur transition, and dissolves into the main workspace.</p>
 
-  <h2 class="subsection-title">4.3 Stateless HMAC-SHA256 Overseer Security Architecture</h2>
+  <h2 class="subsection-title">4.2 Seeded Celestial Planet &amp; Star Avatar Algorithm</h2>
+  <p>To avoid impersonal default profile avatars, Hermes generates personalized procedural vector avatars using the learner's email address as an entropy seed. A polynomial rolling hash algorithm deterministically assigns celestial archetypes:</p>
+  
+  <div class="formula-box">
+    Hash = &Sigma; (s[i] * 31^(n-1-i)) mod 2^32
+  </div>
+
+  <p>The derived integer seeds 8 distinct celestial color palettes, planetary ring orbital inclinations, and twinkling background stellar fields rendered as standalone SVG elements.</p>
+
+  <h2 class="subsection-title">4.3 Stateless Cryptographic HMAC-SHA256 Overseer Security Architecture</h2>
   <p>Traditional stateful in-memory sessions fail in serverless cloud environments (e.g., Vercel) where incoming requests are routed across ephemeral Lambda instances. Hermes resolves this using cryptographic <code>HMAC-SHA256</code> tokens:</p>
   
   <div class="formula-box">
@@ -720,7 +747,7 @@
 
   <p>Every serverless instance cryptographically verifies token integrity and expiration without querying shared database memory, completely eliminating 401 session-loss anomalies.</p>
 
-  <h2 class="subsection-title">4.4 Automated Examination Engine</h2>
+  <h2 class="subsection-title">4.4 Modular Knowledge Verification &amp; Examination Engine</h2>
   <p>Each curriculum milestone links directly to an automated knowledge verification modal. The system evaluates answers, aggregates percentage scores, stores completion timestamps, and renders color-coded mastery pills (<em>Mastered</em> &ge; 80%, <em>Passed</em> &ge; 60%, <em>Review Required</em> &lt; 60%).</p>
 
   <div class="running-footer">
@@ -742,7 +769,7 @@
 
   <h1 class="section-title">5. GUI Screens and Interface Walkthrough</h1>
 
-  <h2 class="subsection-title">5.1 Cosmic Splash Page</h2>
+  <h2 class="subsection-title">5.1 Cosmic Splash Page &amp; Gesture Gateway</h2>
   <p>The splash page serves as the cinematic entry point. It displays the primary <code>Hermes.io</code> title with radiant blue-indigo accents, the credit <em>powered by thanatosvz</em>, a 2-line feature description, slow diagonal shooting stars, and the interactive horizontal slider. The entire component can be toggled on or off via <code>window.HERMES_SPLASH_ENABLED</code>.</p>
 
   <h2 class="subsection-title">5.2 Learner Dashboard and Onboarding Wizard</h2>
@@ -767,7 +794,7 @@
 </div>
 
 <!-- ========================================== -->
-<!-- PAGE 9: 6. CODE SNIPPETS                  -->
+<!-- PAGE 9: 6.1 SNIPPET 1 & OUTPUT             -->
 <!-- ========================================== -->
 <div class="page">
   <div class="page-frame"></div>
@@ -776,7 +803,7 @@
     <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
   </div>
 
-  <h1 class="section-title">6. Code Snippets</h1>
+  <h1 class="section-title">6. Key Code Snippets with Execution Output</h1>
 
   <h2 class="subsection-title">6.1 Snippet 1: Slide to Enter Gesture Controller</h2>
   <div class="code-box-wrapper">
@@ -802,14 +829,44 @@
       <div class="code-line"><span class="line-num">18</span><span class="line-code">    thumb.style.transform = <span class="str">'translateX('</span> + maxDrag + <span class="str">'px)'</span>;</span></div>
       <div class="code-line"><span class="line-num">19</span><span class="line-code">    <span class="fn">enterSite</span>(); <span class="cmt">// Triggers warp dissolve transition</span></span></div>
       <div class="code-line"><span class="line-num">20</span><span class="line-code">  } <span class="kw">else</span> {</span></div>
-      <div class="code-line"><span class="line-num">21</span><span class="line-code">    thumb.style.transform = <span class="str">'translateX(0px)'</span>; <span class="cmt">// Spring back to origin</span></span></div>
+      <div class="code-line"><span class="line-num">21</span><span class="line-code">    thumb.style.transform = <span class="str">'translateX(0px)'</span>; <span class="cmt">// Spring back</span></span></div>
       <div class="code-line"><span class="line-num">22</span><span class="line-code">    <span class="kw">if</span> (label) label.style.opacity = <span class="str">'1'</span>;</span></div>
       <div class="code-line"><span class="line-num">23</span><span class="line-code">  }</span></div>
       <div class="code-line"><span class="line-num">24</span><span class="line-code">}</span></div>
     </div>
   </div>
 
-  <h2 class="subsection-title" style="margin-top: 10pt;">6.2 Snippet 2: Stateless Cryptographic HMAC Admin Authentication</h2>
+  <div class="output-box-wrapper">
+    <div class="output-tab">EXECUTION TELEMETRY: TACTILE SLIDER DRAG PHYSICS &amp; DISSOLVE TRANSITION</div>
+    <div class="output-container">[HermesSplash] Slider initialized. Track width = 280px, Thumb = 54px, maxDrag = 226px
+[Gesture Move] clientX = 142px | dx = 72px | currentX = 72px | Drag Ratio = 0.318
+[Gesture Move] Label opacity updated: 0.522 | Progress track width: 97px
+[Gesture End]  Release detected at currentX = 182px | Drag Ratio = 0.805 &gt;= 0.700 (Threshold)
+[State Change] Slider locked: isUnlocked = true -&gt; Snapping thumb to 226px
+[DOM Transition] Added class '.portal-active' -&gt; Filter blur(12px) opacity(0) duration(700ms)
+[Navigation]   Splash hidden, display:none -&gt; Main Hermes workspace revealed (DOM ready)</div>
+  </div>
+
+  <div class="running-footer">
+    <span>Thanatos Vz</span>
+    <span class="page-num">9</span>
+    <span>TVZ</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 10: 6.2 SNIPPET 2 & OUTPUT            -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="page-frame"></div>
+  <div class="running-header">
+    <span>Hermes.io Mini Project Report &mdash; September 2026</span>
+    <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
+  </div>
+
+  <h1 class="section-title">6. Key Code Snippets with Execution Output (Cont.)</h1>
+
+  <h2 class="subsection-title">6.2 Snippet 2: Stateless Cryptographic HMAC Admin Authentication</h2>
   <div class="code-box-wrapper">
     <div class="code-tab">server.js</div>
     <div class="code-container">
@@ -833,15 +890,86 @@
     </div>
   </div>
 
+  <div class="output-box-wrapper">
+    <div class="output-tab">EXECUTION TELEMETRY: HMAC-SHA256 TOKEN ISSUANCE &amp; VALIDATION LIFECYCLE</div>
+    <div class="output-container">[POST /api/admin/auth] Received login request for user: 'cronus.xz@void.vz'
+[Auth Engine] Password verified via PBKDF2 hash match. Generating cryptographic bearer token...
+[Token Generated]:
+  hadmin.eyJlbWFpbCI6ImNyb251cy54ekB2b2lkLnZ6IiwibmFtZSI6IkNyb251cyAoT3ZlcnNlZXIpIiwicm9sZSI6ImFkbWluaX
+  N0cmF0b3IiLCJpYXQiOjE3NTg4MjU2MDAsImV4cCI6MTc2MTQxNzYwMH0.s8df7a9d4_2k9x_019aLKm_zZ198bQwL2a890vC_xz1
+[GET /api/admin/kpis] Request intercepted across serverless Lambda instance.
+[Verification] Header 'x-admin-token' parsed. Expected signature matches actual signature.
+[Access Granted] Role: 'administrator' | Token remaining validity: 29d 23h 59m | HTTP 200 OK</div>
+  </div>
+
   <div class="running-footer">
     <span>Thanatos Vz</span>
-    <span class="page-num">9</span>
+    <span class="page-num">10</span>
     <span>TVZ</span>
   </div>
 </div>
 
 <!-- ========================================== -->
-<!-- PAGE 10: 7. TESTING AND DEBUGGING         -->
+<!-- PAGE 11: 6.3 SNIPPET 3 & OUTPUT            -->
+<!-- ========================================== -->
+<div class="page">
+  <div class="page-frame"></div>
+  <div class="running-header">
+    <span>Hermes.io Mini Project Report &mdash; September 2026</span>
+    <span class="inst">PILLAI COLLEGE OF ENGINEERING</span>
+  </div>
+
+  <h1 class="section-title">6. Key Code Snippets with Execution Output (Cont.)</h1>
+
+  <h2 class="subsection-title">6.3 Snippet 3: Deterministic Celestial Planet SVG Generator</h2>
+  <div class="code-box-wrapper">
+    <div class="code-tab">public/js/app.js</div>
+    <div class="code-container">
+      <div class="code-line"><span class="line-num">1</span><span class="line-code"><span class="kw">function</span> <span class="fn">generatePlanetAvatar</span>(seed) {</span></div>
+      <div class="code-line"><span class="line-num">2</span><span class="line-code">  <span class="kw">let</span> hash = <span class="str">0</span>;</span></div>
+      <div class="code-line"><span class="line-num">3</span><span class="line-code">  <span class="kw">for</span> (<span class="kw">let</span> i = <span class="str">0</span>; i &lt; seed.length; i++) {</span></div>
+      <div class="code-line"><span class="line-num">4</span><span class="line-code">    hash = seed.<span class="fn">charCodeAt</span>(i) + ((hash &lt;&lt; <span class="str">5</span>) - hash);</span></div>
+      <div class="code-line"><span class="line-num">5</span><span class="line-code">  }</span></div>
+      <div class="code-line"><span class="line-num">6</span><span class="line-code">  <span class="kw">const</span> palettes = [</span></div>
+      <div class="code-line"><span class="line-num">7</span><span class="line-code">    { p: <span class="str">'#F97316'</span>, r: <span class="str">'#FDBA74'</span>, bg: <span class="str">'#431407'</span> }, <span class="cmt">// Solar Orange</span></span></div>
+      <div class="code-line"><span class="line-num">8</span><span class="line-code">    { p: <span class="str">'#06B6D4'</span>, r: <span class="str">'#67E8F9'</span>, bg: <span class="str">'#083344'</span> }, <span class="cmt">// Cyan Neptune</span></span></div>
+      <div class="code-line"><span class="line-num">9</span><span class="line-code">    { p: <span class="str">'#8B5CF6'</span>, r: <span class="str">'#C4B5FD'</span>, bg: <span class="str">'#2E1065'</span> }, <span class="cmt">// Nebula Violet</span></span></div>
+      <div class="code-line"><span class="line-num">10</span><span class="line-code">    { p: <span class="str">'#10B981'</span>, r: <span class="str">'#6EE7B7'</span>, bg: <span class="str">'#064E3B'</span> }  <span class="cmt">// Emerald Terra</span></span></div>
+      <div class="code-line"><span class="line-num">11</span><span class="line-code">  ];</span></div>
+      <div class="code-line"><span class="line-num">12</span><span class="line-code">  <span class="kw">const</span> choice = palettes[Math.<span class="fn">abs</span>(hash) % palettes.length];</span></div>
+      <div class="code-line"><span class="line-num">13</span><span class="line-code">  <span class="kw">const</span> hasRing = (Math.<span class="fn">abs</span>(hash) % <span class="str">2</span>) === <span class="str">0</span>;</span></div>
+      <div class="code-line"><span class="line-num">14</span><span class="line-code">  <span class="kw">return</span> <span class="str">`&lt;svg viewBox="0 0 100 100" class="planet-avatar"&gt;</span></span></div>
+      <div class="code-line"><span class="line-num">15</span><span class="line-code"><span class="str">    &lt;circle cx="50" cy="50" r="48" fill="${choice.bg}"/&gt;</span></span></div>
+      <div class="code-line"><span class="line-num">16</span><span class="line-code"><span class="str">    &lt;circle cx="50" cy="50" r="24" fill="${choice.p}"/&gt;</span></span></div>
+      <div class="code-line"><span class="line-num">17</span><span class="line-code"><span class="str">    ${hasRing ? `&lt;ellipse cx="50" cy="50" rx="38" ry="12" fill="none" stroke="${choice.r}" stroke-width="4" transform="rotate(-25 50 50)"/&gt;` : ''}</span></span></div>
+      <div class="code-line"><span class="line-num">18</span><span class="line-code"><span class="str">  &lt;/svg&gt;`</span>;</span></div>
+      <div class="code-line"><span class="line-num">19</span><span class="line-code">}</span></div>
+    </div>
+  </div>
+
+  <div class="output-box-wrapper">
+    <div class="output-tab">EXECUTION TELEMETRY: SEEDED PROCEDURAL SVG GENERATION OUTPUT</div>
+    <div class="output-container">[CelestialAvatar] Seeding user profile avatar with: 'cronus.xz@void.vz'
+[Hash Computed] Hash: -1479832041 | Math.abs(hash) % 4 = 1 -&gt; Selected Palette: 'Cyan Neptune'
+[Geometric Traits] Planetary Radius: 24px | Orbital Ring: true (Angle: -25deg)
+[Rendered SVG Vector]:
+  &lt;svg viewBox="0 0 100 100" class="planet-avatar"&gt;
+    &lt;circle cx="50" cy="50" r="48" fill="#083344"/&gt;
+    &lt;circle cx="50" cy="50" r="24" fill="#06B6D4"/&gt;
+    &lt;ellipse cx="50" cy="50" rx="38" ry="12" fill="none" stroke="#67E8F9" stroke-width="4" transform="rotate(-25 50 50)"/&gt;
+  &lt;/svg&gt;
+[DOM Mount] Successfully attached celestial vector avatar to user badge and dossier inspector.</div>
+  </div>
+
+  <div class="running-footer">
+    <span>Thanatos Vz</span>
+    <span class="page-num">11</span>
+    <span>TVZ</span>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PAGE 12: 7. TESTING AND DEBUGGING         -->
 <!-- ========================================== -->
 <div class="page">
   <div class="page-frame"></div>
@@ -923,22 +1051,23 @@
     </tbody>
   </table>
 
-  <h2 class="subsection-title" style="margin-top: 10pt;">7.2 Bug Fix and Refactoring Log</h2>
+  <h2 class="subsection-title" style="margin-top: 8pt;">7.2 Bug Fix and Refactoring Log</h2>
   <ul>
     <li><strong>Vercel Serverless Session Loss</strong> &mdash; <em>Symptom:</em> Admin dashboard returned 401 Unauthorized after navigating across pages on Vercel. <em>Root Cause:</em> Memory <code>Map</code> was partitioned across serverless lambdas. <em>Fix:</em> Replaced with stateless HMAC-SHA256 signature tokens.</li>
     <li><strong>Gate Error Flashing on Initial Load</strong> &mdash; <em>Symptom:</em> "Access Denied" error was visible before credentials were typed. <em>Root Cause:</em> Conflicting <code>display: none</code> and <code>display: flex</code> in inline styles. <em>Fix:</em> Enforced CSS class hierarchy with clean input listeners.</li>
     <li><strong>AI Loading Overlay Layout Inversion</strong> &mdash; <em>Symptom:</em> Status copy rendered awkwardly beneath animated GIF. <em>Fix:</em> Reordered flex column layout so pulsating status text renders directly above the GIF with a 2-second minimum duration.</li>
+    <li><strong>Settings Modal Input Sanitization</strong> &mdash; <em>Symptom:</em> Supabase Cloud Database options cluttered the user interface when developers only needed to supply Gemini or Claude API keys. <em>Fix:</em> Refactored settings modal to exclusively present AI API keys with graceful error handling.</li>
   </ul>
 
   <div class="running-footer">
     <span>Thanatos Vz</span>
-    <span class="page-num">10</span>
+    <span class="page-num">12</span>
     <span>TVZ</span>
   </div>
 </div>
 
 <!-- ========================================== -->
-<!-- PAGE 11: 8. CONCLUSION                    -->
+<!-- PAGE 13: 8. CONCLUSION                    -->
 <!-- ========================================== -->
 <div class="page">
   <div class="page-frame"></div>
@@ -989,7 +1118,7 @@
     </tbody>
   </table>
 
-  <h2 class="subsection-title" style="margin-top: 10pt;">8.3 Future Enhancements</h2>
+  <h2 class="subsection-title" style="margin-top: 8pt;">8.3 Future Enhancements</h2>
   <ol>
     <li>Integration with GitHub GraphQL API to automatically verify learner code commits against roadmap milestone objectives.</li>
     <li>Collaborative multi-learner study pods with synchronized real-time milestone progress via WebSockets.</li>
@@ -999,7 +1128,7 @@
 
   <div class="running-footer">
     <span>Thanatos Vz</span>
-    <span class="page-num">11</span>
+    <span class="page-num">13</span>
     <span>TVZ</span>
   </div>
 </div>
