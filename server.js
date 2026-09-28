@@ -1,4 +1,4 @@
-// Hermes.io â€” AI-Powered Learning Roadmap Generator Backend
+﻿// Hermes.io â€” AI-Powered Learning Roadmap Generator Backend
 // Pure Node.js HTTP Server with User Auth, Database Persistence & AI Engine
 
 const { spawn } = require('child_process');
@@ -910,6 +910,24 @@ function calculateRollup(nodes) {
 // QUIZ GENERATION ENGINE (10-20 Questions per Module)
 // ==========================================
 
+// Shuffles quiz options in a random sequence (A, B, C, D) and updates correctAnswer to match
+function shuffleQuizQuestion(q) {
+  if (!q || !Array.isArray(q.options) || q.options.length < 2) return q;
+  const correctIdx = typeof q.correctAnswer === 'number' && q.correctAnswer >= 0 && q.correctAnswer < q.options.length ? q.correctAnswer : 0;
+  const correctText = q.options[correctIdx];
+  const shuffled = [...q.options];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  const newCorrectIdx = shuffled.indexOf(correctText);
+  return {
+    ...q,
+    options: shuffled,
+    correctAnswer: newCorrectIdx >= 0 ? newCorrectIdx : 0
+  };
+}
+
 function generateSmartOfflineQuiz(moduleTitle = 'Core Topic', moduleDescription = '', count = 15) {
   const titleLower = moduleTitle.toLowerCase();
   const descLower = moduleDescription.toLowerCase();
@@ -1383,14 +1401,14 @@ function generateSmartOfflineQuiz(moduleTitle = 'Core Topic', moduleDescription 
   let questions = [];
   for (let i = 0; i < count; i++) {
     const base = pool[i % pool.length];
-    questions.push({
+    questions.push(shuffleQuizQuestion({
       id: `q_${i + 1}`,
       question: base.question,
       codeSnippet: base.codeSnippet || '',
-      options: base.options,
+      options: [...base.options],
       correctAnswer: base.correctAnswer,
       explanation: base.explanation
-    });
+    }));
   }
 
   return {
@@ -1412,7 +1430,7 @@ Return valid JSON only matching this schema:
       "question": "string (clear, direct technical question)",
       "codeSnippet": "string (optional code block if applicable, or empty string)",
       "options": ["Option A", "Option B", "Option C", "Option D"],
-      "correctAnswer": 0, // index 0, 1, 2, or 3
+      "correctAnswer": 2, // 0 for A, 1 for B, 2 for C, or 3 for D (randomly distributed)
       "explanation": "Detailed explanation of why this answer is correct and why other options are incorrect."
     }
   ]
@@ -1425,7 +1443,7 @@ Return valid JSON only matching this schema:
     return {
       moduleTitle: aiResult.moduleTitle || moduleTitle,
       totalQuestions: aiResult.questions.length,
-      questions: aiResult.questions.map((q, idx) => ({
+      questions: aiResult.questions.map((q, idx) => shuffleQuizQuestion({
         id: q.id || `q_${idx + 1}`,
         question: String(q.question || 'Question'),
         codeSnippet: String(q.codeSnippet || ''),

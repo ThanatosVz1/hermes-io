@@ -572,6 +572,8 @@ TC-07 & Offline fallback during network disconnection & Seamlessly serves local 
 TC-08 & Modular examination score computation & Accurately records \% and badges & {\color{passGreen}\textbf{\checkmark}} \\
 \rowcolor{mintGreen}
 TC-09 & Overseer raw telemetry JSON export & Downloads comprehensive system snapshot & {\color{passGreen}\textbf{\checkmark}} \\
+\rowcolor{paleSalmon}
+TC-10 & Module Quiz option randomness verification & Shuffles options across A, B, C, D (~25\% distribution) & {\color{passGreen}\textbf{\checkmark}} \\
 \bottomrule
 \end{tabularx}
 
@@ -581,6 +583,7 @@ TC-09 & Overseer raw telemetry JSON export & Downloads comprehensive system snap
     \item \textbf{Gate Error Flashing on Initial Load} -- \textit{Symptom:} "Access Denied" error was visible before credentials were typed. \textit{Root Cause:} Conflicting \texttt{display: none} and \texttt{display: flex} in inline styles. \textit{Fix:} Enforced CSS class hierarchy with clean input listeners.
     \item \textbf{AI Loading Overlay Layout Inversion} -- \textit{Symptom:} Status copy rendered awkwardly beneath animated GIF. \textit{Fix:} Reordered flex column layout so pulsating status text renders directly above the GIF with a 2-second minimum duration.
     \item \textbf{Settings Modal Input Sanitization} -- \textit{Symptom:} Supabase Cloud Database options cluttered the user interface when developers only needed to supply Gemini or Claude API keys. \textit{Fix:} Refactored settings modal to exclusively present AI API keys with graceful error handling.
+    \item \textbf{Module Quiz Option Bias Elimination} -- \textit{Symptom:} Module quizzes consistently presented the correct answer in Option A (index 0). \textit{Root Cause:} The offline question bank and LLM schema examples defaulted to index 0. \textit{Fix:} Implemented a Fisher-Yates option shuffling algorithm across both server (\texttt{server.js}) and client session initializers (\texttt{public/js/app.js}) that dynamically randomizes option sequence and re-indexes \texttt{correctAnswer}, achieving an unbiased ~25\% distribution across A, B, C, and D.
 \end{itemize}
 
 \newpage

@@ -1048,6 +1048,12 @@
         <td>Downloads comprehensive system snapshot</td>
         <td class="check-pass">&check;</td>
       </tr>
+      <tr class="row-salmon">
+        <td><strong>TC-10</strong></td>
+        <td>Module Quiz option randomness verification</td>
+        <td>Shuffles options across A, B, C, D (~25% distribution)</td>
+        <td class="check-pass">&check;</td>
+      </tr>
     </tbody>
   </table>
 
@@ -1057,6 +1063,7 @@
     <li><strong>Gate Error Flashing on Initial Load</strong> &mdash; <em>Symptom:</em> "Access Denied" error was visible before credentials were typed. <em>Root Cause:</em> Conflicting <code>display: none</code> and <code>display: flex</code> in inline styles. <em>Fix:</em> Enforced CSS class hierarchy with clean input listeners.</li>
     <li><strong>AI Loading Overlay Layout Inversion</strong> &mdash; <em>Symptom:</em> Status copy rendered awkwardly beneath animated GIF. <em>Fix:</em> Reordered flex column layout so pulsating status text renders directly above the GIF with a 2-second minimum duration.</li>
     <li><strong>Settings Modal Input Sanitization</strong> &mdash; <em>Symptom:</em> Supabase Cloud Database options cluttered the user interface when developers only needed to supply Gemini or Claude API keys. <em>Fix:</em> Refactored settings modal to exclusively present AI API keys with graceful error handling.</li>
+    <li><strong>Module Quiz Option Bias Elimination</strong> &mdash; <em>Symptom:</em> Module quizzes consistently presented the correct answer in Option A (index 0). <em>Root Cause:</em> The offline question bank and LLM schema examples defaulted to index 0. <em>Fix:</em> Implemented a Fisher-Yates option shuffling algorithm across both server (<code>server.js</code>) and client session initializers (<code>public/js/app.js</code>) that dynamically randomizes option sequence and re-indexes <code>correctAnswer</code>, achieving an unbiased ~25% distribution across A, B, C, and D.</li>
   </ul>
 
   <div class="running-footer">

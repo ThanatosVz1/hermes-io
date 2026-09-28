@@ -1466,8 +1466,26 @@ class HermesApp {
     }
   }
 
+  shuffleQuizQuestion(q) {
+    if (!q || !Array.isArray(q.options) || q.options.length < 2) return q;
+    const correctIdx = typeof q.correctAnswer === 'number' && q.correctAnswer >= 0 && q.correctAnswer < q.options.length ? q.correctAnswer : 0;
+    const correctText = q.options[correctIdx];
+    const options = [...q.options];
+    for (let i = options.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [options[i], options[j]] = [options[j], options[i]];
+    }
+    const newCorrectIdx = options.indexOf(correctText);
+    return {
+      ...q,
+      options,
+      correctAnswer: newCorrectIdx >= 0 ? newCorrectIdx : 0
+    };
+  }
+
   startQuizSession(quiz, node) {
-    this.quizQuestions = quiz.questions || [];
+    const rawQuestions = Array.isArray(quiz.questions) ? quiz.questions : [];
+    this.quizQuestions = rawQuestions.map(q => this.shuffleQuizQuestion(q));
     this.currentQuestionIdx = 0;
     this.quizScore = 0;
     this.quizUserAnswers = [];
