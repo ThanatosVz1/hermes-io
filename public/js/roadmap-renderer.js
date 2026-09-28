@@ -18,7 +18,6 @@ class HermesRoadmapRenderer {
     this.statusFilter = 'all';
     this.activeDrawerNode = null;
     this.activeDrawerParentNode = null;
-    this.expandedSubId = null; // currently expanded submodule id for sub-submodules
 
     // Redraw connectors smoothly on window resize
     window.addEventListener('resize', () => {
@@ -35,24 +34,23 @@ class HermesRoadmapRenderer {
     this.recalculateAndRender();
   }
 
-  // Ensure all milestones have 2-5 submodules and each submodule has 1-2 sub-submodules
+  // Ensure all milestones have submodules populated and are expanded by default
   ensureAllMilestonesAutoExpanded() {
     if (!this.roadmap || !this.roadmap.nodes) return;
 
-    this.roadmap.nodes.forEach((milestone, mIdx) => {
+    this.roadmap.nodes.forEach((milestone) => {
       if (!milestone.children || milestone.children.length === 0) {
         // If milestone has collapsed backup, restore it
         if (milestone.collapsedBackup && milestone.collapsedBackup.length > 0) {
           milestone.children = milestone.collapsedBackup;
           milestone.collapsedBackup = null;
         } else {
-          // Auto-generate realistic 2 to 5 submodules (default 3)
+          // Auto-generate realistic submodules so it expands automatically
           const title = milestone.title || 'Core Topic';
-          const cleanTitle = title.split('(')[0].trim();
           milestone.children = [
             {
               id: `sub_${Date.now()}_${Math.random().toString(36).substring(2, 6)}_1`,
-              title: `Foundations & Theory of ${cleanTitle}`,
+              title: `Foundations & Theory of ${title.split('(')[0].trim()}`,
               description: `Understand the fundamental concepts, terminology, and core architecture of ${title}.`,
               status: 'not_started',
               progress: 0,
@@ -60,7 +58,7 @@ class HermesRoadmapRenderer {
               recommendationType: 'recommended',
               resources: [{ type: 'docs', title: `Official Documentation for ${title}`, url: 'https://developer.mozilla.org/', isFree: true }],
               children: [],
-              isExpandable: true
+              isExpandable: false
             },
             {
               id: `sub_${Date.now()}_${Math.random().toString(36).substring(2, 6)}_2`,
@@ -72,7 +70,7 @@ class HermesRoadmapRenderer {
               recommendationType: 'recommended',
               resources: [{ type: 'practice', title: `Hands-on Exercises and Examples`, url: 'https://github.com/', isFree: true }],
               children: [],
-              isExpandable: true
+              isExpandable: false
             },
             {
               id: `sub_${Date.now()}_${Math.random().toString(36).substring(2, 6)}_3`,
@@ -84,66 +82,11 @@ class HermesRoadmapRenderer {
               recommendationType: 'alternative',
               resources: [{ type: 'article', title: `Industry Best Practices Guide`, url: 'https://github.com/', isFree: true }],
               children: [],
-              isExpandable: true
+              isExpandable: false
             }
           ];
         }
       }
-
-      // Enforce submodule range: 2 to 5 submodules per milestone
-      if (milestone.children.length > 5) {
-        milestone.children = milestone.children.slice(0, 5);
-      } else if (milestone.children.length === 1) {
-        const sub1 = milestone.children[0];
-        milestone.children.push({
-          id: `sub_${Date.now()}_${Math.random().toString(36).substring(2, 6)}_2`,
-          title: `Applied Patterns & Implementations`,
-          description: `Practical implementations and extensions for ${milestone.title || 'this topic'}.`,
-          status: 'not_started',
-          progress: 0,
-          estimatedHours: Math.max(2, Math.round((milestone.estimatedHours || 12) * 0.3)),
-          recommendationType: 'alternative',
-          resources: [{ type: 'practice', title: `Hands-on Exercises`, url: 'https://github.com/', isFree: true }],
-          children: [],
-          isExpandable: true
-        });
-      }
-
-      // Enforce sub-submodule range: 1 to 2 sub-submodules per submodule
-      milestone.children.forEach((sub, sIdx) => {
-        if (!sub.children || sub.children.length === 0) {
-          const subTitle = (sub.title || `Submodule ${sIdx + 1}`).split('(')[0].trim();
-          sub.children = [
-            {
-              id: `subsub_${Date.now()}_${Math.random().toString(36).substring(2, 6)}_1`,
-              title: `Core Concept & Syntax: ${subTitle}`,
-              description: `Foundational mechanics, mental model, and syntax nuances of ${subTitle}.`,
-              status: sub.status === 'completed' ? 'completed' : 'not_started',
-              progress: sub.status === 'completed' ? 100 : 0,
-              estimatedHours: Math.max(1, Math.round((sub.estimatedHours || 3) * 0.5)),
-              recommendationType: 'recommended',
-              resources: [{ type: 'docs', title: `Documentation & Guide`, url: 'https://devdocs.io/', isFree: true }],
-              children: [],
-              isExpandable: false
-            },
-            {
-              id: `subsub_${Date.now()}_${Math.random().toString(36).substring(2, 6)}_2`,
-              title: `Practical Application & Implementation: ${subTitle}`,
-              description: `Real-world patterns, exercise walkthroughs, and common debugging pitfalls.`,
-              status: sub.status === 'completed' ? 'completed' : 'not_started',
-              progress: sub.status === 'completed' ? 100 : 0,
-              estimatedHours: Math.max(1, Math.round((sub.estimatedHours || 3) * 0.5)),
-              recommendationType: 'recommended',
-              resources: [{ type: 'practice', title: `Hands-on Code Practice`, url: 'https://github.com/', isFree: true }],
-              children: [],
-              isExpandable: false
-            }
-          ];
-        } else if (sub.children.length > 2) {
-          sub.children = sub.children.slice(0, 2);
-        }
-      });
-
       milestone.isExpanded = true;
     });
   }
@@ -539,19 +482,13 @@ class HermesRoadmapRenderer {
         subnodesWrap.appendChild(clusterHeader);
 
         children.forEach((sub, sIdx) => {
-          const itemWrap = document.createElement('div');
-          itemWrap.className = 'graph-submodule-item-wrap';
+          const subCard = document.createElement('div');
+          subCard.className = `graph-submodule-card status-${sub.status} rec-${sub.recommendationType || 'recommended'} animate-stagger-item`;
+          subCard.style.animationDelay = `${sIdx * 40}ms`;
+          subCard.dataset.nodeId = sub.id;
 
           const isSubDone = sub.status === 'completed';
           const isSubInProg = sub.status === 'in_progress';
-          const isExpanded = this.expandedSubId === sub.id;
-          const subsubs = sub.children || [];
-          const hasSubsubs = subsubs.length > 0;
-
-          const subCard = document.createElement('div');
-          subCard.className = `graph-submodule-card status-${sub.status} rec-${sub.recommendationType || 'recommended'} ${isExpanded ? 'is-expanded' : ''} animate-stagger-item`;
-          subCard.style.animationDelay = `${sIdx * 40}ms`;
-          subCard.dataset.nodeId = sub.id;
 
           const subCheckboxIcon = isSubDone
             ? '<i class="ph-fill ph-check-square"></i>'
@@ -564,18 +501,12 @@ class HermesRoadmapRenderer {
                 ? '<span class="rec-badge badge-opt" title="Optional"><i class="ph ph-circle-dashed"></i> Opt</span>'
                 : '');
 
-          const expandIcon = hasSubsubs 
-            ? `<span class="subcard-expand-indicator" title="${isExpanded ? 'Click to collapse sub-modules' : 'Click to expand sub-modules'}"><i class="ph ph-${isExpanded ? 'caret-up' : 'caret-down'}"></i></span>`
-            : '';
-
           subCard.innerHTML = `
             <button class="subcard-checkbox status-${sub.status}" title="${isSubDone ? 'Click to uncheck' : 'Mark Completed'}">
               ${subCheckboxIcon}
             </button>
             <div class="subcard-title">${this.escapeHTML(sub.title)}</div>
             ${recBadge}
-            ${expandIcon}
-            <button class="subcard-drawer-btn" title="View details & resources"><i class="ph ph-info"></i></button>
           `;
 
           // Checkbox click directly toggles submodule completion
@@ -586,92 +517,13 @@ class HermesRoadmapRenderer {
           });
           this.addCompletedHoverSwap(subCheckbox, isSubDone);
 
-          // Info icon button opens drawer
-          const drawerBtn = subCard.querySelector('.subcard-drawer-btn');
-          if (drawerBtn) {
-            drawerBtn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              this.openNodeDrawer(sub, milestone);
-            });
-          }
-
-          // Clicking card body expands its sub-submodule and closes other sub-submodules
+          // Clicking card body opens drawer
           subCard.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (this.expandedSubId === sub.id) {
-              this.expandedSubId = null;
-            } else {
-              this.expandedSubId = sub.id;
-            }
-            this.recalculateAndRender();
-            this.onUpdate(this.roadmap);
+            this.openNodeDrawer(sub, milestone);
           });
 
-          itemWrap.appendChild(subCard);
-
-          // If this submodule is expanded, render its sub-submodules with dedicated close button
-          if (isExpanded && hasSubsubs) {
-            const subsubStack = document.createElement('div');
-            subsubStack.className = 'graph-subsubnodes-stack animate-fade-in-down';
-
-            const controlHeader = document.createElement('div');
-            controlHeader.className = 'subsub-control-header';
-            controlHeader.innerHTML = `
-              <span class="subsub-header-label">
-                <i class="ph ph-tree-structure"></i> Sub-modules (${subsubs.length})
-              </span>
-              <button class="btn-dedicated-close-subsub" title="Close Sub-modules">
-                <i class="ph ph-x-circle"></i> Close Sub-modules
-              </button>
-            `;
-
-            controlHeader.querySelector('.btn-dedicated-close-subsub').addEventListener('click', (e) => {
-              e.stopPropagation();
-              this.expandedSubId = null;
-              this.recalculateAndRender();
-              this.onUpdate(this.roadmap);
-            });
-
-            subsubStack.appendChild(controlHeader);
-
-            subsubs.forEach((subsub, ssIdx) => {
-              const subsubCard = document.createElement('div');
-              const isSsDone = subsub.status === 'completed';
-              const isSsInProg = subsub.status === 'in_progress';
-              subsubCard.className = `graph-subsubmodule-card status-${subsub.status || 'not_started'}`;
-              subsubCard.dataset.nodeId = subsub.id;
-
-              const ssCheckboxIcon = isSsDone
-                ? '<i class="ph-fill ph-check-square"></i>'
-                : (isSsInProg ? '<i class="ph ph-clock-clockwise"></i>' : '<i class="ph ph-square"></i>');
-
-              subsubCard.innerHTML = `
-                <button class="subcard-checkbox subsub-checkbox status-${subsub.status}" title="${isSsDone ? 'Click to uncheck' : 'Mark Completed'}">
-                  ${ssCheckboxIcon}
-                </button>
-                <div class="subsubcard-title">${this.escapeHTML(subsub.title)}</div>
-                <div class="subsubcard-hours">${subsub.estimatedHours || 2}h</div>
-              `;
-
-              const ssCheckbox = subsubCard.querySelector('.subsub-checkbox');
-              ssCheckbox.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.handleSubSubmoduleCheckboxToggle(subsub, sub, milestone);
-              });
-              this.addCompletedHoverSwap(ssCheckbox, isSsDone);
-
-              subsubCard.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.openNodeDrawer(subsub, sub);
-              });
-
-              subsubStack.appendChild(subsubCard);
-            });
-
-            itemWrap.appendChild(subsubStack);
-          }
-
-          subnodesWrap.appendChild(itemWrap);
+          subnodesWrap.appendChild(subCard);
         });
 
         branchCluster.appendChild(subnodesWrap);
@@ -825,14 +677,12 @@ class HermesRoadmapRenderer {
 
   // Handle direct submodule checkbox toggle
   handleSubmoduleCheckboxToggle(sub, parentMilestone) {
-    const newStatus = sub.status === 'completed' ? 'not_started' : 'completed';
-    const newProgress = newStatus === 'completed' ? 100 : 0;
-    sub.status = newStatus;
-    sub.progress = newProgress;
-
-    // Toggle all children sub-submodules
-    if (sub.children && sub.children.length > 0) {
-      this.setAllDescendantsStatus(sub, newStatus, newProgress);
+    if (sub.status === 'completed') {
+      sub.status = 'not_started';
+      sub.progress = 0;
+    } else {
+      sub.status = 'completed';
+      sub.progress = 100;
     }
 
     this.recalculateAndRender();
@@ -841,33 +691,6 @@ class HermesRoadmapRenderer {
     if (window.hermesApp && window.hermesApp.showToast) {
       const msg = sub.status === 'completed' ? `✓ "${sub.title}" Completed!` : `"${sub.title}" marked as Not Started`;
       window.hermesApp.showToast(msg, sub.status === 'completed' ? 'success' : 'info');
-    }
-  }
-
-  // Handle direct sub-submodule checkbox toggle
-  handleSubSubmoduleCheckboxToggle(subsub, parentSub, milestone) {
-    if (!subsub) return;
-    const isCurrentlyDone = subsub.status === 'completed';
-    const newStatus = isCurrentlyDone ? 'not_started' : 'completed';
-    const newProgress = isCurrentlyDone ? 0 : 100;
-    subsub.status = newStatus;
-    subsub.progress = newProgress;
-
-    // Recalculate parent submodule progress from its children
-    if (parentSub && parentSub.children && parentSub.children.length > 0) {
-      const childSum = parentSub.children.reduce((acc, c) => acc + (c.progress || 0), 0);
-      parentSub.progress = Math.round(childSum / parentSub.children.length);
-      if (parentSub.progress === 100) parentSub.status = 'completed';
-      else if (parentSub.progress > 0) parentSub.status = 'in_progress';
-      else parentSub.status = 'not_started';
-    }
-
-    this.recalculateAndRender();
-    this.onUpdate(this.roadmap);
-
-    if (window.hermesApp && window.hermesApp.showToast) {
-      const msg = subsub.status === 'completed' ? `✓ "${subsub.title}" Completed!` : `"${subsub.title}" marked as Not Started`;
-      window.hermesApp.showToast(msg, subsub.status === 'completed' ? 'success' : 'info');
     }
   }
 

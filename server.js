@@ -1,4 +1,4 @@
-// Hermes.io â€” AI-Powered Learning Roadmap Generator Backend
+﻿// Hermes.io â€” AI-Powered Learning Roadmap Generator Backend
 // Pure Node.js HTTP Server with User Auth, Database Persistence & AI Engine
 
 const { spawn } = require('child_process');
@@ -1809,286 +1809,7 @@ function generateSmartOfflineRoadmap(profile, userId = 'usr_guest') {
       }
     ];
   }
-  // 4. Machine Learning & AI Engineering Track
-  else if (query.includes('ml') || query.includes('machine learning') || query.includes('deep learning') || query.includes('artificial intelligence') || query.includes('ai engineer')) {
-    milestoneTemplates = [
-      {
-        title: 'Mathematics, Linear Algebra & Probability for Machine Learning',
-        description: 'Matrix decompositions, vector spaces, eigenvalues, multivariate calculus, gradient descent optimization, and probability distributions.',
-        estimatedHours: 20,
-        recommendationType: 'recommended',
-        projectCallout: { title: 'Beginner ML Checkpoint', description: 'Implement linear regression and gradient descent from scratch using raw matrix operations.', level: 'beginner' },
-        resources: [
-          { type: 'course', title: 'Mathematics for Machine Learning Specialization (Coursera / Imperial)', url: 'https://www.coursera.org/specializations/mathematics-machine-learning', isFree: true },
-          { type: 'docs', title: '3Blue1Brown: Essence of Linear Algebra', url: 'https://www.3blue1brown.com/topics/linear-algebra', isFree: true }
-        ],
-        children: [
-          {
-            title: 'Vectors, Matrices & Linear Systems',
-            description: 'Vector spaces, matrix multiplication, rank, determinants, and Gaussian elimination.',
-            estimatedHours: 6,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'Linear Algebra Matrix Operations Guide', url: 'https://docs.scipy.org/doc/numpy/reference/routines.linalg.html', isFree: true }],
-            children: [
-              { title: 'Vector Computations & Dot Products', estimatedHours: 3 },
-              { title: 'Matrix Factorization & Inversion', estimatedHours: 3 }
-            ]
-          },
-          {
-            title: 'Multivariate Calculus & Optimization Gradients',
-            description: 'Partial derivatives, Jacobians, Hessians, and learning rate scheduling in gradient descent.',
-            estimatedHours: 7,
-            recommendationType: 'recommended',
-            resources: [{ type: 'article', title: 'Calculus on Computational Graphs', url: 'https://colah.github.io/posts/2015-08-Backprop/', isFree: true }],
-            children: [
-              { title: 'Partial Derivatives & Chain Rule', estimatedHours: 4 },
-              { title: 'Gradient Descent & Learning Rates', estimatedHours: 3 }
-            ]
-          },
-          {
-            title: 'Probability Distributions & Statistical Inference',
-            description: 'Continuous/discrete random variables, Bayes theorem, expected value, variance, and Maximum Likelihood Estimation (MLE).',
-            estimatedHours: 7,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'Scipy Stats Probability Distributions', url: 'https://docs.scipy.org/doc/scipy/reference/stats.html', isFree: true }],
-            children: [
-              { title: 'Bayes Theorem & Prior/Posterior Probabilities', estimatedHours: 4 },
-              { title: 'Maximum Likelihood Estimation (MLE)', estimatedHours: 3 }
-            ]
-          }
-        ]
-      },
-      {
-        title: 'Data Wrangling & Feature Engineering (NumPy, Pandas, Scikit-Learn)',
-        description: 'Tidy data principles, tabular transformations, handling missing data, outlier detection, encoding categorical features, and standard scaling.',
-        estimatedHours: 18,
-        recommendationType: 'recommended',
-        projectCallout: { title: 'Intermediate Project', description: 'Build an automated feature engineering pipeline on real-world tabular Kaggle datasets.', level: 'intermediate' },
-        resources: [
-          { type: 'docs', title: 'Scikit-Learn Preprocessing & Pipeline Documentation', url: 'https://scikit-learn.org/stable/modules/preprocessing.html', isFree: true },
-          { type: 'practice', title: 'Kaggle: Feature Engineering Micro-Course', url: 'https://www.kaggle.com/learn/feature-engineering', isFree: true }
-        ],
-        children: [
-          {
-            title: 'Vectorized Computing & Array Operations (NumPy)',
-            description: 'Broadcasting rules, boolean indexing, vectorized mathematical operations, and memory layouts.',
-            estimatedHours: 6,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'NumPy Vectorization User Guide', url: 'https://numpy.org/doc/stable/user/basics.broadcasting.html', isFree: true }],
-            children: [
-              { title: 'Broadcasting & Multi-Dimensional Slicing', estimatedHours: 3 },
-              { title: 'Performance Profiling of Vector Operations', estimatedHours: 3 }
-            ]
-          },
-          {
-            title: 'Tabular Cleaning, Imputation & Encoding (Pandas)',
-            description: 'One-hot encoding, target encoding, iterative imputation, and datetime feature extraction.',
-            estimatedHours: 6,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'Pandas User Guide for Data Reshaping', url: 'https://pandas.pydata.org/docs/user_guide/reshaping.html', isFree: true }],
-            children: [
-              { title: 'Categorical Encoding & Imputation Pipelines', estimatedHours: 3 },
-              { title: 'Feature Scaling & Normalization Robustness', estimatedHours: 3 }
-            ]
-          },
-          {
-            title: 'Dimensionality Reduction (PCA & t-SNE)',
-            description: 'Principal Component Analysis, variance ratio plots, high-dimensional projections, and manifold learning.',
-            estimatedHours: 6,
-            recommendationType: 'alternative',
-            resources: [{ type: 'article', title: 'Visual Guide to PCA & Dimensionality Reduction', url: 'https://builtin.com/data-science/step-step-explanation-principal-component-analysis', isFree: true }],
-            children: [
-              { title: 'Eigen-decomposition & PCA Explained Variance', estimatedHours: 3 },
-              { title: 't-SNE & UMAP Latent Space Visualizations', estimatedHours: 3 }
-            ]
-          }
-        ]
-      },
-      {
-        title: 'Supervised & Unsupervised Machine Learning Models',
-        description: 'Linear/logistic regression, SVMs, decision trees, Random Forest, XGBoost/LightGBM, k-Means clustering, and cross-validation metrics.',
-        estimatedHours: 24,
-        recommendationType: 'recommended',
-        resources: [
-          { type: 'docs', title: 'Scikit-Learn Supervised Models Documentation', url: 'https://scikit-learn.org/stable/supervised_learning.html', isFree: true },
-          { type: 'book', title: 'Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow', url: 'https://github.com/ageron/handson-ml3', isFree: true }
-        ],
-        children: [
-          {
-            title: 'Linear, Logistic & Regularized Regression',
-            description: 'Cost function formulation, Lasso (L1) and Ridge (L2) penalties, and decision boundaries.',
-            estimatedHours: 8,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'Scikit-Learn Generalized Linear Models', url: 'https://scikit-learn.org/stable/modules/linear_model.html', isFree: true }],
-            children: [
-              { title: 'Cost Functions & Regularization Formulations', estimatedHours: 4 },
-              { title: 'Logistic Classification & Odds Ratios', estimatedHours: 4 }
-            ]
-          },
-          {
-            title: 'Tree Ensembles: Random Forest & Gradient Boosting (XGBoost)',
-            description: 'Gini impurity, bagging, boosting, learning rate, tree depth constraints, and feature importance analysis.',
-            estimatedHours: 8,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'XGBoost Documentation & Python API', url: 'https://xgboost.readthedocs.io/', isFree: true }],
-            children: [
-              { title: 'Decision Trees & Bagging Mechanics', estimatedHours: 4 },
-              { title: 'Gradient Boosting & Hyperparameter Tuning', estimatedHours: 4 }
-            ]
-          },
-          {
-            title: 'Model Evaluation, ROC-AUC & Cross-Validation',
-            description: 'K-Fold cross-validation, precision-recall tradeoffs, confusion matrices, and data leakage prevention.',
-            estimatedHours: 8,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'Model Evaluation & Scoring Metrics', url: 'https://scikit-learn.org/stable/modules/model_evaluation.html', isFree: true }],
-            children: [
-              { title: 'Stratified K-Fold & Leakage Prevention', estimatedHours: 4 },
-              { title: 'ROC-AUC & F1-Score Precision-Recall Curves', estimatedHours: 4 }
-            ]
-          }
-        ]
-      },
-      {
-        title: 'Deep Learning & Neural Architectures (PyTorch)',
-        description: 'Tensors, computational graphs, Autograd, Multi-Layer Perceptrons, Convolutional Networks (CNNs), and loss backpropagation.',
-        estimatedHours: 26,
-        recommendationType: 'recommended',
-        projectCallout: { title: 'Deep Learning Checkpoint', description: 'Train a vision classifier using custom PyTorch modules and transfer learning with ResNet.', level: 'intermediate' },
-        resources: [
-          { type: 'docs', title: 'PyTorch Official Deep Learning Tutorials', url: 'https://pytorch.org/tutorials/', isFree: true },
-          { type: 'course', title: 'Fast.ai: Practical Deep Learning for Coders', url: 'https://course.fast.ai/', isFree: true }
-        ],
-        children: [
-          {
-            title: 'PyTorch Tensors, Autograd & Custom Modules',
-            description: 'Torch tensors, GPU memory management, nn.Module inheritance, and custom training loops.',
-            estimatedHours: 9,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'PyTorch nn.Module & Optimizers Documentation', url: 'https://pytorch.org/docs/stable/nn.html', isFree: true }],
-            children: [
-              { title: 'Tensors, Devices & Autograd Backpropagation', estimatedHours: 5 },
-              { title: 'Custom Datasets, DataLoaders & Training Loops', estimatedHours: 4 }
-            ]
-          },
-          {
-            title: 'Convolutional Neural Networks & Computer Vision',
-            description: 'Spatial convolutions, pooling layers, receptive fields, residual connections, and fine-tuning pretrained backbones.',
-            estimatedHours: 9,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'Torchvision Models and Pretrained Weights', url: 'https://pytorch.org/vision/stable/models.html', isFree: true }],
-            children: [
-              { title: 'Convolution Kernels, Strides & Pooling', estimatedHours: 5 },
-              { title: 'Transfer Learning & Data Augmentations', estimatedHours: 4 }
-            ]
-          },
-          {
-            title: 'Sequence Modeling & Recurrent Neural Nets (RNN, LSTM, GRU)',
-            description: 'Recurrent hidden states, vanishing gradients, gating mechanisms, and sequence-to-sequence prediction.',
-            estimatedHours: 8,
-            recommendationType: 'alternative',
-            resources: [{ type: 'article', title: 'Understanding LSTM Networks', url: 'https://colah.github.io/posts/2015-08-Understanding-LSTMs/', isFree: true }],
-            children: [
-              { title: 'Hidden State Transitions & BPTT', estimatedHours: 4 },
-              { title: 'LSTM & GRU Gating Architectures', estimatedHours: 4 }
-            ]
-          }
-        ]
-      },
-      {
-        title: 'Transformers, Large Language Models & GenAI',
-        description: 'Scaled dot-product attention, multi-head attention, Transformer architecture, tokenizers, Hugging Face ecosystem, and LoRA/PEFT fine-tuning.',
-        estimatedHours: 28,
-        recommendationType: 'recommended',
-        resources: [
-          { type: 'docs', title: 'Hugging Face NLP Course & Transformers Library', url: 'https://huggingface.co/learn/nlp-course/', isFree: true },
-          { type: 'article', title: 'The Illustrated Transformer by Jay Alammar', url: 'https://jalammar.github.io/illustrated-transformer/', isFree: true }
-        ],
-        children: [
-          {
-            title: 'Attention Mechanism & Transformer Core Architecture',
-            description: 'Query, Key, Value dot-products, causal masking, layer normalization, and positional embeddings.',
-            estimatedHours: 10,
-            recommendationType: 'recommended',
-            resources: [{ type: 'paper', title: 'Attention Is All You Need (Vaswani et al.)', url: 'https://arxiv.org/abs/1706.03762', isFree: true }],
-            children: [
-              { title: 'Self-Attention & Multi-Head Projections', estimatedHours: 5 },
-              { title: 'Encoder-Decoder vs Decoder-Only Models', estimatedHours: 5 }
-            ]
-          },
-          {
-            title: 'Hugging Face Transformers & Tokenizer Pipelines',
-            description: 'Byte-Pair Encoding (BPE), auto-classes, token classification, text generation, and model quantization (4-bit/8-bit).',
-            estimatedHours: 9,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'Hugging Face Transformers Documentation', url: 'https://huggingface.co/docs/transformers/', isFree: true }],
-            children: [
-              { title: 'Tokenizers, Vocabulary & Padding Tokens', estimatedHours: 5 },
-              { title: 'Inference Pipelines & Quantized Models (bitsandbytes)', estimatedHours: 4 }
-            ]
-          },
-          {
-            title: 'Parameter-Efficient Fine-Tuning (PEFT, LoRA & Instruction Tuning)',
-            description: 'Low-Rank Adaptation (LoRA), QLoRA, instruction dataset curation, and evaluation of generated responses.',
-            estimatedHours: 9,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'PEFT: Parameter-Efficient Fine-Tuning Guide', url: 'https://huggingface.co/docs/peft/', isFree: true }],
-            children: [
-              { title: 'LoRA Matrix Decomposition & Adapter Weights', estimatedHours: 5 },
-              { title: 'Instruction Dataset Formatting & SFT Training', estimatedHours: 4 }
-            ]
-          }
-        ]
-      },
-      {
-        title: 'MLOps, Model Serving & Production Deployment Capstone',
-        description: 'Model serialization (ONNX), high-throughput serving with FastAPI & vLLM, experiment tracking with MLflow, Docker containerization, and drift monitoring.',
-        estimatedHours: 26,
-        recommendationType: 'recommended',
-        projectCallout: { title: 'Production Capstone Project', description: 'Deploy a containerized end-to-end ML/LLM API with real-time inference, monitoring, and automated retraining triggers.', level: 'advanced' },
-        resources: [
-          { type: 'docs', title: 'MLflow Tracking & Registry Documentation', url: 'https://mlflow.org/docs/latest/index.html', isFree: true },
-          { type: 'course', title: 'Full Stack Deep Learning Course', url: 'https://fullstackdeeplearning.com/', isFree: true }
-        ],
-        children: [
-          {
-            title: 'Model Serialization & High-Speed Serving (ONNX, FastAPI, vLLM)',
-            description: 'ONNX runtime graph optimization, async REST endpoints, batching inference requests, and GPU acceleration.',
-            estimatedHours: 9,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'ONNX Runtime Documentation', url: 'https://onnxruntime.ai/docs/', isFree: true }],
-            children: [
-              { title: 'ONNX Export & Graph Optimization', estimatedHours: 5 },
-              { title: 'FastAPI Async Inference Endpoints & Streaming', estimatedHours: 4 }
-            ]
-          },
-          {
-            title: 'Experiment Tracking & Model Registry (MLflow & W&B)',
-            description: 'Artifact logging, hyperparameter search tracking, model staging, and lineage reproducibility.',
-            estimatedHours: 8,
-            recommendationType: 'recommended',
-            resources: [{ type: 'docs', title: 'Weights & Biases Documentation', url: 'https://docs.wandb.ai/', isFree: true }],
-            children: [
-              { title: 'Metric Logging & Artifact Tracking', estimatedHours: 4 },
-              { title: 'Model Versioning & Production Registry Stages', estimatedHours: 4 }
-            ]
-          },
-          {
-            title: 'Production Capstone: Autonomous AI Agent & Pipeline Deployment',
-            description: 'Containerize with Docker, configure CI/CD testing, detect data/concept drift, and deploy live portfolio service.',
-            estimatedHours: 9,
-            recommendationType: 'recommended',
-            resources: [{ type: 'project', title: 'Production AI Portfolio Project Specification', url: 'https://github.com/', isFree: true }],
-            children: [
-              { title: 'Docker Containerization & GPU Runtime Setup', estimatedHours: 5 },
-              { title: 'Drift Detection & Continuous Monitoring', estimatedHours: 4 }
-            ]
-          }
-        ]
-      }
-    ];
-  }
-  // 5. Data / Analytics Track
+  // 4. Data / Analytics Track
   else if (query.includes('data') || query.includes('analytics')) {
     milestoneTemplates = [
       {
@@ -2309,79 +2030,6 @@ function generateSmartOfflineRoadmap(profile, userId = 'usr_guest') {
   }
 
   const nodes = milestoneTemplates.map((m) => {
-    const rawSubs = (m.children && m.children.length > 0) ? m.children : generateSmartOfflineSubmodules(m);
-    const clampedSubs = rawSubs.slice(0, 5);
-    if (clampedSubs.length < 2) {
-      clampedSubs.push({
-        id: crypto.randomUUID(),
-        title: `Applied Patterns & Implementations`,
-        description: `Practical application for ${m.title}.`,
-        status: 'not_started',
-        progress: 0,
-        estimatedHours: 4,
-        recommendationType: 'alternative',
-        resources: [],
-        children: []
-      });
-    }
-
-    const submodules = clampedSubs.map(child => {
-      const childTitle = (child.title || 'Topic').split('(')[0].trim();
-      const rawSubsubs = (child.children && child.children.length > 0)
-        ? child.children.slice(0, 2)
-        : [
-            {
-              id: crypto.randomUUID(),
-              title: `Core Concept & Syntax: ${childTitle}`,
-              description: `Foundational mechanics and mental model of ${childTitle}.`,
-              status: 'not_started',
-              progress: 0,
-              estimatedHours: Math.max(1, Math.round((child.estimatedHours || 4) * 0.5)),
-              recommendationType: 'recommended',
-              resources: [{ type: 'docs', title: `Technical Documentation`, url: 'https://devdocs.io/', isFree: true }],
-              children: []
-            },
-            {
-              id: crypto.randomUUID(),
-              title: `Practical Application & Labs: ${childTitle}`,
-              description: `Real-world patterns, exercise walkthroughs, and common debugging pitfalls.`,
-              status: 'not_started',
-              progress: 0,
-              estimatedHours: Math.max(1, Math.round((child.estimatedHours || 4) * 0.5)),
-              recommendationType: 'recommended',
-              resources: [{ type: 'practice', title: `Practical Exercises`, url: 'https://github.com/', isFree: true }],
-              children: []
-            }
-          ];
-
-      return {
-        id: crypto.randomUUID(),
-        title: child.title,
-        description: child.description || '',
-        status: 'not_started',
-        progress: 0,
-        estimatedHours: child.estimatedHours || 4,
-        recommendationType: child.recommendationType || 'recommended',
-        projectCallout: null,
-        resources: child.resources || [],
-        children: rawSubsubs.map(ss => ({
-          id: crypto.randomUUID(),
-          title: ss.title,
-          description: ss.description || '',
-          status: 'not_started',
-          progress: 0,
-          estimatedHours: ss.estimatedHours || 2,
-          recommendationType: ss.recommendationType || 'recommended',
-          resources: ss.resources || [],
-          children: [],
-          isExpandable: false,
-          isExpanded: false
-        })),
-        isExpandable: true,
-        isExpanded: false
-      };
-    });
-
     const nodeObj = {
       id: crypto.randomUUID(),
       title: m.title,
@@ -2392,7 +2040,20 @@ function generateSmartOfflineRoadmap(profile, userId = 'usr_guest') {
       recommendationType: m.recommendationType || 'recommended',
       projectCallout: m.projectCallout || null,
       resources: m.resources || [],
-      children: submodules,
+      children: (m.children || []).map(child => ({
+        id: crypto.randomUUID(),
+        title: child.title,
+        description: child.description || '',
+        status: 'not_started',
+        progress: 0,
+        estimatedHours: child.estimatedHours || 4,
+        recommendationType: child.recommendationType || 'recommended',
+        projectCallout: null,
+        resources: child.resources || [],
+        children: [],
+        isExpandable: false,
+        isExpanded: false
+      })),
       isExpandable: true,
       isExpanded: true
     };
@@ -2416,45 +2077,21 @@ function generateSmartOfflineRoadmap(profile, userId = 'usr_guest') {
 
 function generateSmartOfflineSubmodules(milestone) {
   const title = milestone.title || 'Core Topic';
-  const cleanTitle = title.split('(')[0].trim();
   return [
     {
       id: crypto.randomUUID(),
-      title: `Fundamentals & Core Theory of ${cleanTitle}`,
+      title: `Fundamentals & Core Theory of ${title.split('(')[0].trim()}`,
       description: `Understand the core architecture, mental model, and foundational principles behind ${title}.`,
       status: 'not_started',
       progress: 0,
       estimatedHours: Math.max(2, Math.round((milestone.estimatedHours || 12) * 0.25)),
       recommendationType: 'recommended',
       resources: [
-        { type: 'article', title: `Deep Dive: Introduction to ${cleanTitle}`, url: 'https://developer.mozilla.org/', isFree: true },
+        { type: 'article', title: `Deep Dive: Introduction to ${title.split('(')[0].trim()}`, url: 'https://developer.mozilla.org/', isFree: true },
         { type: 'video', title: `Visual Mental Models & Lecture`, url: 'https://www.youtube.com/', isFree: true }
       ],
-      children: [
-        {
-          id: crypto.randomUUID(),
-          title: `Core Architectural Principles: ${cleanTitle}`,
-          description: `Key theoretical frameworks and syntax primitives for ${cleanTitle}.`,
-          status: 'not_started',
-          progress: 0,
-          estimatedHours: 2,
-          recommendationType: 'recommended',
-          resources: [{ type: 'docs', title: `Technical Reference`, url: 'https://devdocs.io/', isFree: true }],
-          children: []
-        },
-        {
-          id: crypto.randomUUID(),
-          title: `Mental Models & Syntax Foundations: ${cleanTitle}`,
-          description: `Internalize execution model, memory layout, and core terminology.`,
-          status: 'not_started',
-          progress: 0,
-          estimatedHours: 2,
-          recommendationType: 'recommended',
-          resources: [{ type: 'article', title: `Conceptual Foundations Guide`, url: 'https://developer.mozilla.org/', isFree: true }],
-          children: []
-        }
-      ],
-      isExpandable: true,
+      children: [],
+      isExpandable: false,
       isExpanded: false
     },
     {
@@ -2469,30 +2106,7 @@ function generateSmartOfflineSubmodules(milestone) {
         { type: 'docs', title: `Official Implementation Guide & API Reference`, url: 'https://devdocs.io/', isFree: true },
         { type: 'practice', title: `Interactive Code Challenges & Exercises`, url: 'https://exercism.org/', isFree: true }
       ],
-      children: [
-        {
-          id: crypto.randomUUID(),
-          title: `API Patterns & Workflow Execution`,
-          description: `Hands-on syntax usage and standard library APIs.`,
-          status: 'not_started',
-          progress: 0,
-          estimatedHours: 2,
-          recommendationType: 'recommended',
-          resources: [{ type: 'docs', title: `API Reference`, url: 'https://devdocs.io/', isFree: true }],
-          children: []
-        },
-        {
-          id: crypto.randomUUID(),
-          title: `Edge Cases & Robust Exception Handling`,
-          description: `Defensive programming, validation, and error boundaries.`,
-          status: 'not_started',
-          progress: 0,
-          estimatedHours: 2,
-          recommendationType: 'recommended',
-          resources: [{ type: 'practice', title: `Debugging Drills`, url: 'https://exercism.org/', isFree: true }],
-          children: []
-        }
-      ],
+      children: [],
       isExpandable: true,
       isExpanded: false
     },
@@ -2507,31 +2121,8 @@ function generateSmartOfflineSubmodules(milestone) {
       resources: [
         { type: 'article', title: `Comparison & Tradeoff Analysis`, url: 'https://dev.to/', isFree: true }
       ],
-      children: [
-        {
-          id: crypto.randomUUID(),
-          title: `Tooling Comparison & Ecosystem Alternatives`,
-          description: `Pros and cons of competing libraries and paradigms.`,
-          status: 'not_started',
-          progress: 0,
-          estimatedHours: 1,
-          recommendationType: 'alternative',
-          resources: [{ type: 'article', title: `Ecosystem Overview`, url: 'https://dev.to/', isFree: true }],
-          children: []
-        },
-        {
-          id: crypto.randomUUID(),
-          title: `Migration & Interoperability Strategies`,
-          description: `Integrating with legacy codebases and secondary toolchains.`,
-          status: 'not_started',
-          progress: 0,
-          estimatedHours: 1,
-          recommendationType: 'alternative',
-          resources: [{ type: 'article', title: `Migration Patterns`, url: 'https://github.com/', isFree: true }],
-          children: []
-        }
-      ],
-      isExpandable: true,
+      children: [],
+      isExpandable: false,
       isExpanded: false
     },
     {
@@ -2545,31 +2136,8 @@ function generateSmartOfflineSubmodules(milestone) {
       resources: [
         { type: 'project', title: `Project Specification & Verification Checklist`, url: 'https://github.com/', isFree: true }
       ],
-      children: [
-        {
-          id: crypto.randomUUID(),
-          title: `Specification & Milestone Deliverables`,
-          description: `Requirements checklist and functional test suite setup.`,
-          status: 'not_started',
-          progress: 0,
-          estimatedHours: 2,
-          recommendationType: 'optional',
-          resources: [{ type: 'project', title: `Spec Checklist`, url: 'https://github.com/', isFree: true }],
-          children: []
-        },
-        {
-          id: crypto.randomUUID(),
-          title: `Code Review & Performance Tuning Check`,
-          description: `Benchmarking, refactoring, and code quality review.`,
-          status: 'not_started',
-          progress: 0,
-          estimatedHours: 1,
-          recommendationType: 'optional',
-          resources: [{ type: 'project', title: `Audit Guidelines`, url: 'https://github.com/', isFree: true }],
-          children: []
-        }
-      ],
-      isExpandable: true,
+      children: [],
+      isExpandable: false,
       isExpanded: false
     }
   ];
@@ -2942,7 +2510,7 @@ Rules:
   return { system, user };
 }
 
-// Prompt §4b
+// Prompt Â§4b
 function buildPrompt4b(milestone, context) {
   const schemaStr = `
 {
@@ -2954,37 +2522,24 @@ function buildPrompt4b(milestone, context) {
       "status": "not_started",
       "progress": 0,
       "estimatedHours": 4,
-      "recommendationType": "recommended",
       "resources": [
         { "type": "article | video | course | docs | practice | project", "title": "string", "url": "string", "isFree": true }
       ],
-      "children": [
-        {
-          "id": "uuid",
-          "title": "string (sub-submodule checkpoint)",
-          "description": "focused concept or practical task summary",
-          "status": "not_started",
-          "progress": 0,
-          "estimatedHours": 2,
-          "recommendationType": "recommended",
-          "resources": [],
-          "children": []
-        }
-      ],
-      "isExpandable": true,
+      "children": [],
+      "isExpandable": false,
       "isExpanded": false
     }
   ]
 }`;
 
-  const system = `You are expanding one milestone of an existing learning roadmap into more granular submodules and sub-submodules. Stay tightly scoped to this milestone; do not repeat sibling milestones.
+  const system = `You are expanding one milestone of an existing learning roadmap into more granular submodules. Stay tightly scoped to this milestone; do not repeat sibling milestones.
 
-Return 2-5 submodule nodes as valid JSON only, matching this schema: ${schemaStr}.
-Each submodule MUST contain 1-2 granular sub-submodules in its 'children' array providing step-by-step concept mastery and hands-on checkpoints. Each submodule should include 1-3 verified resources.`;
+Return 3-6 submodule nodes as valid JSON only, matching this schema: ${schemaStr}.
+Each submodule should be independently completable, include 1-3 verified resources, and set isExpandable: true only if the sub-topic is genuinely broad enough to warrant a further breakdown.`;
 
   const user = `Context:
 - Overall goal: ${context.goal || 'Mastery'} / target role: ${context.targetRole || 'Engineer'} / level: ${context.skillLevel || 'Beginner'}
-- Milestone being expanded: ${milestone.title} — ${milestone.description}
+- Milestone being expanded: ${milestone.title} â€” ${milestone.description}
 - Milestone Estimated Hours: ${milestone.estimatedHours || 12}`;
 
   return { system, user };

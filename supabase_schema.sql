@@ -67,10 +67,6 @@ CREATE TABLE IF NOT EXISTS public.sessions (
 -- 4. ROADMAPS TABLE
 -- Stores personalized learning roadmaps, curricula milestones, AI trees,
 -- hour tracking, and progress metrics.
--- Supports 3-tier hierarchical tree structure in nodes JSONB:
---   - Level 1: Milestones (Central Spine Cards)
---   - Level 2: Submodules (Branching Cluster Cards: 2 to 5 per milestone)
---   - Level 3: Sub-submodules (Nested Mastery Checkpoints: 1 to 2 per submodule)
 -- ========================================================================
 
 CREATE TABLE IF NOT EXISTS public.roadmaps (
@@ -311,348 +307,42 @@ VALUES (
         "title": "Modern Web Foundations & Semantic HTML",
         "status": "completed",
         "estimatedHours": 14,
-        "progress": 100,
-        "recommendationType": "recommended",
-        "children": [
-          {
-            "id": "sub_html_semantics",
-            "title": "Semantic HTML5, ARIA & Accessibility",
-            "status": "completed",
-            "estimatedHours": 7,
-            "progress": 100,
-            "recommendationType": "recommended",
-            "children": [
-              {
-                "id": "subsub_aria_roles",
-                "title": "ARIA Landmark Roles & Accessible Names",
-                "status": "completed",
-                "estimatedHours": 3,
-                "progress": 100
-              },
-              {
-                "id": "subsub_semantic_tags",
-                "title": "Document Outline, Sectioning & Meta Tags",
-                "status": "completed",
-                "estimatedHours": 4,
-                "progress": 100
-              }
-            ]
-          },
-          {
-            "id": "sub_browser_rendering",
-            "title": "Browser Engine Architecture & DOM Parsing",
-            "status": "completed",
-            "estimatedHours": 7,
-            "progress": 100,
-            "recommendationType": "recommended",
-            "children": [
-              {
-                "id": "subsub_critical_path",
-                "title": "Critical Rendering Path & Style Invalidation",
-                "status": "completed",
-                "estimatedHours": 4,
-                "progress": 100
-              },
-              {
-                "id": "subsub_dom_events",
-                "title": "Event Bubbling, Capturing & Delegation",
-                "status": "completed",
-                "estimatedHours": 3,
-                "progress": 100
-              }
-            ]
-          }
-        ]
+        "progress": 100
       },
       {
         "id": "node_css_mastery",
         "title": "CSS3, Flexbox, Grid & Responsive Design Patterns",
         "status": "completed",
         "estimatedHours": 18,
-        "progress": 100,
-        "recommendationType": "recommended",
-        "children": [
-          {
-            "id": "sub_modern_layouts",
-            "title": "Two-Dimensional Grid & Flexbox Alignment",
-            "status": "completed",
-            "estimatedHours": 9,
-            "progress": 100,
-            "recommendationType": "recommended",
-            "children": [
-              {
-                "id": "subsub_grid_tracks",
-                "title": "Grid Templates, repeat(), minmax() & Subgrid",
-                "status": "completed",
-                "estimatedHours": 5,
-                "progress": 100
-              },
-              {
-                "id": "subsub_flex_axes",
-                "title": "Flexbox Main/Cross Axes & Space Distribution",
-                "status": "completed",
-                "estimatedHours": 4,
-                "progress": 100
-              }
-            ]
-          },
-          {
-            "id": "sub_responsive_fluid",
-            "title": "Container Queries, Media Queries & Fluid Typography",
-            "status": "completed",
-            "estimatedHours": 9,
-            "progress": 100,
-            "recommendationType": "recommended",
-            "children": [
-              {
-                "id": "subsub_container_queries",
-                "title": "@container Rules & Component-level Responsiveness",
-                "status": "completed",
-                "estimatedHours": 5,
-                "progress": 100
-              },
-              {
-                "id": "subsub_fluid_clamp",
-                "title": "Fluid Math: clamp(), min(), max() & Design Tokens",
-                "status": "completed",
-                "estimatedHours": 4,
-                "progress": 100
-              }
-            ]
-          }
-        ]
+        "progress": 100
       },
       {
         "id": "node_js_deep_dive",
         "title": "Modern JavaScript ESNext, Asynchronous Programming & DOM",
         "status": "completed",
         "estimatedHours": 22,
-        "progress": 100,
-        "recommendationType": "recommended",
-        "children": [
-          {
-            "id": "sub_async_js",
-            "title": "Event Loop, Promises & Async/Await Concurrency",
-            "status": "completed",
-            "estimatedHours": 11,
-            "progress": 100,
-            "recommendationType": "recommended",
-            "children": [
-              {
-                "id": "subsub_event_loop",
-                "title": "Microtasks, Macrotasks & Call Stack Mechanics",
-                "status": "completed",
-                "estimatedHours": 6,
-                "progress": 100
-              },
-              {
-                "id": "subsub_promise_combos",
-                "title": "Promise.allSettled(), Promise.race() & AbortController",
-                "status": "completed",
-                "estimatedHours": 5,
-                "progress": 100
-              }
-            ]
-          },
-          {
-            "id": "sub_js_internals",
-            "title": "Closures, Lexical Scopes & Prototypes",
-            "status": "completed",
-            "estimatedHours": 11,
-            "progress": 100,
-            "recommendationType": "recommended",
-            "children": [
-              {
-                "id": "subsub_closures",
-                "title": "Lexical Environment & Closure Memory Leaks",
-                "status": "completed",
-                "estimatedHours": 6,
-                "progress": 100
-              },
-              {
-                "id": "subsub_prototypes",
-                "title": "Prototypal Inheritance & ES6 Class Desugaring",
-                "status": "completed",
-                "estimatedHours": 5,
-                "progress": 100
-              }
-            ]
-          }
-        ]
+        "progress": 100
       },
       {
         "id": "node_react_architecture",
         "title": "React 19 Components, State Hooks & Custom Hooks",
         "status": "in_progress",
         "estimatedHours": 32,
-        "progress": 40,
-        "recommendationType": "recommended",
-        "children": [
-          {
-            "id": "sub_react_hooks",
-            "title": "Core React Hooks & Custom Hook Architecture",
-            "status": "completed",
-            "estimatedHours": 16,
-            "progress": 100,
-            "recommendationType": "recommended",
-            "children": [
-              {
-                "id": "subsub_state_effects",
-                "title": "useState, useReducer & useEffect Lifecycle Rules",
-                "status": "completed",
-                "estimatedHours": 8,
-                "progress": 100
-              },
-              {
-                "id": "subsub_custom_hooks",
-                "title": "Composable Custom Hooks with Memoization",
-                "status": "completed",
-                "estimatedHours": 8,
-                "progress": 100
-              }
-            ]
-          },
-          {
-            "id": "sub_react19_features",
-            "title": "React 19 Actions, useTransition & Server Components",
-            "status": "not_started",
-            "estimatedHours": 16,
-            "progress": 0,
-            "recommendationType": "recommended",
-            "children": [
-              {
-                "id": "subsub_actions_transitions",
-                "title": "useActionState, useOptimistic & useTransition",
-                "status": "not_started",
-                "estimatedHours": 8,
-                "progress": 0
-              },
-              {
-                "id": "subsub_rsc_fundamentals",
-                "title": "Server vs Client Component Boundaries & Serialization",
-                "status": "not_started",
-                "estimatedHours": 8,
-                "progress": 0
-              }
-            ]
-          }
-        ]
+        "progress": 40
       },
       {
         "id": "node_node_backend",
         "title": "Node.js Serverless APIs, Express & REST Principles",
         "status": "not_started",
         "estimatedHours": 20,
-        "progress": 0,
-        "recommendationType": "recommended",
-        "children": [
-          {
-            "id": "sub_rest_apis",
-            "title": "REST API Architecture & HTTP Middleware",
-            "status": "not_started",
-            "estimatedHours": 10,
-            "progress": 0,
-            "recommendationType": "recommended",
-            "children": [
-              {
-                "id": "subsub_http_methods",
-                "title": "HTTP Methods, Status Codes & CORS Headers",
-                "status": "not_started",
-                "estimatedHours": 5,
-                "progress": 0
-              },
-              {
-                "id": "subsub_middleware_chains",
-                "title": "Authentication, Rate Limiting & Error Middlewares",
-                "status": "not_started",
-                "estimatedHours": 5,
-                "progress": 0
-              }
-            ]
-          },
-          {
-            "id": "sub_node_runtime",
-            "title": "Streams, Buffers & Node.js Native HTTP",
-            "status": "not_started",
-            "estimatedHours": 10,
-            "progress": 0,
-            "recommendationType": "recommended",
-            "children": [
-              {
-                "id": "subsub_streams_pipeline",
-                "title": "Readable/Writable Streams & Backpressure Control",
-                "status": "not_started",
-                "estimatedHours": 5,
-                "progress": 0
-              },
-              {
-                "id": "subsub_child_process",
-                "title": "Event Emitters & Worker Threads Architecture",
-                "status": "not_started",
-                "estimatedHours": 5,
-                "progress": 0
-              }
-            ]
-          }
-        ]
+        "progress": 0
       },
       {
         "id": "node_postgres_db",
         "title": "PostgreSQL Relational Schema Design & Query Optimization",
         "status": "not_started",
         "estimatedHours": 14,
-        "progress": 0,
-        "recommendationType": "recommended",
-        "children": [
-          {
-            "id": "sub_sql_modeling",
-            "title": "Relational Modeling, Normalization & Constraints",
-            "status": "not_started",
-            "estimatedHours": 7,
-            "progress": 0,
-            "recommendationType": "recommended",
-            "children": [
-              {
-                "id": "subsub_foreign_keys",
-                "title": "Primary Keys, Foreign Keys & Cascade Actions",
-                "status": "not_started",
-                "estimatedHours": 4,
-                "progress": 0
-              },
-              {
-                "id": "subsub_normalization",
-                "title": "1NF, 2NF, 3NF & Denormalization Tradeoffs",
-                "status": "not_started",
-                "estimatedHours": 3,
-                "progress": 0
-              }
-            ]
-          },
-          {
-            "id": "sub_sql_indexing",
-            "title": "Indexes, EXPLAIN ANALYZE & Query Plans",
-            "status": "not_started",
-            "estimatedHours": 7,
-            "progress": 0,
-            "recommendationType": "recommended",
-            "children": [
-              {
-                "id": "subsub_btree_indexes",
-                "title": "B-Tree, GIN, GiST Indexes & Composite Keys",
-                "status": "not_started",
-                "estimatedHours": 4,
-                "progress": 0
-              },
-              {
-                "id": "subsub_explain_analyze",
-                "title": "Query Cost Interpretation & Sequential Scan Elimination",
-                "status": "not_started",
-                "estimatedHours": 3,
-                "progress": 0
-              }
-            ]
-          }
-        ]
+        "progress": 0
       }
     ]'::jsonb
 )
@@ -696,70 +386,8 @@ VALUES
 ON CONFLICT (id) DO NOTHING;
 
 -- ========================================================================
--- 11. HIERARCHY TELEMETRY & STATS FUNCTION
--- Extracts 3-tier counts (Milestones, Submodules: 2-5, Sub-submodules: 1-2)
--- ========================================================================
-
-CREATE OR REPLACE FUNCTION get_roadmap_hierarchy_stats(p_roadmap_id TEXT)
-RETURNS JSONB AS $$
-DECLARE
-    v_nodes JSONB;
-    v_milestone_count INT := 0;
-    v_submodule_count INT := 0;
-    v_subsub_count INT := 0;
-    v_completed_milestones INT := 0;
-    v_completed_submodules INT := 0;
-    v_completed_subsubs INT := 0;
-    m JSONB;
-    s JSONB;
-    ss JSONB;
-BEGIN
-    SELECT nodes INTO v_nodes FROM public.roadmaps WHERE id = p_roadmap_id;
-    IF v_nodes IS NULL THEN
-        RETURN jsonb_build_object('error', 'Roadmap not found');
-    END IF;
-
-    FOR m IN SELECT * FROM jsonb_array_elements(v_nodes) LOOP
-        v_milestone_count := v_milestone_count + 1;
-        IF (m->>'status') = 'completed' THEN
-            v_completed_milestones := v_completed_milestones + 1;
-        END IF;
-
-        IF m ? 'children' AND jsonb_typeof(m->'children') = 'array' THEN
-            FOR s IN SELECT * FROM jsonb_array_elements(m->'children') LOOP
-                v_submodule_count := v_submodule_count + 1;
-                IF (s->>'status') = 'completed' THEN
-                    v_completed_submodules := v_completed_submodules + 1;
-                END IF;
-
-                IF s ? 'children' AND jsonb_typeof(s->'children') = 'array' THEN
-                    FOR ss IN SELECT * FROM jsonb_array_elements(s->'children') LOOP
-                        v_subsub_count := v_subsub_count + 1;
-                        IF (ss->>'status') = 'completed' THEN
-                            v_completed_subsubs := v_completed_subsubs + 1;
-                        END IF;
-                    END LOOP;
-                END IF;
-            END LOOP;
-        END IF;
-    END LOOP;
-
-    RETURN jsonb_build_object(
-        'roadmap_id', p_roadmap_id,
-        'milestones', v_milestone_count,
-        'completed_milestones', v_completed_milestones,
-        'submodules', v_submodule_count,
-        'completed_submodules', v_completed_submodules,
-        'sub_submodules', v_subsub_count,
-        'completed_sub_submodules', v_completed_subsubs
-    );
-END;
-$$ LANGUAGE plpgsql STABLE;
-
--- ========================================================================
 -- SUCCESS CONFIRMATION
 -- ========================================================================
 SELECT 
     'Hermes.io PostgreSQL Schema successfully created and verified!' AS status,
     NOW() AS deployed_at;
-
